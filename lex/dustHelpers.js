@@ -2,7 +2,7 @@ const R_KEY = /[a-zA-Z_$][0-9a-zA-Z_$-]*/g;
 const R_INT = /[0-9]+/g;
 const KEY_TOKEN = 'K';
 const INT_TOKEN = 'I';
-const R_NON_ACCEPTED_TOKENS = /^{[\][0-9a-zA-Z_$\-.]+}$/;
+const R_ACCEPTED_CHARS = /^{[\][0-9a-zA-Z_$\-.|]+}$/;
 const R_NON_REF_TAG = /^{\s*[#?^><+%:@/~]\s*[^}]+}$/;
 
 function isReference(string) {
@@ -19,10 +19,9 @@ function isReference(string) {
 
   const substring = string.substring(0, indexOfRightBrace + 1);
   let bracketCount = 0;
-  let isInKey = false;
 
   // ensure no non-valid chars inside reference
-  if (!R_NON_ACCEPTED_TOKENS.test(substring)) {
+  if (!R_ACCEPTED_CHARS.test(substring)) {
     return false;
   }
 
@@ -64,6 +63,15 @@ function isReference(string) {
       if (prevChar !== '[' || nextChar !== ']') {
         return false;
       }
+    } else if (char === '|') {
+      if(prevChar === '{') {
+        return false;
+      }
+
+      return tokenizedSubstring
+        .slice(i + 1, -1)
+        .split('|')
+        .every(token => token === KEY_TOKEN);
     }
   }
 

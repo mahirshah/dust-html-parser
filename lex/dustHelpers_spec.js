@@ -19,7 +19,8 @@ describe('Test isReference', () => {
     '{_[0]}',
     '{[.a-a[.]]}',
     '{a[.a[.]]}',
-    '{in_seah_lel}'
+    '{in_seah_lel}',
+    '{a|filter1|filter2}'
   ];
 
   const failingCases = [

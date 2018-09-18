@@ -1,11 +1,12 @@
 const { createToken, Lexer } = require('chevrotain');
-const { matchTag } = require('./dustHelpers');
+const { matchTag, isReference } = require('./dustHelpers');
 
 const MODES = {
   TAG_OPEN_STATE: 'TAG_OPEN_STATE',
   ATTRIBUTE_NAME_STATE: 'ATTRIBUTE_NAME_STATE',
   DATA: 'DATA',
   DUST: 'DUST',
+  DUST_QUOTE: 'DUST_QUOTE',
 };
 const WhiteSpace = createToken({
   name: 'WhiteSpace',
@@ -37,13 +38,26 @@ const closingDustTag = createToken({
   name: 'closingDustTag',
   pattern: /{\/[^}]+}/,
 });
+const dustElse = createToken({name: 'else', pattern: /{:else}/});
+const startDustQuotedParam = createToken({
+  name: 'startDustQuotedParam',
+  pattern: /="/,
+  push_mode: MODES.DUST_QUOTE,
+});
+const endDustQuote = createToken({
+  name: 'endDustQuote',
+  pattern: /"/,
+  pop_mode: true,
+});
+const rd = createToken({ name: 'rd', pattern: '{' });
+const ld = createToken({ name: 'ld', pattern: '}' });
 const lb = createToken({ name: 'lb', pattern: /\[/ });
 const rb = createToken({ name: 'rb', pattern: /]/ });
 const bar = createToken({ name: 'bar', pattern: /\|/ });
 const hash = createToken({ name: 'hash', pattern: /#/ });
 const carat = createToken({ name: 'carat', pattern: /\^/ });
 const escapedQuote = createToken({ name: 'escapedQuote', pattern: /\\\\"/ });
-const quote = createToken({ name: 'quote', pattern: /"/ });
+const quotedKey = createToken({ name: 'quotedKey', pattern: /"[^"]*"/ });
 const questionMark = createToken({ name: 'questionMark', pattern: /\?/ });
 const gt = createToken({ name: 'gt', pattern: />/ });
 const lt = createToken({ name: 'lt', pattern: /</ });
@@ -67,7 +81,7 @@ const signedInteger = createToken({
   name: 'signedInteger',
   pattern: /-[0-9]+/,
 });
-const char = createToken({ name: 'char', pattern: /[\s\S]/ });
+const char = createToken({ name: 'char', pattern: /\s|\S/ });
 
 // html tokens
 const startTag = createToken({
@@ -92,7 +106,6 @@ const htmlSelfClosingTagEnd = createToken({
 const attributeName = createToken({
   name: 'attributeName',
   pattern: /[^\s=/>"']+/,
-  push_mode: MODES.ATTRIBUTE_NAME_STATE,
 });
 const attributeValue = createToken({
   name: 'attributeValue',
@@ -102,11 +115,20 @@ const attributeValue = createToken({
 const attributeEquals = createToken({
   name: 'attributeEquals',
   pattern: /\s*=\s*/,
+  push_mode: MODES.ATTRIBUTE_NAME_STATE,
 });
 const attributeWhiteSpace = createToken({
   name: 'attributeWhiteSpace',
   pattern: /\s/,
   pop_mode: true,
+});
+const buffer = createToken({
+  name: 'buffer',
+  pattern: /[^{<]+/,
+});
+const dustQuoteBuffer = createToken({
+  name: 'dustQuoteBuffer',
+  pattern: /[^{\\"]+/,
 });
 
 const lexerDefinition = {
@@ -114,25 +136,29 @@ const lexerDefinition = {
     [MODES.DATA]: [
       comment,
       raw,
+      dustElse,
       dustStart,
       startTag,
       closingDustTag,
       closingHtmlTag,
+      buffer,
       char,
     ],
     [MODES.DUST]: [
+      WhiteSpace,
       comment,
       raw,
       dustStart,
       selfClosingDustTagEnd,
       closingDustTagEnd,
+      startDustQuotedParam,
+      quotedKey,
       lb,
       rb,
       bar,
       hash,
       carat,
       escapedQuote,
-      quote,
       questionMark,
       gt,
       lt,
@@ -143,11 +169,18 @@ const lexerDefinition = {
       at,
       tilde,
       key,
-      dot,
-      unsignedInteger,
       float,
+      unsignedInteger,
       signedInteger,
+      dot,
       char,
+    ],
+    // inside dust params we can have literals, references, or specials
+    [MODES.DUST_QUOTE]: [
+      dustStart,
+      escapedQuote,
+      endDustQuote,
+      dustQuoteBuffer,
     ],
     [MODES.TAG_OPEN_STATE]: [
       WhiteSpace,
@@ -157,9 +190,9 @@ const lexerDefinition = {
       htmlSelfClosingTagEnd,
       htmlTagEnd,
       attributeName,
+      attributeEquals,
     ],
     [MODES.ATTRIBUTE_NAME_STATE]: [
-      attributeEquals,
       attributeValue,
       attributeWhiteSpace,
     ],
@@ -182,7 +215,7 @@ module.exports = {
     const lexingResult = SelectLexer.tokenize(inputText);
 
     if (lexingResult.errors.length > 0) {
-      throw Error('Error lexing input text', lexingResult.errors);
+      throw Error(`Error lexing input text: ${lexingResult.errors[0].message}`);
     }
 
     return lexingResult;

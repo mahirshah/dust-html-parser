@@ -2,15 +2,26 @@ const { Parser } = require('chevrotain');
 const { tokenVocabulary, lex } = require('../lex');
 
 const {
-  ld,
-  rd,
+  comment,
+  raw,
+  dustElse,
+  dustStart,
+  startTag,
+  closingDustTag,
+  closingHtmlTag,
+  buffer,
+  char,
+  WhiteSpace,
+  selfClosingDustTagEnd,
+  closingDustTagEnd,
+  startDustQuotedParam,
+  quotedKey,
   lb,
   rb,
   bar,
   hash,
   carat,
   escapedQuote,
-  quote,
   questionMark,
   gt,
   lt,
@@ -20,13 +31,20 @@ const {
   colon,
   at,
   tilde,
-  comment,
   key,
   dot,
   unsignedInteger,
   float,
   signedInteger,
-  text,
+  rd,
+  ld,
+  endDustQuote,
+  htmlSelfClosingTagEnd,
+  htmlTagEnd,
+  attributeName,
+  attributeEquals,
+  attributeValue,
+  attributeWhiteSpace,
 } = tokenVocabulary;
 
 class DustParser extends Parser {
@@ -34,9 +52,147 @@ class DustParser extends Parser {
     super(input, tokenVocabulary);
     const $ = this;
 
+    $.RULE('body', () => {
+      $.MANY(() => {
+        $.SUBRULE($.part);
+      });
+    });
+
+    $.RULE('part', () => {
+      $.OR([
+        {
+          ALT: () => {
+            $.SUBRULE($.raw);
+          },
+        },
+        {
+          ALT: () => {
+            $.SUBRULE($.comment);
+          },
+        },
+        {
+          ALT: () => {
+            $.SUBRULE($.section);
+          },
+        },
+        // todo: add other parts here
+      ]);
+    });
+
+    $.RULE('section', () => {
+      $.CONSUME(dustStart);
+      $.OR([
+        {
+          ALT: () => {
+            $.CONSUME(hash);
+          },
+        },
+        {
+          ALT: () => {
+            $.CONSUME(questionMark);
+          },
+        },
+        {
+          ALT: () => {
+            $.CONSUME(carat);
+          },
+        },
+        {
+          ALT: () => {
+            $.CONSUME(lt);
+          },
+        },
+        {
+          ALT: () => {
+            $.CONSUME(plus);
+          },
+        },
+        {
+          ALT: () => {
+            $.CONSUME(at);
+          },
+        },
+        {
+          ALT: () => {
+            $.CONSUME(percent);
+          },
+        },
+      ]);
+      $.SUBRULE($.identifier);
+      $.SUBRULE($.context);
+      $.SUBRULE($.params);
+      $.OR([
+        {
+          ALT: () => {
+            $.CONSUME(selfClosingDustTagEnd);
+          },
+        },
+        {
+          ALT: () => {
+            $.CONSUME(closingDustTagEnd);
+            $.SUBRULE($.body);
+            $.OPTION(() => {
+              $.CONSUME(dustElse);
+              $.SUBRULE2($.body);
+            });
+            $.CONSUME(closingDustTag);
+          },
+        },
+      ]);
+    });
+
+    $.RULE('context', () => {
+      $.CONSUME(colon);
+      $.SUBRULE($.identifier);
+    });
+
+    $.RULE('params', () => {
+      $.MANY(() => {
+        $.CONSUME(key);
+        $.OR([
+          {
+            ALT: () => {
+              $.CONSUME(equals);
+              $.OR([
+                {
+                  ALT: () => {
+                    // todo: implement number
+                    $.SUBRULE($.number);
+                  },
+                },
+                {
+                  ALT: () => {
+                    $.SUBRULE($.identifier);
+                  },
+                }
+              ]);
+            },
+          },
+          {
+            ALT: () => {
+              $.CONSUME(startDustQuotedParam);
+              // todo: implement inline without start quote
+              $.SUBRULE($.inlineWithoutStartQuote);
+            },
+          }
+        ]);
+      });
+    });
+
     // {path|filter|filter2}
     $.RULE('reference', () => {
-      $.CONSUME(ld);
+      $.OR([
+        {
+          ALT: () => {
+            $.CONSUME(dustStart);
+          },
+        },
+        {
+          ALT: () => {
+            $.CONSUME(lb);
+          },
+        },
+      ]);
       $.SUBRULE($.path);
       $.OPTION(() => {
         $.CONSUME(bar);
@@ -53,6 +209,11 @@ class DustParser extends Parser {
     // {! comment !}
     $.RULE('comment', () => {
       $.CONSUME(comment);
+    });
+
+    // {` raw `}
+    $.RULE('raw', () => {
+      $.CONSUME(raw);
     });
 
     $.RULE('tagstart', () => {
