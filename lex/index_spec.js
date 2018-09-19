@@ -50,7 +50,7 @@ const {
 
 describe('Test Lexer', () => {
   it('can lex simple input', () => {
-    const inputText = '{@component}Text{/component}';
+    const inputText = '{@component}Text{/  component  }';
     const lexResult = lex(inputText);
 
     expect(lexResult.errors).to.be.empty;
@@ -108,7 +108,7 @@ describe('Test Lexer', () => {
   });
 
   it('can lex dust attributes', () => {
-    const inputText = '{>"somereference{}" param="doublequote" param2=true /}';
+    const inputText = '{>"somereference{}" param="doublequote {abc|filter1} abc" param2=true /}';
     const lexResult = lex(inputText);
 
     expect(lexResult.errors).to.be.empty;
@@ -138,7 +138,31 @@ describe('Test Lexer', () => {
         type: startDustQuotedParam,
       },
       {
-        image: 'doublequote',
+        image: 'doublequote ',
+        type: dustQuoteBuffer,
+      },
+      {
+        image: '{',
+        type: dustStart,
+      },
+      {
+        image: 'abc',
+        type: key,
+      },
+      {
+        image: '|',
+        type: bar,
+      },
+      {
+        image: 'filter1',
+        type: key,
+      },
+      {
+        image: '}',
+        type: closingDustTagEnd,
+      },
+      {
+        image: ' abc',
         type: dustQuoteBuffer,
       },
       {

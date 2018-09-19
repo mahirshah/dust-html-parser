@@ -38,7 +38,7 @@ const closingDustTag = createToken({
   name: 'closingDustTag',
   pattern: /{\/[^}]+}/,
 });
-const dustElse = createToken({name: 'else', pattern: /{:else}/});
+const dustElse = createToken({name: 'dustElse', pattern: /{:else}/});
 const startDustQuotedParam = createToken({
   name: 'startDustQuotedParam',
   pattern: /="/,
@@ -49,8 +49,6 @@ const endDustQuote = createToken({
   pattern: /"/,
   pop_mode: true,
 });
-const rd = createToken({ name: 'rd', pattern: '{' });
-const ld = createToken({ name: 'ld', pattern: '}' });
 const lb = createToken({ name: 'lb', pattern: /\[/ });
 const rb = createToken({ name: 'rb', pattern: /]/ });
 const bar = createToken({ name: 'bar', pattern: /\|/ });
@@ -137,9 +135,9 @@ const lexerDefinition = {
       comment,
       raw,
       dustElse,
+      closingDustTag,
       dustStart,
       startTag,
-      closingDustTag,
       closingHtmlTag,
       buffer,
       char,
@@ -200,7 +198,7 @@ const lexerDefinition = {
   defaultMode: MODES.DATA,
 };
 
-const SelectLexer = new Lexer(lexerDefinition);
+const DustLexer = new Lexer(lexerDefinition);
 
 module.exports = {
   tokenVocabulary: [].concat(...Object.values(lexerDefinition.modes)).reduce(
@@ -210,9 +208,9 @@ module.exports = {
     }),
     {}
   ),
-
+  lexerDefinition,
   lex(inputText) {
-    const lexingResult = SelectLexer.tokenize(inputText);
+    const lexingResult = DustLexer.tokenize(inputText);
 
     if (lexingResult.errors.length > 0) {
       throw Error(`Error lexing input text: ${lexingResult.errors[0].message}`);
@@ -220,4 +218,5 @@ module.exports = {
 
     return lexingResult;
   },
+  DustLexer,
 };

@@ -103,7 +103,7 @@ function matchTag(text, startOffset) {
     return null;
   }
 
-  const closingBraceIndex = text.slice(startOffset).indexOf('}');
+  const closingBraceIndex = text.slice(startOffset).indexOf('}') + startOffset;
 
   if (closingBraceIndex === -1) {
     return null;

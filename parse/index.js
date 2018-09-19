@@ -1,5 +1,5 @@
 const { Parser } = require('chevrotain');
-const { tokenVocabulary, lex } = require('../lex');
+const { tokenVocabulary, lex, DustLexer, lexerDefinition } = require('../lex');
 
 const {
   comment,
@@ -11,7 +11,6 @@ const {
   closingHtmlTag,
   buffer,
   char,
-  WhiteSpace,
   selfClosingDustTagEnd,
   closingDustTagEnd,
   startDustQuotedParam,
@@ -36,9 +35,8 @@ const {
   unsignedInteger,
   float,
   signedInteger,
-  rd,
-  ld,
   endDustQuote,
+  dustQuoteBuffer,
   htmlSelfClosingTagEnd,
   htmlTagEnd,
   attributeName,
@@ -49,7 +47,7 @@ const {
 
 class DustParser extends Parser {
   constructor(input) {
-    super(input, tokenVocabulary);
+    super(input, lexerDefinition);
     const $ = this;
 
     $.RULE('body', () => {
@@ -62,12 +60,12 @@ class DustParser extends Parser {
       $.OR([
         {
           ALT: () => {
-            $.SUBRULE($.raw);
+            $.SUBRULE($.rawRule);
           },
         },
         {
           ALT: () => {
-            $.SUBRULE($.comment);
+            $.SUBRULE($.commentRule);
           },
         },
         {
@@ -75,7 +73,32 @@ class DustParser extends Parser {
             $.SUBRULE($.section);
           },
         },
-        // todo: add other parts here
+        {
+          ALT: () => {
+            $.SUBRULE($.special);
+          },
+        },
+        {
+          ALT: () => {
+            $.SUBRULE($.reference);
+          },
+        },
+        {
+          ALT: () => {
+            $.OR1([
+              {
+                ALT: () => {
+                  $.CONSUME(buffer);
+                },
+              },
+              {
+                ALT: () => {
+                  $.CONSUME(char);
+                },
+              },
+            ]);
+          },
+        },
       ]);
     });
 
@@ -121,7 +144,7 @@ class DustParser extends Parser {
       $.SUBRULE($.identifier);
       $.SUBRULE($.context);
       $.SUBRULE($.params);
-      $.OR([
+      $.OR1([
         {
           ALT: () => {
             $.CONSUME(selfClosingDustTagEnd);
@@ -142,8 +165,10 @@ class DustParser extends Parser {
     });
 
     $.RULE('context', () => {
-      $.CONSUME(colon);
-      $.SUBRULE($.identifier);
+      $.OPTION(() => {
+        $.CONSUME(colon);
+        $.SUBRULE($.identifier);
+      });
     });
 
     $.RULE('params', () => {
@@ -153,10 +178,9 @@ class DustParser extends Parser {
           {
             ALT: () => {
               $.CONSUME(equals);
-              $.OR([
+              $.OR1([
                 {
                   ALT: () => {
-                    // todo: implement number
                     $.SUBRULE($.number);
                   },
                 },
@@ -164,150 +188,61 @@ class DustParser extends Parser {
                   ALT: () => {
                     $.SUBRULE($.identifier);
                   },
-                }
+                },
               ]);
             },
           },
           {
             ALT: () => {
               $.CONSUME(startDustQuotedParam);
-              // todo: implement inline without start quote
               $.SUBRULE($.inlineWithoutStartQuote);
             },
-          }
+          },
         ]);
       });
     });
 
-    // {path|filter|filter2}
+    // {identifier|filter|filter2}
     $.RULE('reference', () => {
+      $.CONSUME(dustStart);
+      $.SUBRULE($.identifier);
+      $.SUBRULE($.filters);
+      $.CONSUME(closingDustTagEnd);
+    });
+
+    // |filter1|filter2
+    $.RULE('filters', () => {
+      $.MANY(() => {
+        $.CONSUME(bar);
+        $.CONSUME(key);
+      });
+    });
+
+    // {~key}
+    $.RULE('special', () => {
+      $.CONSUME(dustStart);
+      $.CONSUME(tilde);
+      $.CONSUME(key);
+      $.CONSUME(closingDustTagEnd);
+    });
+
+    // a path or key
+    $.RULE('identifier', () => {
       $.OR([
         {
           ALT: () => {
-            $.CONSUME(dustStart);
+            $.SUBRULE($.path);
           },
         },
         {
           ALT: () => {
-            $.CONSUME(lb);
-          },
-        },
-      ]);
-      $.SUBRULE($.path);
-      $.OPTION(() => {
-        $.CONSUME(bar);
-        $.MANY_SEP({
-          SEP: bar,
-          DEF: () => {
             $.CONSUME(key);
           },
-        });
-      });
-      $.CONSUME(rd);
-    });
-
-    // {! comment !}
-    $.RULE('comment', () => {
-      $.CONSUME(comment);
-    });
-
-    // {` raw `}
-    $.RULE('raw', () => {
-      $.CONSUME(raw);
-    });
-
-    $.RULE('tagstart', () => {
-      $.CONSUME(ld);
-      $.OR([
-        {
-          ALT: () => {
-            $.CONSUME(hash);
-          },
-        },
-        {
-          ALT: () => {
-            $.CONSUME(questionMark);
-          },
-        },
-        {
-          ALT: () => {
-            $.CONSUME(carat);
-          },
-        },
-        {
-          ALT: () => {
-            $.CONSUME(lt);
-          },
-        },
-        {
-          ALT: () => {
-            $.CONSUME(plus);
-          },
-        },
-        {
-          ALT: () => {
-            $.CONSUME(at);
-          },
-        },
-        {
-          ALT: () => {
-            $.CONSUME(percent);
-          },
-        },
-      ]);
-      $.SUBRULE($.path);
-      $.OPTION(() => {
-        $.CONSUME(colon);
-        $.SUBRULE($.path);
-      });
-      $.SUBRULE($.params);
-    });
-
-    $.RULE('param', () => {
-      $.CONSUME(key);
-      $.CONSUME(equals);
-      $.OR([
-        {
-          ALT: () => {
-            $.SUBRULE($.number);
-          },
-        },
-        {
-          ALT: () => {
-            $.SUBRULE($.identifier);
-          },
-        },
-        {
-          ALT: () => {
-            $.SUBRULE($.inline);
-          },
         },
       ]);
     });
 
-    $.RULE('inline', () => {
-      $.OR([
-        {
-          ALT: () => {
-            $.CONSUME(quote);
-            $.CONSUME(quote);
-          },
-        },
-        {
-          ALT: () => {
-            $.CONSUME(quote);
-            $.CONSUME(quote);
-          },
-        },
-        {
-          ALT: () => {
-            $.CONSUME(quote);
-            $.CONSUME(quote);
-          },
-        },
-      ]);
-    });
-
+    // 5 or -5 or 5.5 or -5.5
     $.RULE('number', () => {
       $.OR([
         {
@@ -337,7 +272,7 @@ class DustParser extends Parser {
               $.CONSUME(key);
             });
             $.AT_LEAST_ONE(() => {
-              $.OR([
+              $.OR1([
                 {
                   ALT: () => {
                     $.SUBRULE($.arrayPart);
@@ -356,15 +291,15 @@ class DustParser extends Parser {
           ALT: () => {
             $.CONSUME(dot);
             $.MANY(() => {
-              $.OR([
+              $.OR2([
                 {
                   ALT: () => {
-                    $.SUBRULE($.arrayPart);
+                    $.SUBRULE1($.arrayPart);
                   },
                 },
                 {
                   ALT: () => {
-                    $.SUBRULE($.array);
+                    $.SUBRULE1($.array);
                   },
                 },
               ]);
@@ -404,20 +339,42 @@ class DustParser extends Parser {
       });
     });
 
-    // a path or key
-    $.RULE('identifier', () => {
-      $.OR([
-        {
-          ALT: () => {
-            $.SUBRULE($.path);
+    $.RULE('inlineWithoutStartQuote', () => {
+      $.MANY(() => {
+        $.OR([
+          {
+            ALT: () => {
+              $.SUBRULE($.special);
+            },
           },
-        },
-        {
-          ALT: () => {
-            $.CONSUME(key);
+          {
+            ALT: () => {
+              $.SUBRULE($.reference);
+            },
           },
-        },
-      ]);
+          {
+            ALT: () => {
+              $.CONSUME(escapedQuote);
+            },
+          },
+          {
+            ALT: () => {
+              $.CONSUME(dustQuoteBuffer);
+            },
+          },
+        ]);
+      });
+      $.CONSUME(endDustQuote);
+    });
+
+    // {` raw `}
+    $.RULE('rawRule', () => {
+      $.CONSUME(raw);
+    });
+
+    // {! comment !}
+    $.RULE('commentRule', () => {
+      $.CONSUME(comment);
     });
 
     this.performSelfAnalysis();
@@ -430,7 +387,14 @@ module.exports = {
   parserInstance,
   DustParser,
   parse(inputText) {
-    const lexResult = lex(inputText);
+    const lexResult = DustLexer.tokenize(inputText);
     parserInstance.input = lexResult.tokens;
+    parserInstance.body();
+
+    if(parserInstance.errors.length > 0) {
+      throw new Error(`Error parsing input: ${parserInstance.errors[0].message}`);
+    }
+
+    return parserInstance;
   },
 };
