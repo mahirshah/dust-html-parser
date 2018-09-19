@@ -1,5 +1,5 @@
 const { expect } = require('chai');
-const { isReference } = require('./dustHelpers');
+const { isReference } = require('../../src/utils/dustHelpers');
 
 describe('Test isReference', () => {
   const passingCases = [

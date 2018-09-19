@@ -1,5 +1,5 @@
 const { createToken, Lexer } = require('chevrotain');
-const { matchTag, isReference } = require('./dustHelpers');
+const { matchTag, isReference } = require('../utils/dustHelpers');
 
 const MODES = {
   TAG_OPEN_STATE: 'TAG_OPEN_STATE',
@@ -82,8 +82,8 @@ const signedInteger = createToken({
 const char = createToken({ name: 'char', pattern: /\s|\S/ });
 
 // html tokens
-const startTag = createToken({
-  name: 'startTag',
+const htmlStartTag = createToken({
+  name: 'htmlStartTag',
   pattern: /<[a-zA-Z][^\s/>]+/,
   push_mode: MODES.TAG_OPEN_STATE,
 });
@@ -97,7 +97,7 @@ const htmlTagEnd = createToken({
   pop_mode: true,
 });
 const htmlSelfClosingTagEnd = createToken({
-  name: 'htmlTagEnd',
+  name: 'htmlSelfClosingTagEnd',
   pattern: /\/>/,
   pop_mode: true,
 });
@@ -137,7 +137,7 @@ const lexerDefinition = {
       dustElse,
       closingDustTag,
       dustStart,
-      startTag,
+      htmlStartTag,
       closingHtmlTag,
       buffer,
       char,

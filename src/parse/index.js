@@ -6,7 +6,7 @@ const {
   raw,
   dustElse,
   dustStart,
-  startTag,
+  htmlStartTag,
   closingDustTag,
   closingHtmlTag,
   buffer,
@@ -375,6 +375,11 @@ class DustParser extends Parser {
     // {! comment !}
     $.RULE('commentRule', () => {
       $.CONSUME(comment);
+    });
+
+    $.RULE('htmlTag', () => {
+      $.CONSUME(htmlStartTag);
+
     });
 
     this.performSelfAnalysis();

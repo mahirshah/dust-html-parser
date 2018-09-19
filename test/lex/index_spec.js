@@ -1,12 +1,12 @@
 const { expect } = require('chai');
-const { lex, tokenVocabulary } = require('./index');
+const { lex, tokenVocabulary } = require('../../src/lex');
 
 const {
   comment,
   raw,
   dustElse,
   dustStart,
-  startTag,
+  htmlStartTag,
   closingDustTag,
   closingHtmlTag,
   buffer,
@@ -278,6 +278,55 @@ describe('Test Lexer', () => {
     const lexResult = lex(inputText);
 
     expect(lexResult.errors).to.be.empty;
+  });
+
+  it('can lex self closing html tags', () => {
+    const inputText = '<br attr="a\'<>" data-test-foo {abc}/>';
+    const lexResult = lex(inputText);
+
+    expect(lexResult.errors).to.be.empty;
+    const tokens = lexResult.tokens.map(token => ({
+      image: token.image,
+      type: token.tokenType,
+    }));
+    expect(tokens).to.deep.equal([
+      {
+        image: '<br',
+        type: htmlStartTag,
+      },
+      {
+        image: 'attr',
+        type: attributeName,
+      },
+      {
+        image: '=',
+        type: attributeEquals,
+      },
+      {
+        image: '"a\'<>"',
+        type: attributeValue,
+      },
+      {
+        image: 'data-test-foo',
+        type: attributeName,
+      },
+      {
+        image: '{',
+        type: dustStart,
+      },
+      {
+        image: 'abc',
+        type: key,
+      },
+      {
+        image: '}',
+        type: closingDustTagEnd,
+      },
+      {
+        image: '/>',
+        type: htmlSelfClosingTagEnd,
+      },
+    ]);
   });
 
   it('can lex html dust mix', () => {
