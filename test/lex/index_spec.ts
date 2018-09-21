@@ -1,4 +1,4 @@
-import { expect }  from 'chai';
+import { expect } from 'chai';
 import { lex, tokenVocabulary } from '../../src/lex';
 
 const {
@@ -68,7 +68,7 @@ describe('Test Lexer', () => {
 
     expect(lexResult.errors).to.be.empty;
 
-    const tokens = lexResult.tokens.map(token => ({
+    const tokens = lexResult.tokens.map((token) => ({
       image: token.image,
       type: token.tokenType,
     }));
@@ -116,7 +116,7 @@ describe('Test Lexer', () => {
     const lexResult = lex(inputText);
 
     expect(lexResult.errors).to.be.empty;
-    const tokens = lexResult.tokens.map(token => ({
+    const tokens = lexResult.tokens.map((token) => ({
       image: token.image,
       type: token.tokenType,
     }));
@@ -197,7 +197,7 @@ describe('Test Lexer', () => {
     const lexResult = lex(inputText);
 
     expect(lexResult.errors).to.be.empty;
-    const tokens = lexResult.tokens.map(token => ({
+    const tokens = lexResult.tokens.map((token) => ({
       image: token.image,
       type: token.tokenType,
     }));
@@ -289,7 +289,7 @@ describe('Test Lexer', () => {
     const lexResult = lex(inputText);
 
     expect(lexResult.errors).to.be.empty;
-    const tokens = lexResult.tokens.map(token => ({
+    const tokens = lexResult.tokens.map((token) => ({
       image: token.image,
       type: token.tokenType,
     }));
