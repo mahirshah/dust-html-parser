@@ -81,6 +81,16 @@ export class DustParser extends Parser {
       },
       {
         ALT: () => {
+          this.SUBRULE(this.partial);
+        },
+      },
+      {
+        ALT: () => {
+          this.SUBRULE(this.selfClosingBlock);
+        },
+      },
+      {
+        ALT: () => {
           this.SUBRULE(this.htmlTag);
         },
       },
@@ -124,11 +134,6 @@ export class DustParser extends Parser {
       {
         ALT: () => {
           this.CONSUME(lt);
-        },
-      },
-      {
-        ALT: () => {
-          this.CONSUME(plus);
         },
       },
       {
@@ -211,21 +216,47 @@ export class DustParser extends Parser {
     this.CONSUME(closingDustTagEnd);
   });
 
-  private partial = this.RULE('partial', () => {
+  private selfClosingBlock = this.RULE('selfClosingBlock', () => {
     this.CONSUME(dustStart);
+    this.CONSUME(plus);
     this.OR([
       {
         ALT: () => {
-          this.CONSUME(gt);
+          this.CONSUME(key);
         },
       },
       {
         ALT: () => {
-          this.CONSUME(plus);
+          this.CONSUME(quotedKey);
         },
       },
     ]);
+    this.SUBRULE(this.context);
+    this.SUBRULE(this.params);
     this.OR1([
+      {
+        ALT: () => {
+          this.CONSUME(selfClosingDustTagEnd);
+        },
+      },
+      {
+        ALT: () => {
+          this.CONSUME(closingDustTagEnd);
+          this.SUBRULE(this.body);
+          this.OPTION(() => {
+            this.CONSUME(dustElse);
+            this.SUBRULE2(this.body);
+          });
+          this.CONSUME(closingDustTag);
+        },
+      },
+    ]);
+  });
+
+  private partial = this.RULE('partial', () => {
+    this.CONSUME(dustStart);
+    this.CONSUME(gt);
+    this.OR([
       {
         ALT: () => {
           this.CONSUME(key);
