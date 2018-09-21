@@ -5,19 +5,19 @@ const INT_TOKEN = 'I';
 const R_ACCEPTED_CHARS = /^{[\][0-9a-zA-Z_$\-.|]+}$/;
 const R_NON_REF_TAG = /^{\s*[#?^><+%:@/~]\s*[^}]+}$/;
 
-function isReference(string) {
+export function isReference(str: string) {
   // first make sure the starting char is "{"
-  if (string[0] !== '{') {
+  if (str[0] !== '{') {
     return false;
   }
   // make sure it has a closing brace and does not immediately follow the
   // opening brace
-  const indexOfRightBrace = string.indexOf('}');
+  const indexOfRightBrace = str.indexOf('}');
   if (indexOfRightBrace === -1 || indexOfRightBrace === 1) {
     return false;
   }
 
-  const substring = string.substring(0, indexOfRightBrace + 1);
+  const substring = str.substring(0, indexOfRightBrace + 1);
   let bracketCount = 0;
 
   // ensure no non-valid chars inside reference
@@ -64,14 +64,14 @@ function isReference(string) {
         return false;
       }
     } else if (char === '|') {
-      if(prevChar === '{') {
+      if (prevChar === '{') {
         return false;
       }
 
       return tokenizedSubstring
         .slice(i + 1, -1)
         .split('|')
-        .every(token => token === KEY_TOKEN);
+        .every((token) => token === KEY_TOKEN);
     }
   }
 
@@ -79,7 +79,7 @@ function isReference(string) {
 }
 
 // ld ws* [#?^><+%:@/~%] ws* (!rd !eol .)+ ws* rd
-function isNonReferenceTag(tagString) {
+function isNonReferenceTag(tagString: string) {
   return R_NON_REF_TAG.test(tagString);
 }
 
@@ -98,7 +98,10 @@ function isNonReferenceTag(tagString) {
  * @param {number} startOffset - the start offset in the string
  * @return {null|string[]} - null if no match, or ['{'] if match
  */
-function matchTag(text, startOffset) {
+export function matchTag(
+  text: string,
+  startOffset: number,
+): RegExpExecArray | null {
   if (text[startOffset] !== '{') {
     return null;
   }
@@ -112,11 +115,6 @@ function matchTag(text, startOffset) {
   const tagSubstring = text.substring(startOffset, closingBraceIndex + 1);
 
   return isNonReferenceTag(tagSubstring) || isReference(tagSubstring)
-    ? ['{']
+    ? (['{'] as RegExpExecArray)
     : null;
 }
-
-module.exports = {
-  isReference,
-  matchTag,
-};

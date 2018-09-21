@@ -1,5 +1,5 @@
-const { expect } = require('chai');
-const { parse } = require('../../src/parse');
+import { expect } from 'chai';
+import { parse } from '../../src/parse';
 
 describe('Test Parser', () => {
   it('can parse simple input', () => {

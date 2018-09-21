@@ -1,5 +1,5 @@
-const { expect } = require('chai');
-const { lex, tokenVocabulary } = require('../../src/lex');
+import { expect }  from 'chai';
+import { lex, tokenVocabulary } from '../../src/lex';
 
 const {
   comment,
@@ -11,7 +11,6 @@ const {
   closingHtmlTag,
   buffer,
   char,
-  WhiteSpace,
   selfClosingDustTagEnd,
   closingDustTagEnd,
   startDustQuotedParam,
@@ -37,8 +36,6 @@ const {
   unsignedInteger,
   float,
   signedInteger,
-  rd,
-  ld,
   endDustQuote,
   htmlSelfClosingTagEnd,
   htmlTagEnd,
@@ -105,6 +102,13 @@ describe('Test Lexer', () => {
         type: closingDustTagEnd,
       },
     ]);
+  });
+
+  it('can lex section keys that are paths', () => {
+    const inputText = '{>somePath[0]}{/somePath[0]}';
+    const lexResult = lex(inputText);
+
+    expect(lexResult.errors).to.be.empty;
   });
 
   it('can lex dust attributes', () => {

@@ -1,13 +1,18 @@
-const { createToken, Lexer } = require('chevrotain');
-const { matchTag, isReference } = require('../utils/dustHelpers');
+import {
+  createToken,
+  IMultiModeLexerDefinition,
+  Lexer,
+  TokenType,
+} from 'chevrotain';
+import { matchTag } from '../utils/dustHelpers';
 
-const MODES = {
-  TAG_OPEN_STATE: 'TAG_OPEN_STATE',
-  ATTRIBUTE_NAME_STATE: 'ATTRIBUTE_NAME_STATE',
-  DATA: 'DATA',
-  DUST: 'DUST',
-  DUST_QUOTE: 'DUST_QUOTE',
-};
+enum MODE {
+  TAG_OPEN_STATE = 'TAG_OPEN_STATE',
+  ATTRIBUTE_NAME_STATE = 'ATTRIBUTE_NAME_STATE',
+  DATA = 'DATA',
+  DUST = 'DUST',
+  DUST_QUOTE = 'DUST_QUOTE',
+}
 const WhiteSpace = createToken({
   name: 'WhiteSpace',
   pattern: /\s+/,
@@ -21,7 +26,7 @@ const raw = createToken({ name: 'raw', pattern: /{`(?:[^`]|`(?!}))*!}/ });
 const dustStart = createToken({
   name: 'dustStart',
   pattern: matchTag,
-  push_mode: MODES.DUST,
+  push_mode: MODE.DUST,
   line_breaks: false,
 });
 const selfClosingDustTagEnd = createToken({
@@ -38,11 +43,11 @@ const closingDustTag = createToken({
   name: 'closingDustTag',
   pattern: /{\/[^}]+}/,
 });
-const dustElse = createToken({name: 'dustElse', pattern: /{:else}/});
+const dustElse = createToken({ name: 'dustElse', pattern: /{:else}/ });
 const startDustQuotedParam = createToken({
   name: 'startDustQuotedParam',
   pattern: /="/,
-  push_mode: MODES.DUST_QUOTE,
+  push_mode: MODE.DUST_QUOTE,
 });
 const endDustQuote = createToken({
   name: 'endDustQuote',
@@ -85,7 +90,7 @@ const char = createToken({ name: 'char', pattern: /\s|\S/ });
 const htmlStartTag = createToken({
   name: 'htmlStartTag',
   pattern: /<[a-zA-Z][^\s/>]+/,
-  push_mode: MODES.TAG_OPEN_STATE,
+  push_mode: MODE.TAG_OPEN_STATE,
 });
 const closingHtmlTag = createToken({
   name: 'closingHtmlTag',
@@ -113,7 +118,7 @@ const attributeValue = createToken({
 const attributeEquals = createToken({
   name: 'attributeEquals',
   pattern: /\s*=\s*/,
-  push_mode: MODES.ATTRIBUTE_NAME_STATE,
+  push_mode: MODE.ATTRIBUTE_NAME_STATE,
 });
 const attributeWhiteSpace = createToken({
   name: 'attributeWhiteSpace',
@@ -129,9 +134,9 @@ const dustQuoteBuffer = createToken({
   pattern: /[^{\\"]+/,
 });
 
-const lexerDefinition = {
+export const lexerDefinition: IMultiModeLexerDefinition = {
   modes: {
-    [MODES.DATA]: [
+    [MODE.DATA]: [
       comment,
       raw,
       dustElse,
@@ -142,7 +147,7 @@ const lexerDefinition = {
       buffer,
       char,
     ],
-    [MODES.DUST]: [
+    [MODE.DUST]: [
       WhiteSpace,
       comment,
       raw,
@@ -174,13 +179,8 @@ const lexerDefinition = {
       char,
     ],
     // inside dust params we can have literals, references, or specials
-    [MODES.DUST_QUOTE]: [
-      dustStart,
-      escapedQuote,
-      endDustQuote,
-      dustQuoteBuffer,
-    ],
-    [MODES.TAG_OPEN_STATE]: [
+    [MODE.DUST_QUOTE]: [dustStart, escapedQuote, endDustQuote, dustQuoteBuffer],
+    [MODE.TAG_OPEN_STATE]: [
       WhiteSpace,
       comment,
       raw,
@@ -190,33 +190,26 @@ const lexerDefinition = {
       attributeName,
       attributeEquals,
     ],
-    [MODES.ATTRIBUTE_NAME_STATE]: [
-      attributeValue,
-      attributeWhiteSpace,
-    ],
+    [MODE.ATTRIBUTE_NAME_STATE]: [attributeValue, attributeWhiteSpace],
   },
-  defaultMode: MODES.DATA,
+  defaultMode: MODE.DATA,
 };
-
-const DustLexer = new Lexer(lexerDefinition);
-
-module.exports = {
-  tokenVocabulary: [].concat(...Object.values(lexerDefinition.modes)).reduce(
-    (vocab, token) => ({
+export const DustLexer = new Lexer(lexerDefinition);
+export const tokenVocabulary = Array()
+  .concat(...Object.values(lexerDefinition.modes))
+  .reduce<{ [key: string]: TokenType }>(
+    (vocab, token: TokenType) => ({
       [token.name]: token,
       ...vocab,
     }),
-    {}
-  ),
-  lexerDefinition,
-  lex(inputText) {
-    const lexingResult = DustLexer.tokenize(inputText);
+    {},
+  );
+export function lex(inputText: string) {
+  const lexingResult = DustLexer.tokenize(inputText);
 
-    if (lexingResult.errors.length > 0) {
-      throw Error(`Error lexing input text: ${lexingResult.errors[0].message}`);
-    }
+  if (lexingResult.errors.length > 0) {
+    throw Error(`Error lexing input text: ${lexingResult.errors[0].message}`);
+  }
 
-    return lexingResult;
-  },
-  DustLexer,
-};
+  return lexingResult;
+}

@@ -1,5 +1,5 @@
-const { expect } = require('chai');
-const { isReference } = require('../../src/utils/dustHelpers');
+import { expect } from 'chai';
+import { isReference } from '../../src/utils/dustHelpers';
 
 describe('Test isReference', () => {
   const passingCases = [
@@ -20,7 +20,7 @@ describe('Test isReference', () => {
     '{[.a-a[.]]}',
     '{a[.a[.]]}',
     '{in_seah_lel}',
-    '{a|filter1|filter2}'
+    '{a|filter1|filter2}',
   ];
 
   const failingCases = [
@@ -45,18 +45,18 @@ describe('Test isReference', () => {
     '{a.}',
     '{..[0]}',
     '{a[.0]}',
-    '{a[a]a}'
+    '{a[a]a}',
   ];
 
-  passingCases.forEach(string =>
-    it(`true for ${string}`, () => {
-      expect(isReference(string)).to.be.true;
-    })
+  passingCases.forEach((str) =>
+    it(`true for ${str}`, () => {
+      expect(isReference(str)).to.be.true;
+    }),
   );
 
-  failingCases.forEach(string =>
-    it(`false for ${string}`, () => {
-      expect(isReference(string)).to.be.false;
-    })
+  failingCases.forEach((str) =>
+    it(`false for ${str}`, () => {
+      expect(isReference(str)).to.be.false;
+    }),
   );
 });
