@@ -105,7 +105,7 @@ describe('Test Lexer', () => {
   });
 
   it('can lex section keys that are paths', () => {
-    const inputText = '{>somePath[0]}{/somePath[0]}';
+    const inputText = '{#somePath[0]}{/somePath[0]}';
     const lexResult = lex(inputText);
 
     expect(lexResult.errors).to.be.empty;
@@ -349,8 +349,9 @@ describe('Test Lexer', () => {
         {@yield name="name"}
           {some_reference_here}
         {/yield}
-      {/contentFor}
+      {/someFoo}
     {/isFoo}
+  {/component}
 </form>
 `;
     const lexResult = lex(inputText);

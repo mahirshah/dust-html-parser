@@ -1,5 +1,5 @@
 import { IToken, Parser } from 'chevrotain';
-import { DustLexer, lexerDefinition, tokenVocabulary } from '../lex';
+import { lex, lexerDefinition, tokenVocabulary } from '../lex';
 
 const {
   comment,
@@ -490,6 +490,7 @@ export class DustParser extends Parser {
       });
     });
   });
+
   constructor(input: IToken[]) {
     super(input, lexerDefinition);
     this.performSelfAnalysis();
@@ -497,7 +498,7 @@ export class DustParser extends Parser {
 }
 export const parserInstance = new DustParser([]);
 export function parse(inputText: string) {
-  const lexResult = DustLexer.tokenize(inputText);
+  const lexResult = lex(inputText);
   parserInstance.input = lexResult.tokens;
   parserInstance.body();
 
