@@ -5,7 +5,8 @@
   "rules": {
     "quotemark": [true, "single", "avoid-escape"],
     "object-literal-sort-keys": false,
-    "no-trailing-whitespace": [true, "ignore-template-strings"]
+    "no-trailing-whitespace": [true, "ignore-template-strings"],
+    "member-ordering": false
   },
   "rulesDirectory": []
 }

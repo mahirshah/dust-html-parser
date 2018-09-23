@@ -1,4 +1,4 @@
-import { IToken, Parser } from 'chevrotain';
+import { CstNode, IToken, Parser } from 'chevrotain';
 import { lex, lexerDefinition, tokenVocabulary } from '../lex';
 
 const {
@@ -95,6 +95,7 @@ export class DustParser extends Parser {
         },
       },
       {
+        NAME: '$buffer',
         ALT: () => {
           this.OR1([
             {
@@ -492,19 +493,19 @@ export class DustParser extends Parser {
   });
 
   constructor(input: IToken[]) {
-    super(input, lexerDefinition);
+    super(input, lexerDefinition, { outputCst: true });
     this.performSelfAnalysis();
   }
 }
 export const parserInstance = new DustParser([]);
-export function parse(inputText: string) {
+export function parse(inputText: string): CstNode {
   const lexResult = lex(inputText);
   parserInstance.input = lexResult.tokens;
-  parserInstance.body();
+  const cst = parserInstance.body();
 
   if (parserInstance.errors.length > 0) {
     throw new Error(`Error parsing input: ${parserInstance.errors[0].message}`);
   }
 
-  return parserInstance;
+  return cst;
 }

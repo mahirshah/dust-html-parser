@@ -14,7 +14,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "chevrotain": "^3.7.4"
+    "chevrotain": "^3.7.4",
+    "typescript-optional": "^1.8.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.0.0",

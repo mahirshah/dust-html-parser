@@ -6,6 +6,7 @@ import {
 } from 'chevrotain';
 import { matchTag } from '../utils/dustHelpers';
 
+// todo: implement html comments
 enum MODE {
   TAG_OPEN_STATE = 'TAG_OPEN_STATE',
   ATTRIBUTE_NAME_STATE = 'ATTRIBUTE_NAME_STATE',
