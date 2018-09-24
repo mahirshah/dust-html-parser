@@ -2,6 +2,7 @@ import Node from './Node';
 import {
   IContext,
   IParam,
+  IPath,
   IRoot,
   ISection,
   ISource,
@@ -11,13 +12,13 @@ import {
 export default class Section extends Node implements ISection {
   constructor(
     sectionPrefixCharacter: string,
-    source: ISource,
-    public readonly key: string,
-    public readonly context: IContext,
+    public readonly key: IPath,
+    public readonly context: IContext | null,
     public readonly params: IParam[],
-    public readonly body: IRoot,
-    public readonly elseBody: IRoot,
+    public readonly body: IRoot | null,
+    public readonly elseBody: IRoot | null,
     public readonly selfClosing: boolean,
+    source: ISource,
   ) {
     super(Section.determineSectionType(sectionPrefixCharacter), source);
   }

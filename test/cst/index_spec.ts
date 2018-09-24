@@ -10,7 +10,7 @@ describe('Test CST Visitor', () => {
   });
 
   it('cst for dust section', () => {
-    const inputText = '{#sectionKey}abc{/sectionKey}';
+    const inputText = '{#a[0][1] b=1}abc{/sectionKey}';
     const ast = toAst(inputText);
 
     expect(true).to.be.true;

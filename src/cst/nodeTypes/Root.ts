@@ -1,5 +1,5 @@
 import Node from './Node';
-import { IDustComment, INode, IRoot, ISource, NODE_TYPE } from './NodeTypes';
+import { INode, IRoot, ISource, NODE_TYPE } from './NodeTypes';
 
 export default class Root extends Node implements IRoot {
   public readonly nodes: INode[];

@@ -1,8 +1,8 @@
-import { INode, ISource } from './NodeTypes';
+import { INode, ISource, NODE_TYPE } from './NodeTypes';
 
 export default class Node implements INode {
   constructor(
-    public readonly type: string,
+    public readonly type: NODE_TYPE,
     public readonly source: ISource,
   ) {}
 

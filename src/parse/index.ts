@@ -45,7 +45,6 @@ const {
 } = tokenVocabulary;
 
 export class DustParser extends Parser {
-
   public body = this.RULE('body', () => {
     this.MANY(() => {
       this.SUBRULE(this.part);
@@ -116,38 +115,7 @@ export class DustParser extends Parser {
 
   private section = this.RULE('section', () => {
     this.CONSUME(dustStart);
-    this.OR([
-      {
-        ALT: () => {
-          this.CONSUME(hash);
-        },
-      },
-      {
-        ALT: () => {
-          this.CONSUME(questionMark);
-        },
-      },
-      {
-        ALT: () => {
-          this.CONSUME(carat);
-        },
-      },
-      {
-        ALT: () => {
-          this.CONSUME(lt);
-        },
-      },
-      {
-        ALT: () => {
-          this.CONSUME(at);
-        },
-      },
-      {
-        ALT: () => {
-          this.CONSUME(percent);
-        },
-      },
-    ]);
+    this.SUBRULE(this.dustSectionCharacterPrefix);
     this.SUBRULE(this.identifier);
     this.SUBRULE(this.context);
     this.SUBRULE(this.params);
@@ -171,6 +139,44 @@ export class DustParser extends Parser {
     ]);
   });
 
+  private dustSectionCharacterPrefix = this.RULE(
+    'dustSectionCharacterPrefix',
+    () => {
+      this.OR([
+        {
+          ALT: () => {
+            this.CONSUME(hash);
+          },
+        },
+        {
+          ALT: () => {
+            this.CONSUME(questionMark);
+          },
+        },
+        {
+          ALT: () => {
+            this.CONSUME(carat);
+          },
+        },
+        {
+          ALT: () => {
+            this.CONSUME(lt);
+          },
+        },
+        {
+          ALT: () => {
+            this.CONSUME(at);
+          },
+        },
+        {
+          ALT: () => {
+            this.CONSUME(percent);
+          },
+        },
+      ]);
+    },
+  );
+
   private context = this.RULE('context', () => {
     this.OPTION(() => {
       this.CONSUME(colon);
@@ -180,33 +186,38 @@ export class DustParser extends Parser {
 
   private params = this.RULE('params', () => {
     this.MANY(() => {
-      this.CONSUME(key);
-      this.OR([
-        {
-          ALT: () => {
-            this.CONSUME(equals);
-            this.OR1([
-              {
-                ALT: () => {
-                  this.SUBRULE(this.number);
-                },
-              },
-              {
-                ALT: () => {
-                  this.SUBRULE(this.identifier);
-                },
-              },
-            ]);
-          },
-        },
-        {
-          ALT: () => {
-            this.CONSUME(startDustQuotedParam);
-            this.SUBRULE(this.inlineWithoutStartQuote);
-          },
-        },
-      ]);
+      this.SUBRULE(this.param);
     });
+  });
+
+  private param = this.RULE('param', () => {
+    this.CONSUME(key);
+    this.OR([
+      {
+        ALT: () => {
+          this.CONSUME(equals);
+          this.OR1([
+            {
+              ALT: () => {
+                this.SUBRULE(this.number);
+              },
+            },
+            {
+              ALT: () => {
+                this.SUBRULE(this.identifier);
+              },
+            },
+            {
+              NAME: '$inlineStringParamValue',
+              ALT: () => {
+                this.CONSUME(startDustQuotedParam);
+                this.SUBRULE(this.inlineWithoutStartQuote);
+              },
+            },
+          ]);
+        },
+      },
+    ]);
   });
 
   // {identifier|filter|filter2}
@@ -331,6 +342,7 @@ export class DustParser extends Parser {
   private path = this.RULE('path', () => {
     this.OR([
       {
+        NAME: '$path1',
         ALT: () => {
           this.OPTION(() => {
             this.CONSUME(key);
@@ -352,6 +364,7 @@ export class DustParser extends Parser {
         },
       },
       {
+        NAME: '$path2',
         ALT: () => {
           this.CONSUME(dot);
           this.MANY(() => {
@@ -405,30 +418,35 @@ export class DustParser extends Parser {
 
   private inlineWithoutStartQuote = this.RULE('inlineWithoutStartQuote', () => {
     this.MANY(() => {
-      this.OR([
-        {
-          ALT: () => {
-            this.SUBRULE(this.special);
-          },
-        },
-        {
-          ALT: () => {
-            this.SUBRULE(this.reference);
-          },
-        },
-        {
-          ALT: () => {
-            this.CONSUME(escapedQuote);
-          },
-        },
-        {
-          ALT: () => {
-            this.CONSUME(dustQuoteBuffer);
-          },
-        },
-      ]);
+      this.SUBRULE(this.inline);
     });
     this.CONSUME(endDustQuote);
+  });
+
+  // inline dust quote can have special, reference, or buffer
+  private inline = this.RULE('inline', () => {
+    this.OR([
+      {
+        ALT: () => {
+          this.SUBRULE(this.special);
+        },
+      },
+      {
+        ALT: () => {
+          this.SUBRULE(this.reference);
+        },
+      },
+      {
+        ALT: () => {
+          this.CONSUME(escapedQuote);
+        },
+      },
+      {
+        ALT: () => {
+          this.CONSUME(dustQuoteBuffer);
+        },
+      },
+    ]);
   });
 
   // {` raw `}

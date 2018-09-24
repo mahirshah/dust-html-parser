@@ -17,11 +17,14 @@ export enum NODE_TYPE {
   FILTER = 'FILTER',
   NUMBER = 'NUMBER',
   PATH = 'PATH',
+  STRING_BUFFER = 'STRING_BUFFER',
+  ESCAPED_QUOTE = 'ESCAPED_QUOTE',
+  QUOTED_DUST_VALUE = 'QUOTED_DUST_VALUE',
 }
 
 export declare interface INode {
   source: ISource;
-  type: string;
+  type: NODE_TYPE;
   clone: () => INode;
   toString: () => string;
 }
@@ -33,25 +36,41 @@ export declare interface IRoot extends INode {
 }
 
 export declare interface ISection extends INode {
-  key: string;
-  context: IContext;
+  key: IPath;
+  context: IContext | null;
   params: IParam[];
-  body: IRoot;
-  elseBody: IRoot;
+  body: IRoot | null;
+  elseBody: IRoot | null;
   selfClosing: boolean;
 }
 
 export declare interface IParam extends INode {
   key: string;
-  value: INumber | string | IPath;
+  value: ParamValue;
 }
+
+export declare type ParamValue = INumber | IQuotedDustValue | IPath;
+
+export declare interface IQuotedDustValue extends INode {
+  valueArray: Inline[];
+}
+
+export declare interface IStringBuffer extends INode {
+  buffer: string;
+}
+
+export declare interface IEscapedQuote extends INode {
+  escapedQuote: string;
+}
+
+export declare type Inline = IReference | ISpecial | IStringBuffer | IEscapedQuote;
 
 export declare interface IPath extends INode {
   path: string;
 }
 
 export declare interface IContext extends INode {
-  identifier: string;
+  identifier: IPath;
 }
 
 export declare interface IReference extends INode {
