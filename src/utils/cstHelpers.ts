@@ -2,14 +2,6 @@ import { CstElement, CstNode, IToken } from 'chevrotain';
 import { INode, IPosition, ISource } from '../cst/nodeTypes/NodeTypes';
 import Optional from 'typescript-optional';
 
-export function cstElementToSource(node: CstElement): ISource {
-  if (isIToken(node)) {
-    return tokenToSource(node);
-  }
-
-  return { start: {}, end: {}, raw: '' };
-}
-
 /**
  * Given a token convert it to an {@link ISource} object.
  * @param node - the token

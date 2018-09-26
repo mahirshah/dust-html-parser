@@ -4,7 +4,7 @@ import { lex, lexerDefinition, tokenVocabulary } from '../lex';
 const {
   comment,
   raw,
-  dustElse,
+  dustContext,
   dustStart,
   htmlStartTag,
   closingDustTag,
@@ -96,18 +96,24 @@ export class DustParser extends Parser {
       {
         NAME: '$buffer',
         ALT: () => {
-          this.OR1([
-            {
-              ALT: () => {
-                this.CONSUME(buffer);
-              },
-            },
-            {
-              ALT: () => {
-                this.CONSUME(char);
-              },
-            },
-          ]);
+          this.AT_LEAST_ONE(() => {
+            this.SUBRULE(this.bufferOrChar);
+          });
+        },
+      },
+    ]);
+  });
+
+  private bufferOrChar = this.RULE('bufferOrChar', () => {
+    this.OR1([
+      {
+        ALT: () => {
+          this.CONSUME(buffer);
+        },
+      },
+      {
+        ALT: () => {
+          this.CONSUME(char);
         },
       },
     ]);
@@ -129,9 +135,8 @@ export class DustParser extends Parser {
         ALT: () => {
           this.CONSUME(closingDustTagEnd);
           this.SUBRULE(this.body);
-          this.OPTION(() => {
-            this.CONSUME(dustElse);
-            this.SUBRULE2(this.body);
+          this.MANY(() => {
+            this.SUBRULE(this.contextBody);
           });
           this.CONSUME(closingDustTag);
         },
@@ -143,6 +148,11 @@ export class DustParser extends Parser {
     'dustSectionCharacterPrefix',
     () => {
       this.OR([
+        {
+          ALT: () => {
+            this.CONSUME(plus);
+          },
+        },
         {
           ALT: () => {
             this.CONSUME(hash);
@@ -177,6 +187,11 @@ export class DustParser extends Parser {
     },
   );
 
+  private contextBody = this.RULE('contextBody', () => {
+    this.CONSUME(dustContext);
+    this.SUBRULE(this.body);
+  });
+
   private context = this.RULE('context', () => {
     this.OPTION(() => {
       this.CONSUME(colon);
@@ -207,14 +222,14 @@ export class DustParser extends Parser {
                 this.SUBRULE(this.identifier);
               },
             },
-            {
-              NAME: '$inlineStringParamValue',
-              ALT: () => {
-                this.CONSUME(startDustQuotedParam);
-                this.SUBRULE(this.inlineWithoutStartQuote);
-              },
-            },
           ]);
+        },
+      },
+      {
+        NAME: '$inlineStringParamValue',
+        ALT: () => {
+          this.CONSUME(startDustQuotedParam);
+          this.SUBRULE(this.inlineWithoutStartQuote);
         },
       },
     ]);
@@ -228,47 +243,21 @@ export class DustParser extends Parser {
     this.CONSUME(closingDustTagEnd);
   });
 
+  // {+"abc" param=1 /}
   private selfClosingBlock = this.RULE('selfClosingBlock', () => {
     this.CONSUME(dustStart);
     this.CONSUME(plus);
-    this.OR([
-      {
-        ALT: () => {
-          this.CONSUME(key);
-        },
-      },
-      {
-        ALT: () => {
-          this.CONSUME(quotedKey);
-        },
-      },
-    ]);
+    this.CONSUME(quotedKey);
     this.SUBRULE(this.context);
     this.SUBRULE(this.params);
-    this.OR1([
-      {
-        ALT: () => {
-          this.CONSUME(selfClosingDustTagEnd);
-        },
-      },
-      {
-        ALT: () => {
-          this.CONSUME(closingDustTagEnd);
-          this.SUBRULE(this.body);
-          this.OPTION(() => {
-            this.CONSUME(dustElse);
-            this.SUBRULE2(this.body);
-          });
-          this.CONSUME(closingDustTag);
-        },
-      },
-    ]);
+    this.CONSUME(selfClosingDustTagEnd);
   });
 
+  // {>foo param=1 /}
   private partial = this.RULE('partial', () => {
     this.CONSUME(dustStart);
     this.CONSUME(gt);
-    this.OR([
+    this.OR1([
       {
         ALT: () => {
           this.CONSUME(key);

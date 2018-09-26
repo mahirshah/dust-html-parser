@@ -13,13 +13,14 @@ export enum NODE_TYPE {
   SELF_CLOSING_BLOCK = 'SELF_CLOSING_BLOCK',
   SPECIAL = 'SPECIAL',
   PARAM = 'PARAM',
-  CONTEXT = 'CONTENT',
+  CONTEXT = 'CONTEXT',
   FILTER = 'FILTER',
   NUMBER = 'NUMBER',
   PATH = 'PATH',
   STRING_BUFFER = 'STRING_BUFFER',
   ESCAPED_QUOTE = 'ESCAPED_QUOTE',
   QUOTED_DUST_VALUE = 'QUOTED_DUST_VALUE',
+  BODY = 'BODY',
 }
 
 export declare interface INode {
@@ -39,9 +40,13 @@ export declare interface ISection extends INode {
   key: IPath;
   context: IContext | null;
   params: IParam[];
-  body: IRoot | null;
-  elseBody: IRoot | null;
+  bodies: IBody[];
   selfClosing: boolean;
+}
+
+export declare interface IBody extends INode {
+  context: IContext | null;
+  root: IRoot;
 }
 
 export declare interface IParam extends INode {

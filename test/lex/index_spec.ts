@@ -269,6 +269,13 @@ describe('Test Lexer', () => {
     ]);
   });
 
+  it('can lex body contexts', () => {
+    const inputText = `{<r[0] param=true}{:foo}{/r[0]}`;
+    const lexResult = lex(inputText);
+
+    expect(lexResult.errors).to.be.empty;
+  });
+
   it('can lex blank lines', () => {
     const inputText = `
       <div attr="a">a b</div>`;

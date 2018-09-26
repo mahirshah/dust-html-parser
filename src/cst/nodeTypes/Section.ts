@@ -1,5 +1,6 @@
 import Node from './Node';
 import {
+  IBody,
   IContext,
   IParam,
   IPath,
@@ -15,8 +16,7 @@ export default class Section extends Node implements ISection {
     public readonly key: IPath,
     public readonly context: IContext | null,
     public readonly params: IParam[],
-    public readonly body: IRoot | null,
-    public readonly elseBody: IRoot | null,
+    public readonly bodies: IBody[],
     public readonly selfClosing: boolean,
     source: ISource,
   ) {

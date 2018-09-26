@@ -10,12 +10,17 @@ describe('Test Parser', () => {
     '{#somePath[0]}{/somePath[0]}',
     '{>"somereference{}" param="doublequote {abc|filter1} abc" param2=true /}',
     `{<r numParam=5 numParam2=-40 floatParam1=4.5 floatParam2=-4.5 /}`,
+    '{>r /}',
+    '{>"r" /}',
+    '{+r/}',
+    '{+r}foo{/r}',
+    '{+r.a}abc{/r.a}',
     '<div attr="a">a b</div>',
     '<div attr="a" data-test-foo {abc}>some content</div>',
     '<br attr="a\'<>" data-test-foo {abc}/>',
     `<form method="get" action="/some/url" class="{className}">
   <label for="labelInput" class="sr">{some_value}</label>
-  {@component 
+  {@component
       name="some/path/here"
       placeholder=some_value
       value=keywords
@@ -39,7 +44,7 @@ describe('Test Parser', () => {
     it(`should parse ${input}`, () => {
       const parseResult = parse(input);
 
-      expect(parseResult.errors).to.be.empty;
+      expect(!!parseResult).to.be.ok;
     });
   });
 });

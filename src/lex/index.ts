@@ -44,7 +44,7 @@ const closingDustTag = createToken({
   name: 'closingDustTag',
   pattern: /{\/[^}]+}/,
 });
-const dustElse = createToken({ name: 'dustElse', pattern: /{:else}/ });
+const dustContext = createToken({ name: 'dustContext', pattern: /{:[a-zA-Z_$][0-9a-zA-Z_$-]*}/ });
 const startDustQuotedParam = createToken({
   name: 'startDustQuotedParam',
   pattern: /="/,
@@ -140,7 +140,7 @@ export const lexerDefinition: IMultiModeLexerDefinition = {
     [MODE.DATA]: [
       comment,
       raw,
-      dustElse,
+      dustContext,
       closingDustTag,
       dustStart,
       htmlStartTag,
