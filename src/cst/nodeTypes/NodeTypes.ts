@@ -3,7 +3,7 @@ export enum NODE_TYPE {
   EXISTS = 'EXISTS',
   NOT_EXISTS = 'NOT_EXISTS',
   HELPER = 'HELPER',
-  HTML = 'HTML',
+  HTML_TAG = 'HTML_TAG',
   INLINE_PARTIAL = 'INLINE_PARTIAL',
   PARTIAL = 'PARTIAL',
   RAW = 'RAW',
@@ -21,6 +21,7 @@ export enum NODE_TYPE {
   ESCAPED_QUOTE = 'ESCAPED_QUOTE',
   QUOTED_DUST_VALUE = 'QUOTED_DUST_VALUE',
   BODY = 'BODY',
+  ATTRIBUTE = 'ATTRIBUTE',
 }
 
 export declare interface INode {
@@ -28,6 +29,7 @@ export declare interface INode {
   type: NODE_TYPE;
   clone: () => INode;
   toString: () => string;
+  [key: string]: any;
 }
 
 export declare interface IRoot extends INode {
@@ -41,7 +43,7 @@ export declare interface ISection extends INode {
   context: IContext | null;
   params: IParam[];
   bodies: IBody[];
-  selfClosing: boolean;
+  isSelfClosing: boolean;
 }
 
 export declare interface IBody extends INode {
@@ -113,3 +115,23 @@ export declare interface ISource {
   start: IPosition;
   end: IPosition;
 }
+
+export declare interface IHtmlTag extends INode {
+  tagName: string;
+  attributes: IAttribute[];
+  isSelfClosing: boolean;
+  body: IRoot | null;
+}
+
+export declare interface IAttribute  extends INode {
+  attributeName: AttributeName;
+  attributeValue: AttributeValue;
+  isBooleanAttribute: boolean;
+}
+
+export declare interface IHtmlComment extends INode {
+  text: string;
+}
+
+export declare type AttributeName = string | null;
+export declare type AttributeValue = string | IReference;

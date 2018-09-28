@@ -22,8 +22,10 @@ const WhiteSpace = createToken({
 const comment = createToken({
   name: 'comment',
   pattern: /{!(?:[^!]|!(?!}))*!}/,
+  line_breaks: true,
 });
-const raw = createToken({ name: 'raw', pattern: /{`(?:[^`]|`(?!}))*!}/ });
+const raw = createToken({ name: 'raw', pattern: /{`(?:[^`]|`(?!}))*`}/, line_breaks: true });
+const htmlComment = createToken({ name: 'htmlComment', pattern: /(?=<!--)([\s\S]*?)-->/, line_breaks: true });
 const dustStart = createToken({
   name: 'dustStart',
   pattern: matchTag,
@@ -140,6 +142,7 @@ export const lexerDefinition: IMultiModeLexerDefinition = {
     [MODE.DATA]: [
       comment,
       raw,
+      htmlComment,
       dustContext,
       closingDustTag,
       dustStart,

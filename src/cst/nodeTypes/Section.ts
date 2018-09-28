@@ -4,7 +4,6 @@ import {
   IContext,
   IParam,
   IPath,
-  IRoot,
   ISection,
   ISource,
   NODE_TYPE,
@@ -17,7 +16,7 @@ export default class Section extends Node implements ISection {
     public readonly context: IContext | null,
     public readonly params: IParam[],
     public readonly bodies: IBody[],
-    public readonly selfClosing: boolean,
+    public readonly isSelfClosing: boolean,
     source: ISource,
   ) {
     super(Section.determineSectionType(sectionPrefixCharacter), source);

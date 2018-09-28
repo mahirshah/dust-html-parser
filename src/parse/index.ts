@@ -7,6 +7,7 @@ const {
   dustContext,
   dustStart,
   htmlStartTag,
+  htmlComment,
   closingDustTag,
   closingHtmlTag,
   buffer,
@@ -469,33 +470,45 @@ export class DustParser extends Parser {
 
   private attributes = this.RULE('attributes', () => {
     this.MANY(() => {
+      this.SUBRULE(this.attribute);
+    });
+  });
+
+  private attribute = this.RULE('attribute', () => {
+    this.OR([
+      {
+        ALT: () => {
+          this.CONSUME(attributeName);
+        },
+      },
+      {
+        ALT: () => {
+          this.SUBRULE(this.reference);
+        },
+      },
+    ]);
+    this.SUBRULE(this.attributeValueRule);
+  });
+
+  private htmlCommentRule = this.RULE('htmlCommentRule', () => {
+    this.CONSUME(htmlComment);
+  });
+
+  private attributeValueRule = this.RULE('attributeValueRule', () => {
+    this.OPTION(() => {
+      this.CONSUME(attributeEquals);
       this.OR([
         {
           ALT: () => {
-            this.CONSUME(attributeName);
+            this.CONSUME(attributeValue);
           },
         },
         {
           ALT: () => {
-            this.SUBRULE(this.reference);
+            this.SUBRULE1(this.reference);
           },
         },
       ]);
-      this.OPTION(() => {
-        this.CONSUME(attributeEquals);
-        this.OR1([
-          {
-            ALT: () => {
-              this.CONSUME(attributeValue);
-            },
-          },
-          {
-            ALT: () => {
-              this.SUBRULE1(this.reference);
-            },
-          },
-        ]);
-      });
     });
   });
 

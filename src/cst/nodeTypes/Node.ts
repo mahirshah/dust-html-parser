@@ -21,4 +21,40 @@ export default class Node implements INode {
   public toString() {
     return this.source.raw;
   }
+
+  /**
+   * Returns a POJO representation of this node, while recursively
+   * providing a POJO representation for all child nodes, by calling
+   * {@link toObject} on child nodes. This is very useful for testing
+   * and debugging processes, when the entire AST needs to be easily examined.
+   */
+  public toObject(): object {
+    return Object.getOwnPropertyNames(this)
+      .map((
+        propertyName: string,
+      ): [string, any] => {
+        const propertyValue = (this as any)[propertyName];
+
+        return (function resolveObject(value): any {
+          if (value instanceof Node) {
+            return [propertyName, value.toObject()];
+          } else if (Array.isArray(value)) {
+            return [
+              propertyName,
+              value.map(val => resolveObject(val)),
+            ];
+          }
+
+          return [propertyName, propertyValue];
+        })(propertyValue);
+      },
+      this)
+      .reduce(
+        (object: object, [name, value]): object => ({
+          [name]: value,
+          ...object,
+        }),
+        {},
+      );
+  }
 }

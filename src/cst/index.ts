@@ -11,17 +11,22 @@ import DustComment from './nodeTypes/DustComment';
 import Raw from './nodeTypes/Raw';
 import Root from './nodeTypes/Root';
 import {
+  AttributeName,
+  IAttribute,
   IBody,
   IContext,
   IEscapedQuote,
   IFilter,
   Inline,
-  INode, INumber,
+  INode,
+  INumber,
   IParam,
   IPath,
+  IPosition,
   IQuotedDustValue,
   IReference,
-  IRoot, ISection,
+  IRoot,
+  ISection,
   ISource,
   ISpecial,
   IStringBuffer,
@@ -40,14 +45,46 @@ import QuotedDustValue from './nodeTypes/QuotedDustValue';
 import Reference from './nodeTypes/Reference';
 import Filter from './nodeTypes/Filter';
 import Body from './nodeTypes/Body';
+import HtmlTag from './nodeTypes/HtmlTag';
+import Attribute from './nodeTypes/Attribute';
+import HtmlComment from './nodeTypes/HtmlComment';
 
 // todo: switch back to non default constructor
 const BaseDustHtmlVisitor = parserInstance.getBaseCstVisitorConstructorWithDefaults();
 
 class DustHtmlVisitor extends BaseDustHtmlVisitor {
+  private inputByLine: string[] = [];
+
   constructor() {
     super();
     this.validateVisitor();
+  }
+
+  public parse(inputText: string, cst: CstNode) {
+    this.inputByLine = inputText.split(/\r?\n/);
+    return this.visit(cst);
+  }
+
+  /**
+   * Given a start {@link IPosition} and end {@link IPosition}, return the
+   * raw string from the original input text.
+   * @param startLine
+   * @param startColumn
+   * @param endLine
+   * @param endColumn
+   */
+  private getRawSourceFromPosition(
+    { line: startLine = 0, column: startColumn = 0 }: IPosition,
+    { line: endLine = 0, column: endColumn = 0 }: IPosition,
+  ): string {
+    const startString = this.inputByLine[startLine - 1].slice(startColumn - 1);
+    const endString = this.inputByLine[endLine - 1].slice(0, endColumn);
+
+    return [
+      startString,
+      ...this.inputByLine.slice(startLine, endLine),
+      endString,
+    ].join('\n');
   }
 
   public body(cst: CstChildrenDictionary) {
@@ -64,7 +101,7 @@ class DustHtmlVisitor extends BaseDustHtmlVisitor {
 
     return new Root(
       {
-        raw: rawParts,
+        raw: this.getRawSourceFromPosition(startPosition, endPosition),
         start: startPosition,
         end: endPosition,
       },
@@ -87,11 +124,13 @@ class DustHtmlVisitor extends BaseDustHtmlVisitor {
       .filter(isCstNode)
       .map(node => this.visit(node));
     const rawString = bufferOrCharSources.map(source => source.raw).join('');
+    const startPosition = bufferOrCharSources[0].start;
+    const endPosition = bufferOrCharSources[bufferOrCharSources.length - 1].end;
 
     return new StringBuffer(rawString, {
-      raw: rawString,
-      start: bufferOrCharSources[0].start,
-      end: bufferOrCharSources[bufferOrCharSources.length - 1].end,
+      raw: this.getRawSourceFromPosition(startPosition, endPosition),
+      start: startPosition,
+      end: endPosition,
     });
   }
 
@@ -137,23 +176,6 @@ class DustHtmlVisitor extends BaseDustHtmlVisitor {
     const startPosition = tokenToStartPosition(
       cst.dustStart.filter(isIToken)[0],
     );
-    const rawClosingToken = maybeSelfClosingDustTag.map(_ => '/}').orElse('}');
-    const rawClosingTag = maybeSelfClosingDustTag
-      .map(_ => '')
-      .orElse(`{/${key.source.raw}}`);
-    const rawParams = params.map(param => param.source.raw).join('\n');
-    const rawContext = Optional.ofNullable(context)
-      .map(ctx => ctx.source.raw)
-      .orElse('');
-    const rawMainBody = Optional.ofNullable(mainBody)
-      .map(body => body.source.raw)
-      .orElse('');
-    const rawBodies = otherBodies
-      .map(body => `\n{:${body.context}\n${body.source.raw}`)
-      .join('');
-    const rawSection = `{${dustSectionCharacterPrefix}${
-      key.source.raw
-    }${rawContext} ${rawParams}${rawClosingToken}${rawMainBody}${rawBodies}${rawClosingTag}`;
 
     return new Section(
       dustSectionCharacterPrefix,
@@ -163,21 +185,21 @@ class DustHtmlVisitor extends BaseDustHtmlVisitor {
       allBodies,
       maybeSelfClosingDustTag.isPresent,
       {
-        raw: rawSection,
+        raw: this.getRawSourceFromPosition(startPosition, endPosition),
         start: startPosition,
         end: endPosition,
       },
     );
   }
 
-  public params(cst: CstChildrenDictionary): IParam[] {
+  private params(cst: CstChildrenDictionary): IParam[] {
     return Optional.ofNullable(cst.param)
       .map(params => params.filter(isCstNode))
       .map(params => params.map(param => this.visit(param)))
       .orElseGet(() => []);
   }
 
-  public param(cst: CstChildrenDictionary): IParam {
+  private param(cst: CstChildrenDictionary): IParam {
     const key = cst.key.filter(isIToken)[0];
     const value: ParamValue = Optional.ofNullable(cst.number)
       .or(() => Optional.ofNullable(cst.identifier))
@@ -187,32 +209,34 @@ class DustHtmlVisitor extends BaseDustHtmlVisitor {
       .orElseThrow(
         () => new Error('expected number, identifier, or inline string param'),
       );
+    const startPosition = tokenToStartPosition(key);
+    const endPosition = value.source.end;
 
     return new Param(key.image, value, {
-      raw: `${key.image}=${value.source.raw}`,
-      start: tokenToStartPosition(key),
-      end: value.source.end,
+      raw: this.getRawSourceFromPosition(startPosition, endPosition),
+      start: startPosition,
+      end: endPosition,
     });
   }
 
-  public param$inlineStringParamValue(
+  private param$inlineStringParamValue(
     cst: CstChildrenDictionary,
   ): IQuotedDustValue {
     return this.visit(cst.inlineWithoutStartQuote[0] as CstNode);
   }
 
-  public reference(cst: CstChildrenDictionary): IReference {
+  private reference(cst: CstChildrenDictionary): IReference {
     const path: IPath = this.visit(cst.identifier.filter(isCstNode)[0]);
     const filters: IFilter[] = this.visit(cst.filters.filter(isCstNode)[0]);
     const startBrace = cst.dustStart.filter(isIToken)[0];
     const endBrace = cst.closingDustTagEnd.filter(isIToken)[0];
+    const startPosition = tokenToStartPosition(startBrace);
+    const endPosition = tokenToEndPosition(endBrace);
 
     return new Reference(path, filters, {
-      raw: `{${path.source.raw}${filters
-        .map(filter => filter.source.raw)
-        .join('')}`,
-      start: tokenToStartPosition(startBrace),
-      end: tokenToEndPosition(endBrace),
+      raw: this.getRawSourceFromPosition(startPosition, endPosition),
+      start: startPosition,
+      end: endPosition,
     });
   }
 
@@ -249,13 +273,6 @@ class DustHtmlVisitor extends BaseDustHtmlVisitor {
     const startPosition = tokenToStartPosition(
       cst.dustStart.filter(isIToken)[0],
     );
-    const rawParams = params.map(param => param.source.raw).join('\n');
-    const rawContext = Optional.ofNullable(context)
-      .map(ctx => ctx.source.raw)
-      .orElse('');
-    const rawSection = `{${dustSectionCharacterPrefix}${
-      key.image
-    }${rawContext} ${rawParams} /}`;
 
     return new Section(
       dustSectionCharacterPrefix,
@@ -265,7 +282,7 @@ class DustHtmlVisitor extends BaseDustHtmlVisitor {
       [],
       true,
       {
-        raw: rawSection,
+        raw: this.getRawSourceFromPosition(startPosition, endPosition),
         start: startPosition,
         end: endPosition,
       },
@@ -288,13 +305,6 @@ class DustHtmlVisitor extends BaseDustHtmlVisitor {
     const startPosition = tokenToStartPosition(
       cst.dustStart.filter(isIToken)[0],
     );
-    const rawParams = params.map(param => param.source.raw).join('\n');
-    const rawContext = Optional.ofNullable(context)
-      .map(ctx => ctx.source.raw)
-      .orElse('');
-    const rawSection = `{${dustSectionCharacterPrefix}${
-      key.image
-    }${rawContext} ${rawParams} /}`;
 
     return new Section(
       dustSectionCharacterPrefix,
@@ -304,7 +314,7 @@ class DustHtmlVisitor extends BaseDustHtmlVisitor {
       [],
       true,
       {
-        raw: rawSection,
+        raw: this.getRawSourceFromPosition(startPosition, endPosition),
         start: startPosition,
         end: endPosition,
       },
@@ -318,7 +328,6 @@ class DustHtmlVisitor extends BaseDustHtmlVisitor {
         (inlineNodes): Inline[] => inlineNodes.map(node => this.visit(node)),
       );
     const inlines = maybeInlines.orElseGet(() => []);
-    const rawInlines = inlines.map(inline => inline.source.raw).join('');
     const endPosition = tokenToEndPosition(
       cst.endDustQuote.filter(isIToken)[0],
     );
@@ -335,7 +344,10 @@ class DustHtmlVisitor extends BaseDustHtmlVisitor {
     };
 
     return new QuotedDustValue(inlines, {
-      raw: `"${rawInlines}"`,
+      raw: this.getRawSourceFromPosition(
+        startPositionWithStartQuote,
+        endPosition,
+      ),
       start: startPositionWithStartQuote,
       end: endPosition,
     });
@@ -366,55 +378,71 @@ class DustHtmlVisitor extends BaseDustHtmlVisitor {
       );
   }
 
-  public special(cst: CstChildrenDictionary): ISpecial {
+  private special(cst: CstChildrenDictionary): ISpecial {
     const key = cst.key.filter(isIToken)[0];
     const dustStart = cst.dustStart.filter(isIToken)[0];
     const closingDustTagEnd = cst.closingDustTagEnd.filter(isIToken)[0];
+    const startPosition = tokenToStartPosition(dustStart);
+    const endPosition = tokenToEndPosition(closingDustTagEnd);
 
     return new Special(key.image, {
-      raw: `{~${key.image}`,
-      start: tokenToStartPosition(dustStart),
-      end: tokenToEndPosition(closingDustTagEnd),
+      raw: this.getRawSourceFromPosition(startPosition, endPosition),
+      start: startPosition,
+      end: endPosition,
     });
   }
 
-  public number(cst: CstChildrenDictionary): INumber {
+  private number(cst: CstChildrenDictionary): INumber {
     const numberToken: IToken = Object.values(cst)[0][0] as IToken;
 
     return new NumberNode(+numberToken.image, tokenToSource(numberToken));
   }
 
-  public contextBody(cst: CstChildrenDictionary): IBody {
+  private contextBody(cst: CstChildrenDictionary): IBody {
     const root: IRoot = this.visit(cst.body.filter(isCstNode)[0]);
     const contextToken = cst.dustContext.filter(isIToken)[0];
-    const contextKey = Optional.ofNullable(contextToken.image.match(/{:([^}]+)}/))
+    const contextKey = Optional.ofNullable(
+      contextToken.image.match(/{:([^}]+)}/),
+    )
       .map(match => match[1])
-      .orElseThrow(() => new Error('error parsing dustContext token key: context key not found'));
-    const context = new Context(new Path(contextKey, tokenToSource(contextToken)), tokenToSource(contextToken));
+      .orElseThrow(
+        () =>
+          new Error(
+            'error parsing dustContext token key: context key not found',
+          ),
+      );
+    const context = new Context(
+      new Path(contextKey, tokenToSource(contextToken)),
+      tokenToSource(contextToken),
+    );
+    const startPosition = tokenToStartPosition(contextToken);
+    const endPosition = root.source.end;
 
     return new Body(context, root, {
-      raw: `${context.source.raw}\n${root.source.raw}`,
-      start: tokenToStartPosition(contextToken),
-      end: root.source.end,
+      raw: this.getRawSourceFromPosition(startPosition, endPosition),
+      start: startPosition,
+      end: endPosition,
     });
   }
 
-  public context(cst: CstChildrenDictionary): IContext | null {
+  private context(cst: CstChildrenDictionary): IContext | null {
     return Optional.ofNullable(cst.colon)
       .map(colons => {
         const colonToken = colons.filter(isIToken)[0];
         const path: Path = this.visit(cst.path[0] as CstNode);
+        const startPosition = tokenToStartPosition(colonToken);
+        const endPosition = path.source.end;
 
         return new Context(path, {
-          raw: `:${path.source.raw}`,
-          start: tokenToStartPosition(colonToken),
-          end: path.source.end,
+          raw: this.getRawSourceFromPosition(startPosition, endPosition),
+          start: startPosition,
+          end: endPosition,
         });
       })
       .orNull();
   }
 
-  public identifier(cst: CstChildrenDictionary): Path {
+  private identifier(cst: CstChildrenDictionary): Path {
     if (cst.key) {
       const keyToken = cst.key[0] as IToken;
       return new Path(keyToken.image, tokenToSource(keyToken));
@@ -423,7 +451,7 @@ class DustHtmlVisitor extends BaseDustHtmlVisitor {
     return this.visit(cst.path[0] as CstNode);
   }
 
-  public path(cst: CstChildrenDictionary) {
+  private path(cst: CstChildrenDictionary) {
     return Optional.ofNullable(cst.$path1)
       .map(path1Nodes => path1Nodes.filter(isCstNode)[0])
       .map(
@@ -480,7 +508,7 @@ class DustHtmlVisitor extends BaseDustHtmlVisitor {
                 .orElseGet(() => tokenToEndPosition(dotToken));
 
               return {
-                raw: `.${rawArrays}`,
+                raw: this.getRawSourceFromPosition(startPosition, endPosition),
                 start: startPosition,
                 end: endPosition,
               };
@@ -493,28 +521,23 @@ class DustHtmlVisitor extends BaseDustHtmlVisitor {
       );
   }
 
-  public array(cst: CstChildrenDictionary): ISource {
-    const rawInner = Optional.ofNullable(cst.identifier)
-      .map(identifierNodes => this.visit(identifierNodes[0] as CstNode))
-      .orElseGet(() => (cst.unsignedInteger[0] as IToken).image);
+  private array(cst: CstChildrenDictionary): ISource {
     const maybeArrayPartSource: Optional<ISource> = Optional.ofNullable(
       cst.arrayPart,
     ).map(arrayPartNodes => this.visit(arrayPartNodes[0] as CstNode));
-    const rawArrayPart = maybeArrayPartSource
-      .map(arrayPart => arrayPart.raw)
-      .orElse('');
     const endPosition = maybeArrayPartSource
       .map(source => source.end)
       .orElseGet(() => tokenToEndPosition(cst.rb[0] as IToken));
+    const startPosition = tokenToStartPosition(cst.lb[0] as IToken);
 
     return {
-      raw: `[${rawInner}]${rawArrayPart}`,
-      start: tokenToStartPosition(cst.lb[0] as IToken),
+      raw: this.getRawSourceFromPosition(startPosition, endPosition),
+      start: startPosition,
       end: endPosition,
     };
   }
 
-  public arrayPart(cst: CstChildrenDictionary): ISource {
+  private arrayPart(cst: CstChildrenDictionary): ISource {
     const keys = cst.key
       .filter(isIToken)
       .map(token => token.image)
@@ -526,20 +549,22 @@ class DustHtmlVisitor extends BaseDustHtmlVisitor {
     const endPosition = maybeArraySource
       .map(source => source.end)
       .orElseGet(() => tokenToEndPosition(cst.key.slice(-1)[0] as IToken));
+    const startPosition = tokenToStartPosition(cst.dot[0] as IToken);
 
     return {
-      raw: `.${keys}${rawArray}`,
-      start: tokenToStartPosition(cst.dot[0] as IToken),
+      raw: this.getRawSourceFromPosition(startPosition, endPosition),
+      start: startPosition,
       end: endPosition,
     };
   }
 
-  public commentRule(cst: CstChildrenDictionary) {
+  private commentRule(cst: CstChildrenDictionary) {
     return Optional.ofNullable(cst.comment[0])
       .filter(isIToken)
       .map(token => new DustComment(tokenToSource(token as IToken)))
       .orElseThrow(
-        () => new Error(`Expected comment token, received: ${cst.comment[0]}`),
+        () =>
+          new Error(`Expected dust comment token, received: ${cst.comment[0]}`),
       );
   }
 
@@ -549,15 +574,133 @@ class DustHtmlVisitor extends BaseDustHtmlVisitor {
     if (isIToken(rawNode)) {
       return new Raw(tokenToSource(rawNode));
     } else {
-      throw new Error(`Expected comment token, received: ${rawNode}`);
+      throw new Error(`Expected raw token, received: ${rawNode}`);
     }
+  }
+
+  // todo: make sure start and end tags are the same
+  public htmlTag(cst: CstChildrenDictionary) {
+    const startTag = cst.htmlStartTag.filter(isIToken)[0];
+    const tagName = startTag.image.slice(1);
+    const attributes = this.visit(cst.attributes.filter(isCstNode)[0]);
+    const maybeSelfClosing = Optional.ofNullable(cst.htmlSelfClosingTagEnd);
+    const bodyOrNull = Optional.ofNullable(cst.body)
+      .map(body => body.filter(isCstNode)[0])
+      .map(body => this.visit(body))
+      .orNull();
+    const endPosition = maybeSelfClosing
+      .or(() => Optional.ofNullable(cst.closingHtmlTag))
+      .map(elements => elements.filter(isIToken)[0])
+      .map(tokenToEndPosition)
+      .orElseThrow(() => new Error('expected end tag token'));
+    const startPosition = tokenToStartPosition(startTag);
+
+    return new HtmlTag(
+      tagName,
+      attributes,
+      maybeSelfClosing.isPresent,
+      bodyOrNull,
+      {
+        raw: this.getRawSourceFromPosition(startPosition, endPosition),
+        start: startPosition,
+        end: endPosition,
+      },
+    );
+  }
+
+  public attributes(cst: CstChildrenDictionary): IAttribute[] {
+    return Optional.ofNullable(cst.attributeValue)
+      .map(elements => elements.filter(isCstNode))
+      .map(nodes => nodes.map(node => this.visit(node)))
+      .orElseGet(() => []);
+  }
+
+  public attribute(cst: CstChildrenDictionary): IAttribute | null {
+    const nameTokenOrReference: IToken | IReference = Optional.ofNullable(
+      cst.attributeName.filter(isIToken)[0] as IToken | IReference,
+    )
+      .or(() =>
+        Optional.ofNullable(cst.reference.filter(isCstNode)[0]).map(node =>
+          this.visit(node),
+        ),
+      )
+      .get();
+    const name: string | IReference = isIToken(nameTokenOrReference)
+      ? nameTokenOrReference.image
+      : nameTokenOrReference;
+    const maybeValue = Optional.ofNullable(
+      this.visit(cst.attributeValue.filter(isCstNode)[0]),
+    );
+    // if the value node is not present, it is a boolean attribute, therefore
+    // the name will be the value.
+    const valueNode = maybeValue
+      .map(valueObject => valueObject.value)
+      .orElse(name);
+    const startPosition = isIToken(nameTokenOrReference)
+      ? tokenToStartPosition(nameTokenOrReference)
+      : nameTokenOrReference.source.start;
+    const endPosition = isIToken(valueNode)
+      ? tokenToStartPosition(valueNode)
+      : valueNode.source.end;
+
+    return new Attribute(
+      maybeValue.map(() => name as AttributeName).orNull(),
+      valueNode,
+      maybeValue.isEmpty,
+      {
+        raw: this.getRawSourceFromPosition(startPosition, endPosition),
+        start: startPosition,
+        end: endPosition,
+      },
+    );
+  }
+
+  public attributeValueRule(cst: CstChildrenDictionary) {
+    const maybeEqualsToken = Optional.ofNullable(cst.attributeEquals).map(
+      elements => elements.filter(isIToken)[0],
+    );
+    const maybeValue: Optional<IToken | IReference> = Optional.ofNullable(
+      cst.attributeValue.filter(isIToken)[0],
+    ).or(() =>
+      Optional.ofNullable(cst.reference.filter(isCstNode)[0]).map(node =>
+        this.visit(node),
+      ),
+    );
+    const value = maybeValue.orElseThrow(
+      () => new Error('expected token or reference as attribute value'),
+    );
+    const rawValue = isIToken(value) ? value.image : value.source.raw;
+
+    if (maybeEqualsToken.isEmpty) {
+      return null;
+    }
+
+    return {
+      value: isIToken(value) ? value.image : value,
+      source: {
+        raw: `=${rawValue}`,
+        start: maybeEqualsToken.map(tokenToStartPosition).get(),
+        end: maybeValue.map(
+          v => (isIToken(v) ? tokenToEndPosition(v) : v.source.end),
+        ),
+      },
+    };
+  }
+
+  private htmlCommentRule(cst: CstChildrenDictionary) {
+    return Optional.ofNullable(cst.htmlComment[0])
+      .filter(isIToken)
+      .map(token => new HtmlComment(tokenToSource(token as IToken)))
+      .orElseThrow(
+        () =>
+          new Error(`Expected html comment token, received: ${cst.comment[0]}`),
+      );
   }
 }
 
 export const toAstVisitorInstance = new DustHtmlVisitor();
-
 export function toAst(inputText: string) {
   const cst = parse(inputText);
 
-  return toAstVisitorInstance.visit(cst);
+  return toAstVisitorInstance.parse(inputText, cst);
 }

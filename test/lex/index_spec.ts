@@ -7,6 +7,7 @@ const {
   dustElse,
   dustStart,
   htmlStartTag,
+  htmlComment,
   closingDustTag,
   closingHtmlTag,
   buffer,
@@ -60,6 +61,29 @@ describe('Test Lexer', () => {
     expect(lexResult.errors).to.be.empty;
     expect(lexResult.tokens).to.have.lengthOf(1);
     expect(lexResult.tokens[0].tokenType).to.equal(comment);
+  });
+
+  it('can lex raw dust tags', () => {
+    const inputText = '{` hello!\n`\n} h{ello! `}';
+    const lexResult = lex(inputText);
+
+    expect(lexResult.errors).to.be.empty;
+    expect(lexResult.tokens).to.have.lengthOf(1);
+    expect(lexResult.tokens[0].tokenType).to.equal(raw);
+  });
+
+  it('can lex html comments', () => {
+    const inputText = `<!-- abc - 
+sadljlad
+asd;kasd;
+<something here>
+
+-- ! -->`;
+    const lexResult = lex(inputText);
+
+    expect(lexResult.errors).to.be.empty;
+    expect(lexResult.tokens).to.have.lengthOf(1);
+    expect(lexResult.tokens[0].tokenType).to.equal(htmlComment);
   });
 
   it('can lex a reference with filters', () => {
