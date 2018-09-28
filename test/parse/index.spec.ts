@@ -1,7 +1,6 @@
-import { expect } from 'chai';
 import { parse } from '../../src/parse';
 
-describe('Test Parser', () => {
+describe('Parser', () => {
   const dataProvider = [
     '{@component}{/component}',
     '{@component}Text{/  component  }',
@@ -44,7 +43,7 @@ describe('Test Parser', () => {
     it(`should parse ${input}`, () => {
       const parseResult = parse(input);
 
-      expect(!!parseResult).to.be.ok;
+      expect(parseResult).toBeTruthy();
     });
   });
 });

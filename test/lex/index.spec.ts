@@ -1,4 +1,3 @@
-import { expect } from 'chai';
 import { lex, tokenVocabulary } from '../../src/lex';
 
 const {
@@ -46,33 +45,33 @@ const {
   attributeWhiteSpace,
 } = tokenVocabulary;
 
-describe('Test Lexer', () => {
-  it('can lex simple input', () => {
+describe('Lexer', () => {
+  test('can lex simple input', () => {
     const inputText = '{@component}Text{/  component  }';
     const lexResult = lex(inputText);
 
-    expect(lexResult.errors).to.be.empty;
+    expect(lexResult.errors).toHaveLength(0);
   });
 
-  it('can lex comments', () => {
+  test('can lex comments', () => {
     const inputText = '{! hello!\n\n hello! !}';
     const lexResult = lex(inputText);
 
-    expect(lexResult.errors).to.be.empty;
-    expect(lexResult.tokens).to.have.lengthOf(1);
-    expect(lexResult.tokens[0].tokenType).to.equal(comment);
+    expect(lexResult.errors).toHaveLength(0);
+    expect(lexResult.tokens).toHaveLength(1);
+    expect(lexResult.tokens[0].tokenType).toBe(comment);
   });
 
-  it('can lex raw dust tags', () => {
+  test('can lex raw dust tags', () => {
     const inputText = '{` hello!\n`\n} h{ello! `}';
     const lexResult = lex(inputText);
 
-    expect(lexResult.errors).to.be.empty;
-    expect(lexResult.tokens).to.have.lengthOf(1);
-    expect(lexResult.tokens[0].tokenType).to.equal(raw);
+    expect(lexResult.errors).toHaveLength(0);
+    expect(lexResult.tokens).toHaveLength(1);
+    expect(lexResult.tokens[0].tokenType).toBe(raw);
   });
 
-  it('can lex html comments', () => {
+  test('can lex html comments', () => {
     const inputText = `<!-- abc - 
 sadljlad
 asd;kasd;
@@ -81,22 +80,22 @@ asd;kasd;
 -- ! -->`;
     const lexResult = lex(inputText);
 
-    expect(lexResult.errors).to.be.empty;
-    expect(lexResult.tokens).to.have.lengthOf(1);
-    expect(lexResult.tokens[0].tokenType).to.equal(htmlComment);
+    expect(lexResult.errors).toHaveLength(0);
+    expect(lexResult.tokens).toHaveLength(1);
+    expect(lexResult.tokens[0].tokenType).toBe(htmlComment);
   });
 
-  it('can lex a reference with filters', () => {
+  test('can lex a reference with filters', () => {
     const inputText = '{reference|filter1|filter2}';
     const lexResult = lex(inputText);
 
-    expect(lexResult.errors).to.be.empty;
+    expect(lexResult.errors).toHaveLength(0);
 
     const tokens = lexResult.tokens.map((token) => ({
       image: token.image,
       type: token.tokenType,
     }));
-    expect(tokens).to.deep.equal([
+    expect(tokens).toMatchObject([
       {
         image: '{',
         type: dustStart,
@@ -128,23 +127,23 @@ asd;kasd;
     ]);
   });
 
-  it('can lex section keys that are paths', () => {
+  test('can lex section keys that are paths', () => {
     const inputText = '{#somePath[0]}{/somePath[0]}';
     const lexResult = lex(inputText);
 
-    expect(lexResult.errors).to.be.empty;
+    expect(lexResult.errors).toHaveLength(0);
   });
 
-  it('can lex dust attributes', () => {
+  test('can lex dust attributes', () => {
     const inputText = '{>"somereference{}" param="doublequote {abc|filter1} abc" param2=true /}';
     const lexResult = lex(inputText);
 
-    expect(lexResult.errors).to.be.empty;
+    expect(lexResult.errors).toHaveLength(0);
     const tokens = lexResult.tokens.map((token) => ({
       image: token.image,
       type: token.tokenType,
     }));
-    expect(tokens).to.deep.equal([
+    expect(tokens).toMatchObject([
       {
         image: '{',
         type: dustStart,
@@ -216,16 +215,16 @@ asd;kasd;
     ]);
   });
 
-  it('can lex number params', () => {
+  test('can lex number params', () => {
     const inputText = `{<r numParam=5 numParam2=-40 floatParam1=4.5 floatParam2=-4.5 /}`;
     const lexResult = lex(inputText);
 
-    expect(lexResult.errors).to.be.empty;
+    expect(lexResult.errors).toHaveLength(0);
     const tokens = lexResult.tokens.map((token) => ({
       image: token.image,
       type: token.tokenType,
     }));
-    expect(tokens).to.deep.equal([
+    expect(tokens).toMatchObject([
       {
         image: '{',
         type: dustStart,
@@ -293,38 +292,38 @@ asd;kasd;
     ]);
   });
 
-  it('can lex body contexts', () => {
+  test('can lex body contexts', () => {
     const inputText = `{<r[0] param=true}{:foo}{/r[0]}`;
     const lexResult = lex(inputText);
 
-    expect(lexResult.errors).to.be.empty;
+    expect(lexResult.errors).toHaveLength(0);
   });
 
-  it('can lex blank lines', () => {
+  test('can lex blank lines', () => {
     const inputText = `
       <div attr="a">a b</div>`;
     const lexResult = lex(inputText);
 
-    expect(lexResult.errors).to.be.empty;
+    expect(lexResult.errors).toHaveLength(0);
   });
 
-  it('can lex html with dust attribute', () => {
+  test('can lex html with dust attribute', () => {
     const inputText = '<div attr="a" data-test-foo {abc}>some content</div>';
     const lexResult = lex(inputText);
 
-    expect(lexResult.errors).to.be.empty;
+    expect(lexResult.errors).toHaveLength(0);
   });
 
-  it('can lex self closing html tags', () => {
+  test('can lex self closing html tags', () => {
     const inputText = '<br attr="a\'<>" data-test-foo {abc}/>';
     const lexResult = lex(inputText);
 
-    expect(lexResult.errors).to.be.empty;
+    expect(lexResult.errors).toHaveLength(0);
     const tokens = lexResult.tokens.map((token) => ({
       image: token.image,
       type: token.tokenType,
     }));
-    expect(tokens).to.deep.equal([
+    expect(tokens).toMatchObject([
       {
         image: '<br',
         type: htmlStartTag,
@@ -364,7 +363,7 @@ asd;kasd;
     ]);
   });
 
-  it('can lex html dust mix', () => {
+  test('can lex html dust mix', () => {
     const inputText = `
 <form method="get" action="/some/url" class="{className}">
   <label for="labelInput" class="sr">{some_value}</label>
@@ -387,20 +386,20 @@ asd;kasd;
 `;
     const lexResult = lex(inputText);
 
-    expect(lexResult.errors).to.be.empty;
+    expect(lexResult.errors).toHaveLength(0);
   });
 
-  it('can lex } inside dust param', () => {
+  test('can lex } inside dust param', () => {
     const inputText = `{#section param="}" /}`;
     const lexResult = lex(inputText);
 
-    expect(lexResult.errors).to.be.empty;
+    expect(lexResult.errors).toHaveLength(0);
   });
 
-  it('can lex quoted partial reference', () => {
+  test('can lex quoted partial reference', () => {
     const inputText = `{>"somereference{}" param="\\\\"b\\\\"" /}`;
     const lexResult = lex(inputText);
 
-    expect(lexResult.errors).to.be.empty;
+    expect(lexResult.errors).toHaveLength(0);
   });
 });
