@@ -7,6 +7,7 @@ const {
   dustStart,
   htmlStartTag,
   htmlComment,
+  voidHtmlStartTag,
   closingDustTag,
   closingHtmlTag,
   buffer,
@@ -129,6 +130,13 @@ asd;kasd;
 
   test('can lex section keys that are paths', () => {
     const inputText = '{#somePath[0]}{/somePath[0]}';
+    const lexResult = lex(inputText);
+
+    expect(lexResult.errors).toHaveLength(0);
+  });
+
+  test('can lex self closing html tag without solidus', () => {
+    const inputText = '<br>';
     const lexResult = lex(inputText);
 
     expect(lexResult.errors).toHaveLength(0);
@@ -326,7 +334,7 @@ asd;kasd;
     expect(tokens).toMatchObject([
       {
         image: '<br',
-        type: htmlStartTag,
+        type: voidHtmlStartTag,
       },
       {
         image: 'attr',

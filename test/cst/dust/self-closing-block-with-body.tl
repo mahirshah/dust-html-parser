@@ -1,0 +1,3 @@
+{+selfClosingBlock}
+    abcdef
+{/selfClosingBlock}

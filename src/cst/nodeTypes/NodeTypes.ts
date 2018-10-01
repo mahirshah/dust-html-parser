@@ -34,8 +34,6 @@ export declare interface INode {
 
 export declare interface IRoot extends INode {
   nodes: INode[];
-  first: INode;
-  last: INode;
 }
 
 export declare interface ISection extends INode {

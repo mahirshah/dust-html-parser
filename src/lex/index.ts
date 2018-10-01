@@ -4,9 +4,9 @@ import {
   Lexer,
   TokenType,
 } from 'chevrotain';
+import voidElementTagNames from 'self-closing-tags';
 import { matchTag } from '../utils/dustHelpers';
 
-// todo: implement html comments
 enum MODE {
   TAG_OPEN_STATE = 'TAG_OPEN_STATE',
   ATTRIBUTE_NAME_STATE = 'ATTRIBUTE_NAME_STATE',
@@ -90,6 +90,11 @@ const signedInteger = createToken({
 const char = createToken({ name: 'char', pattern: /\s|\S/ });
 
 // html tokens
+const voidHtmlStartTag = createToken({
+  name: 'voidHtmlStartTag',
+  pattern: new RegExp(`<(?:${voidElementTagNames.join('|')})(?=[\\s>])`),
+  push_mode: MODE.TAG_OPEN_STATE,
+});
 const htmlStartTag = createToken({
   name: 'htmlStartTag',
   pattern: /<[a-zA-Z][^\s/>]+/,
@@ -146,6 +151,7 @@ export const lexerDefinition: IMultiModeLexerDefinition = {
       dustContext,
       closingDustTag,
       dustStart,
+      voidHtmlStartTag,
       htmlStartTag,
       closingHtmlTag,
       buffer,

@@ -1,13 +1,14 @@
 {
   "defaultSeverity": "error",
-  "extends": ["tslint:recommended", "tslint-no-unused-expression-chai"],
+  "extends": ["tslint:recommended"],
   "jsRules": {},
   "rules": {
     "quotemark": [true, "single", "avoid-escape"],
     "object-literal-sort-keys": false,
     "no-trailing-whitespace": [true, "ignore-template-strings"],
     "member-ordering": false,
-    "arrow-parens": false
+    "arrow-parens": false,
+    "ordered-imports": false
   },
   "rulesDirectory": []
 }

@@ -6,6 +6,7 @@ const {
   raw,
   dustContext,
   dustStart,
+  voidHtmlStartTag,
   htmlStartTag,
   htmlComment,
   closingDustTag,
@@ -91,7 +92,12 @@ export class DustParser extends Parser {
       },
       {
         ALT: () => {
-          this.SUBRULE(this.htmlTag);
+          this.SUBRULE(this.htmlNonSelfClosingElement);
+        },
+      },
+      {
+        ALT: () => {
+          this.SUBRULE(this.htmlSelfClosingElement);
         },
       },
       {
@@ -449,20 +455,26 @@ export class DustParser extends Parser {
     this.CONSUME(comment);
   });
 
-  private htmlTag = this.RULE('htmlTag', () => {
+  private htmlNonSelfClosingElement = this.RULE('htmlNonSelfClosingElement', () => {
     this.CONSUME(htmlStartTag);
+    this.SUBRULE(this.attributes);
+    this.CONSUME(htmlTagEnd);
+    this.SUBRULE(this.body);
+    this.CONSUME(closingHtmlTag);
+  });
+
+  private htmlSelfClosingElement = this.RULE('htmlSelfClosingElement', () => {
+    this.CONSUME(voidHtmlStartTag);
     this.SUBRULE(this.attributes);
     this.OR([
       {
         ALT: () => {
-          this.CONSUME(htmlSelfClosingTagEnd);
+          this.CONSUME(htmlTagEnd);
         },
       },
       {
         ALT: () => {
-          this.CONSUME(htmlTagEnd);
-          this.SUBRULE(this.body);
-          this.CONSUME(closingHtmlTag);
+          this.CONSUME(htmlSelfClosingTagEnd);
         },
       },
     ]);

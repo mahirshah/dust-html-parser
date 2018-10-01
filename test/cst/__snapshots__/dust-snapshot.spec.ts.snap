@@ -1,0 +1,2238 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`toAst buffer 1`] = `
+Object {
+  "nodes": Array [
+    Array [
+      "nodes",
+      Object {
+        "buffer": "abcd
+",
+        "source": Object {
+          "end": Object {
+            "column": 5,
+            "line": 1,
+          },
+          "raw": "abcd
+abcd",
+          "start": Object {
+            "column": 1,
+            "line": 1,
+          },
+        },
+        "type": "STRING_BUFFER",
+      },
+    ],
+  ],
+  "source": Object {
+    "end": Object {
+      "column": 5,
+      "line": 1,
+    },
+    "raw": "abcd
+abcd",
+    "start": Object {
+      "column": 1,
+      "line": 1,
+    },
+  },
+  "type": "ROOT",
+}
+`;
+
+exports[`toAst dust-comment 1`] = `
+Object {
+  "nodes": Array [
+    Array [
+      "nodes",
+      Object {
+        "source": Object {
+          "end": Object {
+            "column": 13,
+            "line": 1,
+          },
+          "raw": "{! ab! bcc !}",
+          "start": Object {
+            "column": 1,
+            "line": 1,
+          },
+        },
+        "text": " ab! bcc ",
+        "type": "DUST_COMMENT",
+      },
+    ],
+    Array [
+      "nodes",
+      Object {
+        "buffer": "
+",
+        "source": Object {
+          "end": Object {
+            "column": 14,
+            "line": 1,
+          },
+          "raw": "
+{! ab! bcc !}",
+          "start": Object {
+            "column": 14,
+            "line": 1,
+          },
+        },
+        "type": "STRING_BUFFER",
+      },
+    ],
+  ],
+  "source": Object {
+    "end": Object {
+      "column": 14,
+      "line": 1,
+    },
+    "raw": "{! ab! bcc !}
+{! ab! bcc !}",
+    "start": Object {
+      "column": 1,
+      "line": 1,
+    },
+  },
+  "type": "ROOT",
+}
+`;
+
+exports[`toAst dust-params 1`] = `
+Object {
+  "nodes": Array [
+    Array [
+      "nodes",
+      Object {
+        "bodies": Array [],
+        "context": null,
+        "isSelfClosing": true,
+        "key": Object {
+          "path": "section",
+          "source": Object {
+            "end": Object {
+              "column": 9,
+              "line": 1,
+            },
+            "raw": "section",
+            "start": Object {
+              "column": 3,
+              "line": 1,
+            },
+          },
+          "type": "PATH",
+        },
+        "params": Array [
+          Array [
+            "params",
+            Object {
+              "key": "param1",
+              "source": Object {
+                "end": Object {
+                  "column": 22,
+                  "line": 1,
+                },
+                "raw": "param1=\\"abc\\" param2=1 param3=someKey param4=somePath[0][0] /}
+{#section param1=\\"abc\\"",
+                "start": Object {
+                  "column": 11,
+                  "line": 1,
+                },
+              },
+              "type": "PARAM",
+              "value": Object {
+                "source": Object {
+                  "end": Object {
+                    "column": 22,
+                    "line": 1,
+                  },
+                  "raw": "\\"abc\\" param2=1 param3=someKey param4=somePath[0][0] /}
+{#section param1=\\"abc\\"",
+                  "start": Object {
+                    "column": 18,
+                    "line": 1,
+                  },
+                },
+                "type": "QUOTED_DUST_VALUE",
+                "valueArray": Array [
+                  Array [
+                    "valueArray",
+                    Object {
+                      "buffer": "abc",
+                      "source": Object {
+                        "end": Object {
+                          "column": 21,
+                          "line": 1,
+                        },
+                        "raw": "abc",
+                        "start": Object {
+                          "column": 19,
+                          "line": 1,
+                        },
+                      },
+                      "type": "STRING_BUFFER",
+                    },
+                  ],
+                ],
+              },
+            },
+          ],
+          Array [
+            "params",
+            Object {
+              "key": "param2",
+              "source": Object {
+                "end": Object {
+                  "column": 31,
+                  "line": 1,
+                },
+                "raw": "param2=1 param3=someKey param4=somePath[0][0] /}
+{#section param1=\\"abc\\" param2=1",
+                "start": Object {
+                  "column": 24,
+                  "line": 1,
+                },
+              },
+              "type": "PARAM",
+              "value": Object {
+                "num": 1,
+                "source": Object {
+                  "end": Object {
+                    "column": 31,
+                    "line": 1,
+                  },
+                  "raw": "1",
+                  "start": Object {
+                    "column": 31,
+                    "line": 1,
+                  },
+                },
+                "type": "NUMBER",
+              },
+            },
+          ],
+          Array [
+            "params",
+            Object {
+              "key": "param3",
+              "source": Object {
+                "end": Object {
+                  "column": 46,
+                  "line": 1,
+                },
+                "raw": "param3=someKey param4=somePath[0][0] /}
+{#section param1=\\"abc\\" param2=1 param3=someKey",
+                "start": Object {
+                  "column": 33,
+                  "line": 1,
+                },
+              },
+              "type": "PARAM",
+              "value": Object {
+                "path": "someKey",
+                "source": Object {
+                  "end": Object {
+                    "column": 46,
+                    "line": 1,
+                  },
+                  "raw": "someKey",
+                  "start": Object {
+                    "column": 40,
+                    "line": 1,
+                  },
+                },
+                "type": "PATH",
+              },
+            },
+          ],
+          Array [
+            "params",
+            Object {
+              "key": "param4",
+              "source": Object {
+                "end": Object {
+                  "column": 68,
+                  "line": 1,
+                },
+                "raw": "param4=somePath[0][0] /}
+{#section param1=\\"abc\\" param2=1 param3=someKey param4=somePath[0][0]",
+                "start": Object {
+                  "column": 48,
+                  "line": 1,
+                },
+              },
+              "type": "PARAM",
+              "value": Object {
+                "path": "somePath[0][0] /}
+{#section param1=\\"abc\\" param2=1 param3=someKey param4=somePath[0][0] /}
+{#section param1=\\"abc\\" param2=1 param3=someKey param4=somePath[0][0]",
+                "source": Object {
+                  "end": Object {
+                    "column": 68,
+                    "line": 1,
+                  },
+                  "raw": "somePath[0][0] /}
+{#section param1=\\"abc\\" param2=1 param3=someKey param4=somePath[0][0] /}
+{#section param1=\\"abc\\" param2=1 param3=someKey param4=somePath[0][0]",
+                  "start": Object {
+                    "column": 55,
+                    "line": 1,
+                  },
+                },
+                "type": "PATH",
+              },
+            },
+          ],
+        ],
+        "source": Object {
+          "end": Object {
+            "column": 71,
+            "line": 1,
+          },
+          "raw": "{#section param1=\\"abc\\" param2=1 param3=someKey param4=somePath[0][0] /}
+{#section param1=\\"abc\\" param2=1 param3=someKey param4=somePath[0][0] /}",
+          "start": Object {
+            "column": 1,
+            "line": 1,
+          },
+        },
+        "type": "SECTION",
+      },
+    ],
+    Array [
+      "nodes",
+      Object {
+        "buffer": "
+",
+        "source": Object {
+          "end": Object {
+            "column": 72,
+            "line": 1,
+          },
+          "raw": "
+{#section param1=\\"abc\\" param2=1 param3=someKey param4=somePath[0][0] /}",
+          "start": Object {
+            "column": 72,
+            "line": 1,
+          },
+        },
+        "type": "STRING_BUFFER",
+      },
+    ],
+  ],
+  "source": Object {
+    "end": Object {
+      "column": 72,
+      "line": 1,
+    },
+    "raw": "{#section param1=\\"abc\\" param2=1 param3=someKey param4=somePath[0][0] /}
+{#section param1=\\"abc\\" param2=1 param3=someKey param4=somePath[0][0] /}",
+    "start": Object {
+      "column": 1,
+      "line": 1,
+    },
+  },
+  "type": "ROOT",
+}
+`;
+
+exports[`toAst dust-raw 1`] = `
+Object {
+  "nodes": Array [
+    Array [
+      "nodes",
+      Object {
+        "source": Object {
+          "end": Object {
+            "column": 23,
+            "line": 1,
+          },
+          "raw": "{\` some raw text \`bc \`}",
+          "start": Object {
+            "column": 1,
+            "line": 1,
+          },
+        },
+        "text": " some raw text \`bc ",
+        "type": "RAW",
+      },
+    ],
+    Array [
+      "nodes",
+      Object {
+        "buffer": "
+",
+        "source": Object {
+          "end": Object {
+            "column": 24,
+            "line": 1,
+          },
+          "raw": "
+{\` some raw text \`bc \`}",
+          "start": Object {
+            "column": 24,
+            "line": 1,
+          },
+        },
+        "type": "STRING_BUFFER",
+      },
+    ],
+  ],
+  "source": Object {
+    "end": Object {
+      "column": 24,
+      "line": 1,
+    },
+    "raw": "{\` some raw text \`bc \`}
+{\` some raw text \`bc \`}",
+    "start": Object {
+      "column": 1,
+      "line": 1,
+    },
+  },
+  "type": "ROOT",
+}
+`;
+
+exports[`toAst empty 1`] = `
+Object {
+  "nodes": Array [],
+  "source": Object {
+    "end": Object {
+      "column": undefined,
+      "line": undefined,
+    },
+    "raw": "
+",
+    "start": Object {
+      "column": undefined,
+      "line": undefined,
+    },
+  },
+  "type": "ROOT",
+}
+`;
+
+exports[`toAst escaped-quote 1`] = `
+Object {
+  "nodes": Array [
+    Array [
+      "nodes",
+      Object {
+        "bodies": Array [],
+        "context": null,
+        "isSelfClosing": true,
+        "key": Object {
+          "path": "section",
+          "source": Object {
+            "end": Object {
+              "column": 9,
+              "line": 1,
+            },
+            "raw": "section",
+            "start": Object {
+              "column": 3,
+              "line": 1,
+            },
+          },
+          "type": "PATH",
+        },
+        "params": Array [
+          Array [
+            "params",
+            Object {
+              "key": "param",
+              "source": Object {
+                "end": Object {
+                  "column": 21,
+                  "line": 1,
+                },
+                "raw": "param=\\"\\\\\\\\\\"\\" /}
+{#section param=\\"\\\\\\\\\\"\\"",
+                "start": Object {
+                  "column": 11,
+                  "line": 1,
+                },
+              },
+              "type": "PARAM",
+              "value": Object {
+                "source": Object {
+                  "end": Object {
+                    "column": 21,
+                    "line": 1,
+                  },
+                  "raw": "\\"\\\\\\\\\\"\\" /}
+{#section param=\\"\\\\\\\\\\"\\"",
+                  "start": Object {
+                    "column": 17,
+                    "line": 1,
+                  },
+                },
+                "type": "QUOTED_DUST_VALUE",
+                "valueArray": Array [
+                  Array [
+                    "valueArray",
+                    Object {
+                      "escapedQuote": "\\\\\\\\\\"",
+                      "source": Object {
+                        "end": Object {
+                          "column": 20,
+                          "line": 1,
+                        },
+                        "raw": "\\\\\\\\\\"",
+                        "start": Object {
+                          "column": 18,
+                          "line": 1,
+                        },
+                      },
+                      "type": "ESCAPED_QUOTE",
+                    },
+                  ],
+                ],
+              },
+            },
+          ],
+        ],
+        "source": Object {
+          "end": Object {
+            "column": 24,
+            "line": 1,
+          },
+          "raw": "{#section param=\\"\\\\\\\\\\"\\" /}
+{#section param=\\"\\\\\\\\\\"\\" /}",
+          "start": Object {
+            "column": 1,
+            "line": 1,
+          },
+        },
+        "type": "SECTION",
+      },
+    ],
+    Array [
+      "nodes",
+      Object {
+        "buffer": "
+",
+        "source": Object {
+          "end": Object {
+            "column": 25,
+            "line": 1,
+          },
+          "raw": "
+{#section param=\\"\\\\\\\\\\"\\" /}",
+          "start": Object {
+            "column": 25,
+            "line": 1,
+          },
+        },
+        "type": "STRING_BUFFER",
+      },
+    ],
+  ],
+  "source": Object {
+    "end": Object {
+      "column": 25,
+      "line": 1,
+    },
+    "raw": "{#section param=\\"\\\\\\\\\\"\\" /}
+{#section param=\\"\\\\\\\\\\"\\" /}",
+    "start": Object {
+      "column": 1,
+      "line": 1,
+    },
+  },
+  "type": "ROOT",
+}
+`;
+
+exports[`toAst exists 1`] = `
+Object {
+  "nodes": Array [
+    Array [
+      "nodes",
+      Object {
+        "bodies": Array [
+          Array [
+            "bodies",
+            Object {
+              "context": null,
+              "root": Object {
+                "nodes": Array [
+                  Array [
+                    "nodes",
+                    Object {
+                      "buffer": "
+  abc
+",
+                      "source": Object {
+                        "end": Object {
+                          "column": 1,
+                          "line": 2,
+                        },
+                        "raw": "
+  abc
+ ",
+                        "start": Object {
+                          "column": 12,
+                          "line": 1,
+                        },
+                      },
+                      "type": "STRING_BUFFER",
+                    },
+                  ],
+                ],
+                "source": Object {
+                  "end": Object {
+                    "column": 1,
+                    "line": 2,
+                  },
+                  "raw": "
+  abc
+ ",
+                  "start": Object {
+                    "column": 12,
+                    "line": 1,
+                  },
+                },
+                "type": "ROOT",
+              },
+              "source": Object {
+                "end": Object {
+                  "column": 1,
+                  "line": 2,
+                },
+                "raw": "
+  abc
+ ",
+                "start": Object {
+                  "column": 12,
+                  "line": 1,
+                },
+              },
+              "type": "BODY",
+            },
+          ],
+        ],
+        "context": null,
+        "isSelfClosing": false,
+        "key": Object {
+          "path": "some_key",
+          "source": Object {
+            "end": Object {
+              "column": 10,
+              "line": 1,
+            },
+            "raw": "some_key",
+            "start": Object {
+              "column": 3,
+              "line": 1,
+            },
+          },
+          "type": "PATH",
+        },
+        "params": Array [],
+        "source": Object {
+          "end": Object {
+            "column": 11,
+            "line": 3,
+          },
+          "raw": "{?some_key}
+  abc
+{/some_key}
+{/some_key}",
+          "start": Object {
+            "column": 1,
+            "line": 1,
+          },
+        },
+        "type": "EXISTS",
+      },
+    ],
+    Array [
+      "nodes",
+      Object {
+        "buffer": "
+",
+        "source": Object {
+          "end": Object {
+            "column": 12,
+            "line": 3,
+          },
+          "raw": "
+{/some_key}",
+          "start": Object {
+            "column": 12,
+            "line": 3,
+          },
+        },
+        "type": "STRING_BUFFER",
+      },
+    ],
+  ],
+  "source": Object {
+    "end": Object {
+      "column": 12,
+      "line": 3,
+    },
+    "raw": "{?some_key}
+  abc
+{/some_key}
+{/some_key}",
+    "start": Object {
+      "column": 1,
+      "line": 1,
+    },
+  },
+  "type": "ROOT",
+}
+`;
+
+exports[`toAst helper 1`] = `
+Object {
+  "nodes": Array [
+    Array [
+      "nodes",
+      Object {
+        "bodies": Array [
+          Array [
+            "bodies",
+            Object {
+              "context": null,
+              "root": Object {
+                "nodes": Array [
+                  Array [
+                    "nodes",
+                    Object {
+                      "buffer": "
+  abc
+",
+                      "source": Object {
+                        "end": Object {
+                          "column": 1,
+                          "line": 2,
+                        },
+                        "raw": "
+  abc
+ ",
+                        "start": Object {
+                          "column": 10,
+                          "line": 1,
+                        },
+                      },
+                      "type": "STRING_BUFFER",
+                    },
+                  ],
+                ],
+                "source": Object {
+                  "end": Object {
+                    "column": 1,
+                    "line": 2,
+                  },
+                  "raw": "
+  abc
+ ",
+                  "start": Object {
+                    "column": 10,
+                    "line": 1,
+                  },
+                },
+                "type": "ROOT",
+              },
+              "source": Object {
+                "end": Object {
+                  "column": 1,
+                  "line": 2,
+                },
+                "raw": "
+  abc
+ ",
+                "start": Object {
+                  "column": 10,
+                  "line": 1,
+                },
+              },
+              "type": "BODY",
+            },
+          ],
+        ],
+        "context": null,
+        "isSelfClosing": false,
+        "key": Object {
+          "path": "helper",
+          "source": Object {
+            "end": Object {
+              "column": 8,
+              "line": 1,
+            },
+            "raw": "helper",
+            "start": Object {
+              "column": 3,
+              "line": 1,
+            },
+          },
+          "type": "PATH",
+        },
+        "params": Array [],
+        "source": Object {
+          "end": Object {
+            "column": 9,
+            "line": 3,
+          },
+          "raw": "{@helper}
+  abc
+{/helper}
+{/helper}",
+          "start": Object {
+            "column": 1,
+            "line": 1,
+          },
+        },
+        "type": "HELPER",
+      },
+    ],
+    Array [
+      "nodes",
+      Object {
+        "buffer": "
+",
+        "source": Object {
+          "end": Object {
+            "column": 10,
+            "line": 3,
+          },
+          "raw": "
+{/helper}",
+          "start": Object {
+            "column": 10,
+            "line": 3,
+          },
+        },
+        "type": "STRING_BUFFER",
+      },
+    ],
+  ],
+  "source": Object {
+    "end": Object {
+      "column": 10,
+      "line": 3,
+    },
+    "raw": "{@helper}
+  abc
+{/helper}
+{/helper}",
+    "start": Object {
+      "column": 1,
+      "line": 1,
+    },
+  },
+  "type": "ROOT",
+}
+`;
+
+exports[`toAst html-tag 1`] = `
+Object {
+  "nodes": Array [
+    Array [
+      "nodes",
+      Object {
+        "attributes": Array [],
+        "body": Object {
+          "nodes": Array [],
+          "source": Object {
+            "end": Object {
+              "column": undefined,
+              "line": undefined,
+            },
+            "raw": "
+",
+            "start": Object {
+              "column": undefined,
+              "line": undefined,
+            },
+          },
+          "type": "ROOT",
+        },
+        "isSelfClosing": false,
+        "source": Object {
+          "end": Object {
+            "column": 11,
+            "line": 1,
+          },
+          "raw": "<div></div>
+<div></div>",
+          "start": Object {
+            "column": 1,
+            "line": 1,
+          },
+        },
+        "tagName": "div",
+        "type": "HTML_TAG",
+      },
+    ],
+    Array [
+      "nodes",
+      Object {
+        "buffer": "
+",
+        "source": Object {
+          "end": Object {
+            "column": 12,
+            "line": 1,
+          },
+          "raw": "
+<div></div>",
+          "start": Object {
+            "column": 12,
+            "line": 1,
+          },
+        },
+        "type": "STRING_BUFFER",
+      },
+    ],
+  ],
+  "source": Object {
+    "end": Object {
+      "column": 12,
+      "line": 1,
+    },
+    "raw": "<div></div>
+<div></div>",
+    "start": Object {
+      "column": 1,
+      "line": 1,
+    },
+  },
+  "type": "ROOT",
+}
+`;
+
+exports[`toAst html-with-attributes 1`] = `
+Object {
+  "nodes": Array [
+    Array [
+      "nodes",
+      Object {
+        "attributes": Array [],
+        "body": Object {
+          "nodes": Array [],
+          "source": Object {
+            "end": Object {
+              "column": undefined,
+              "line": undefined,
+            },
+            "raw": "
+",
+            "start": Object {
+              "column": undefined,
+              "line": undefined,
+            },
+          },
+          "type": "ROOT",
+        },
+        "isSelfClosing": false,
+        "source": Object {
+          "end": Object {
+            "column": 50,
+            "line": 1,
+          },
+          "raw": "<div data-test-abc class=\\"abc\\" align=\\"left\\"></div>
+<div data-test-abc class=\\"abc\\" align=\\"left\\"></div>",
+          "start": Object {
+            "column": 1,
+            "line": 1,
+          },
+        },
+        "tagName": "div",
+        "type": "HTML_TAG",
+      },
+    ],
+    Array [
+      "nodes",
+      Object {
+        "buffer": "
+",
+        "source": Object {
+          "end": Object {
+            "column": 51,
+            "line": 1,
+          },
+          "raw": "
+<div data-test-abc class=\\"abc\\" align=\\"left\\"></div>",
+          "start": Object {
+            "column": 51,
+            "line": 1,
+          },
+        },
+        "type": "STRING_BUFFER",
+      },
+    ],
+    Array [
+      "nodes",
+      Object {
+        "attributes": Array [],
+        "body": null,
+        "isSelfClosing": true,
+        "source": Object {
+          "end": Object {
+            "column": 16,
+            "line": 2,
+          },
+          "raw": "<input disabled>
+<input disabled>",
+          "start": Object {
+            "column": 1,
+            "line": 2,
+          },
+        },
+        "tagName": "input",
+        "type": "HTML_TAG",
+      },
+    ],
+    Array [
+      "nodes",
+      Object {
+        "buffer": "
+",
+        "source": Object {
+          "end": Object {
+            "column": 17,
+            "line": 2,
+          },
+          "raw": "
+<input disabled>",
+          "start": Object {
+            "column": 17,
+            "line": 2,
+          },
+        },
+        "type": "STRING_BUFFER",
+      },
+    ],
+  ],
+  "source": Object {
+    "end": Object {
+      "column": 17,
+      "line": 2,
+    },
+    "raw": "<div data-test-abc class=\\"abc\\" align=\\"left\\"></div>
+<input disabled>
+<input disabled>",
+    "start": Object {
+      "column": 1,
+      "line": 1,
+    },
+  },
+  "type": "ROOT",
+}
+`;
+
+exports[`toAst inline-partial 1`] = `
+Object {
+  "nodes": Array [
+    Array [
+      "nodes",
+      Object {
+        "bodies": Array [],
+        "context": null,
+        "isSelfClosing": true,
+        "key": Object {
+          "path": "\\"some literal {~lb} {abc}\\"",
+          "source": Object {
+            "end": Object {
+              "column": 28,
+              "line": 1,
+            },
+            "raw": "\\"some literal {~lb} {abc}\\"",
+            "start": Object {
+              "column": 3,
+              "line": 1,
+            },
+          },
+          "type": "PATH",
+        },
+        "params": Array [
+          Array [
+            "params",
+            Object {
+              "key": "param1",
+              "source": Object {
+                "end": Object {
+                  "column": 41,
+                  "line": 1,
+                },
+                "raw": "param1=\\"abc\\" /}
+{>\\"some literal {~lb} {abc}\\" param1=\\"abc\\"",
+                "start": Object {
+                  "column": 30,
+                  "line": 1,
+                },
+              },
+              "type": "PARAM",
+              "value": Object {
+                "source": Object {
+                  "end": Object {
+                    "column": 41,
+                    "line": 1,
+                  },
+                  "raw": "\\"abc\\" /}
+{>\\"some literal {~lb} {abc}\\" param1=\\"abc\\"",
+                  "start": Object {
+                    "column": 37,
+                    "line": 1,
+                  },
+                },
+                "type": "QUOTED_DUST_VALUE",
+                "valueArray": Array [
+                  Array [
+                    "valueArray",
+                    Object {
+                      "buffer": "abc",
+                      "source": Object {
+                        "end": Object {
+                          "column": 40,
+                          "line": 1,
+                        },
+                        "raw": "abc",
+                        "start": Object {
+                          "column": 38,
+                          "line": 1,
+                        },
+                      },
+                      "type": "STRING_BUFFER",
+                    },
+                  ],
+                ],
+              },
+            },
+          ],
+        ],
+        "source": Object {
+          "end": Object {
+            "column": 44,
+            "line": 1,
+          },
+          "raw": "{>\\"some literal {~lb} {abc}\\" param1=\\"abc\\" /}
+{>\\"some literal {~lb} {abc}\\" param1=\\"abc\\" /}",
+          "start": Object {
+            "column": 1,
+            "line": 1,
+          },
+        },
+        "type": "PARTIAL",
+      },
+    ],
+    Array [
+      "nodes",
+      Object {
+        "buffer": "
+",
+        "source": Object {
+          "end": Object {
+            "column": 45,
+            "line": 1,
+          },
+          "raw": "
+{>\\"some literal {~lb} {abc}\\" param1=\\"abc\\" /}",
+          "start": Object {
+            "column": 45,
+            "line": 1,
+          },
+        },
+        "type": "STRING_BUFFER",
+      },
+    ],
+  ],
+  "source": Object {
+    "end": Object {
+      "column": 45,
+      "line": 1,
+    },
+    "raw": "{>\\"some literal {~lb} {abc}\\" param1=\\"abc\\" /}
+{>\\"some literal {~lb} {abc}\\" param1=\\"abc\\" /}",
+    "start": Object {
+      "column": 1,
+      "line": 1,
+    },
+  },
+  "type": "ROOT",
+}
+`;
+
+exports[`toAst not-exists 1`] = `
+Object {
+  "nodes": Array [
+    Array [
+      "nodes",
+      Object {
+        "bodies": Array [
+          Array [
+            "bodies",
+            Object {
+              "context": null,
+              "root": Object {
+                "nodes": Array [
+                  Array [
+                    "nodes",
+                    Object {
+                      "buffer": "
+  abc
+",
+                      "source": Object {
+                        "end": Object {
+                          "column": 1,
+                          "line": 2,
+                        },
+                        "raw": "
+  abc
+ ",
+                        "start": Object {
+                          "column": 12,
+                          "line": 1,
+                        },
+                      },
+                      "type": "STRING_BUFFER",
+                    },
+                  ],
+                ],
+                "source": Object {
+                  "end": Object {
+                    "column": 1,
+                    "line": 2,
+                  },
+                  "raw": "
+  abc
+ ",
+                  "start": Object {
+                    "column": 12,
+                    "line": 1,
+                  },
+                },
+                "type": "ROOT",
+              },
+              "source": Object {
+                "end": Object {
+                  "column": 1,
+                  "line": 2,
+                },
+                "raw": "
+  abc
+ ",
+                "start": Object {
+                  "column": 12,
+                  "line": 1,
+                },
+              },
+              "type": "BODY",
+            },
+          ],
+        ],
+        "context": null,
+        "isSelfClosing": false,
+        "key": Object {
+          "path": "some_key",
+          "source": Object {
+            "end": Object {
+              "column": 10,
+              "line": 1,
+            },
+            "raw": "some_key",
+            "start": Object {
+              "column": 3,
+              "line": 1,
+            },
+          },
+          "type": "PATH",
+        },
+        "params": Array [],
+        "source": Object {
+          "end": Object {
+            "column": 11,
+            "line": 3,
+          },
+          "raw": "{^some_key}
+  abc
+{/some_key}
+{/some_key}",
+          "start": Object {
+            "column": 1,
+            "line": 1,
+          },
+        },
+        "type": "NOT_EXISTS",
+      },
+    ],
+    Array [
+      "nodes",
+      Object {
+        "buffer": "
+",
+        "source": Object {
+          "end": Object {
+            "column": 12,
+            "line": 3,
+          },
+          "raw": "
+{/some_key}",
+          "start": Object {
+            "column": 12,
+            "line": 3,
+          },
+        },
+        "type": "STRING_BUFFER",
+      },
+    ],
+  ],
+  "source": Object {
+    "end": Object {
+      "column": 12,
+      "line": 3,
+    },
+    "raw": "{^some_key}
+  abc
+{/some_key}
+{/some_key}",
+    "start": Object {
+      "column": 1,
+      "line": 1,
+    },
+  },
+  "type": "ROOT",
+}
+`;
+
+exports[`toAst reference 1`] = `
+Object {
+  "nodes": Array [
+    Array [
+      "nodes",
+      Object {
+        "filters": Array [
+          Array [
+            "filters",
+            Object {
+              "filter": "filter1",
+              "source": Object {
+                "end": Object {
+                  "column": 18,
+                  "line": 1,
+                },
+                "raw": "|filter1",
+                "start": Object {
+                  "column": 11,
+                  "line": 1,
+                },
+              },
+              "type": "FILTER",
+            },
+          ],
+          Array [
+            "filters",
+            Object {
+              "filter": "filter2",
+              "source": Object {
+                "end": Object {
+                  "column": 26,
+                  "line": 1,
+                },
+                "raw": "|filter2",
+                "start": Object {
+                  "column": 19,
+                  "line": 1,
+                },
+              },
+              "type": "FILTER",
+            },
+          ],
+          Array [
+            "filters",
+            Object {
+              "filter": "filter3",
+              "source": Object {
+                "end": Object {
+                  "column": 34,
+                  "line": 1,
+                },
+                "raw": "|filter3",
+                "start": Object {
+                  "column": 27,
+                  "line": 1,
+                },
+              },
+              "type": "FILTER",
+            },
+          ],
+        ],
+        "path": Object {
+          "path": "reference",
+          "source": Object {
+            "end": Object {
+              "column": 10,
+              "line": 1,
+            },
+            "raw": "reference",
+            "start": Object {
+              "column": 2,
+              "line": 1,
+            },
+          },
+          "type": "PATH",
+        },
+        "source": Object {
+          "end": Object {
+            "column": 35,
+            "line": 1,
+          },
+          "raw": "{reference|filter1|filter2|filter3}
+{reference|filter1|filter2|filter3}",
+          "start": Object {
+            "column": 1,
+            "line": 1,
+          },
+        },
+        "type": "REFERENCE",
+      },
+    ],
+    Array [
+      "nodes",
+      Object {
+        "buffer": "
+",
+        "source": Object {
+          "end": Object {
+            "column": 36,
+            "line": 1,
+          },
+          "raw": "
+{reference|filter1|filter2|filter3}",
+          "start": Object {
+            "column": 36,
+            "line": 1,
+          },
+        },
+        "type": "STRING_BUFFER",
+      },
+    ],
+  ],
+  "source": Object {
+    "end": Object {
+      "column": 36,
+      "line": 1,
+    },
+    "raw": "{reference|filter1|filter2|filter3}
+{reference|filter1|filter2|filter3}",
+    "start": Object {
+      "column": 1,
+      "line": 1,
+    },
+  },
+  "type": "ROOT",
+}
+`;
+
+exports[`toAst section 1`] = `
+Object {
+  "nodes": Array [
+    Array [
+      "nodes",
+      Object {
+        "bodies": Array [
+          Array [
+            "bodies",
+            Object {
+              "context": null,
+              "root": Object {
+                "nodes": Array [
+                  Array [
+                    "nodes",
+                    Object {
+                      "buffer": "
+  abc
+",
+                      "source": Object {
+                        "end": Object {
+                          "column": 1,
+                          "line": 2,
+                        },
+                        "raw": "
+  abc
+ ",
+                        "start": Object {
+                          "column": 11,
+                          "line": 1,
+                        },
+                      },
+                      "type": "STRING_BUFFER",
+                    },
+                  ],
+                ],
+                "source": Object {
+                  "end": Object {
+                    "column": 1,
+                    "line": 2,
+                  },
+                  "raw": "
+  abc
+ ",
+                  "start": Object {
+                    "column": 11,
+                    "line": 1,
+                  },
+                },
+                "type": "ROOT",
+              },
+              "source": Object {
+                "end": Object {
+                  "column": 1,
+                  "line": 2,
+                },
+                "raw": "
+  abc
+ ",
+                "start": Object {
+                  "column": 11,
+                  "line": 1,
+                },
+              },
+              "type": "BODY",
+            },
+          ],
+        ],
+        "context": null,
+        "isSelfClosing": false,
+        "key": Object {
+          "path": "section",
+          "source": Object {
+            "end": Object {
+              "column": 9,
+              "line": 1,
+            },
+            "raw": "section",
+            "start": Object {
+              "column": 3,
+              "line": 1,
+            },
+          },
+          "type": "PATH",
+        },
+        "params": Array [],
+        "source": Object {
+          "end": Object {
+            "column": 10,
+            "line": 3,
+          },
+          "raw": "{#section}
+  abc
+{/section}
+{/section}",
+          "start": Object {
+            "column": 1,
+            "line": 1,
+          },
+        },
+        "type": "SECTION",
+      },
+    ],
+    Array [
+      "nodes",
+      Object {
+        "buffer": "
+",
+        "source": Object {
+          "end": Object {
+            "column": 11,
+            "line": 3,
+          },
+          "raw": "
+{/section}",
+          "start": Object {
+            "column": 11,
+            "line": 3,
+          },
+        },
+        "type": "STRING_BUFFER",
+      },
+    ],
+  ],
+  "source": Object {
+    "end": Object {
+      "column": 11,
+      "line": 3,
+    },
+    "raw": "{#section}
+  abc
+{/section}
+{/section}",
+    "start": Object {
+      "column": 1,
+      "line": 1,
+    },
+  },
+  "type": "ROOT",
+}
+`;
+
+exports[`toAst section-with-context-bodies 1`] = `
+Object {
+  "nodes": Array [
+    Array [
+      "nodes",
+      Object {
+        "bodies": Array [
+          Array [
+            "bodies",
+            Object {
+              "context": null,
+              "root": Object {
+                "nodes": Array [
+                  Array [
+                    "nodes",
+                    Object {
+                      "buffer": "
+  first body main
+",
+                      "source": Object {
+                        "end": Object {
+                          "column": 1,
+                          "line": 2,
+                        },
+                        "raw": "
+  first body main
+ ",
+                        "start": Object {
+                          "column": 11,
+                          "line": 1,
+                        },
+                      },
+                      "type": "STRING_BUFFER",
+                    },
+                  ],
+                ],
+                "source": Object {
+                  "end": Object {
+                    "column": 1,
+                    "line": 2,
+                  },
+                  "raw": "
+  first body main
+ ",
+                  "start": Object {
+                    "column": 11,
+                    "line": 1,
+                  },
+                },
+                "type": "ROOT",
+              },
+              "source": Object {
+                "end": Object {
+                  "column": 1,
+                  "line": 2,
+                },
+                "raw": "
+  first body main
+ ",
+                "start": Object {
+                  "column": 11,
+                  "line": 1,
+                },
+              },
+              "type": "BODY",
+            },
+          ],
+          Array [
+            "bodies",
+            Object {
+              "context": Object {
+                "identifier": Object {
+                  "path": "someContext",
+                  "source": Object {
+                    "end": Object {
+                      "column": 14,
+                      "line": 3,
+                    },
+                    "raw": "{:someContext}",
+                    "start": Object {
+                      "column": 1,
+                      "line": 3,
+                    },
+                  },
+                  "type": "PATH",
+                },
+                "source": Object {
+                  "end": Object {
+                    "column": 14,
+                    "line": 3,
+                  },
+                  "raw": "{:someContext}",
+                  "start": Object {
+                    "column": 1,
+                    "line": 3,
+                  },
+                },
+                "type": "CONTEXT",
+              },
+              "root": Object {
+                "nodes": Array [
+                  Array [
+                    "nodes",
+                    Object {
+                      "buffer": "
+  someContextBody
+",
+                      "source": Object {
+                        "end": Object {
+                          "column": 1,
+                          "line": 4,
+                        },
+                        "raw": "
+  someContextBody
+ ",
+                        "start": Object {
+                          "column": 15,
+                          "line": 3,
+                        },
+                      },
+                      "type": "STRING_BUFFER",
+                    },
+                  ],
+                ],
+                "source": Object {
+                  "end": Object {
+                    "column": 1,
+                    "line": 4,
+                  },
+                  "raw": "
+  someContextBody
+ ",
+                  "start": Object {
+                    "column": 15,
+                    "line": 3,
+                  },
+                },
+                "type": "ROOT",
+              },
+              "source": Object {
+                "end": Object {
+                  "column": 1,
+                  "line": 4,
+                },
+                "raw": "{:someContext}
+  someContextBody
+ ",
+                "start": Object {
+                  "column": 1,
+                  "line": 3,
+                },
+              },
+              "type": "BODY",
+            },
+          ],
+          Array [
+            "bodies",
+            Object {
+              "context": Object {
+                "identifier": Object {
+                  "path": "else",
+                  "source": Object {
+                    "end": Object {
+                      "column": 7,
+                      "line": 5,
+                    },
+                    "raw": "{:else}",
+                    "start": Object {
+                      "column": 1,
+                      "line": 5,
+                    },
+                  },
+                  "type": "PATH",
+                },
+                "source": Object {
+                  "end": Object {
+                    "column": 7,
+                    "line": 5,
+                  },
+                  "raw": "{:else}",
+                  "start": Object {
+                    "column": 1,
+                    "line": 5,
+                  },
+                },
+                "type": "CONTEXT",
+              },
+              "root": Object {
+                "nodes": Array [
+                  Array [
+                    "nodes",
+                    Object {
+                      "buffer": "
+  elseBody
+",
+                      "source": Object {
+                        "end": Object {
+                          "column": 1,
+                          "line": 6,
+                        },
+                        "raw": "
+  elseBody
+ ",
+                        "start": Object {
+                          "column": 8,
+                          "line": 5,
+                        },
+                      },
+                      "type": "STRING_BUFFER",
+                    },
+                  ],
+                ],
+                "source": Object {
+                  "end": Object {
+                    "column": 1,
+                    "line": 6,
+                  },
+                  "raw": "
+  elseBody
+ ",
+                  "start": Object {
+                    "column": 8,
+                    "line": 5,
+                  },
+                },
+                "type": "ROOT",
+              },
+              "source": Object {
+                "end": Object {
+                  "column": 1,
+                  "line": 6,
+                },
+                "raw": "{:else}
+  elseBody
+ ",
+                "start": Object {
+                  "column": 1,
+                  "line": 5,
+                },
+              },
+              "type": "BODY",
+            },
+          ],
+        ],
+        "context": null,
+        "isSelfClosing": false,
+        "key": Object {
+          "path": "section",
+          "source": Object {
+            "end": Object {
+              "column": 9,
+              "line": 1,
+            },
+            "raw": "section",
+            "start": Object {
+              "column": 3,
+              "line": 1,
+            },
+          },
+          "type": "PATH",
+        },
+        "params": Array [],
+        "source": Object {
+          "end": Object {
+            "column": 10,
+            "line": 7,
+          },
+          "raw": "{#section}
+  first body main
+{:someContext}
+  someContextBody
+{:else}
+  elseBody
+{/section}
+{/section}",
+          "start": Object {
+            "column": 1,
+            "line": 1,
+          },
+        },
+        "type": "SECTION",
+      },
+    ],
+    Array [
+      "nodes",
+      Object {
+        "buffer": "
+",
+        "source": Object {
+          "end": Object {
+            "column": 11,
+            "line": 7,
+          },
+          "raw": "
+{/section}",
+          "start": Object {
+            "column": 11,
+            "line": 7,
+          },
+        },
+        "type": "STRING_BUFFER",
+      },
+    ],
+  ],
+  "source": Object {
+    "end": Object {
+      "column": 11,
+      "line": 7,
+    },
+    "raw": "{#section}
+  first body main
+{:someContext}
+  someContextBody
+{:else}
+  elseBody
+{/section}
+{/section}",
+    "start": Object {
+      "column": 1,
+      "line": 1,
+    },
+  },
+  "type": "ROOT",
+}
+`;
+
+exports[`toAst self-closing-block 1`] = `
+Object {
+  "nodes": Array [
+    Array [
+      "nodes",
+      Object {
+        "bodies": Array [],
+        "context": null,
+        "isSelfClosing": true,
+        "key": Object {
+          "path": "selfClosingBlock",
+          "source": Object {
+            "end": Object {
+              "column": 18,
+              "line": 1,
+            },
+            "raw": "selfClosingBlock",
+            "start": Object {
+              "column": 3,
+              "line": 1,
+            },
+          },
+          "type": "PATH",
+        },
+        "params": Array [],
+        "source": Object {
+          "end": Object {
+            "column": 21,
+            "line": 1,
+          },
+          "raw": "{+selfClosingBlock /}
+{+selfClosingBlock /}",
+          "start": Object {
+            "column": 1,
+            "line": 1,
+          },
+        },
+        "type": "SELF_CLOSING_BLOCK",
+      },
+    ],
+    Array [
+      "nodes",
+      Object {
+        "buffer": "
+",
+        "source": Object {
+          "end": Object {
+            "column": 22,
+            "line": 1,
+          },
+          "raw": "
+{+selfClosingBlock /}",
+          "start": Object {
+            "column": 22,
+            "line": 1,
+          },
+        },
+        "type": "STRING_BUFFER",
+      },
+    ],
+  ],
+  "source": Object {
+    "end": Object {
+      "column": 22,
+      "line": 1,
+    },
+    "raw": "{+selfClosingBlock /}
+{+selfClosingBlock /}",
+    "start": Object {
+      "column": 1,
+      "line": 1,
+    },
+  },
+  "type": "ROOT",
+}
+`;
+
+exports[`toAst self-closing-block-with-body 1`] = `
+Object {
+  "nodes": Array [
+    Array [
+      "nodes",
+      Object {
+        "bodies": Array [
+          Array [
+            "bodies",
+            Object {
+              "context": null,
+              "root": Object {
+                "nodes": Array [
+                  Array [
+                    "nodes",
+                    Object {
+                      "buffer": "
+    abcdef
+",
+                      "source": Object {
+                        "end": Object {
+                          "column": 1,
+                          "line": 2,
+                        },
+                        "raw": "
+    abcdef
+ ",
+                        "start": Object {
+                          "column": 20,
+                          "line": 1,
+                        },
+                      },
+                      "type": "STRING_BUFFER",
+                    },
+                  ],
+                ],
+                "source": Object {
+                  "end": Object {
+                    "column": 1,
+                    "line": 2,
+                  },
+                  "raw": "
+    abcdef
+ ",
+                  "start": Object {
+                    "column": 20,
+                    "line": 1,
+                  },
+                },
+                "type": "ROOT",
+              },
+              "source": Object {
+                "end": Object {
+                  "column": 1,
+                  "line": 2,
+                },
+                "raw": "
+    abcdef
+ ",
+                "start": Object {
+                  "column": 20,
+                  "line": 1,
+                },
+              },
+              "type": "BODY",
+            },
+          ],
+        ],
+        "context": null,
+        "isSelfClosing": false,
+        "key": Object {
+          "path": "selfClosingBlock",
+          "source": Object {
+            "end": Object {
+              "column": 18,
+              "line": 1,
+            },
+            "raw": "selfClosingBlock",
+            "start": Object {
+              "column": 3,
+              "line": 1,
+            },
+          },
+          "type": "PATH",
+        },
+        "params": Array [],
+        "source": Object {
+          "end": Object {
+            "column": 19,
+            "line": 3,
+          },
+          "raw": "{+selfClosingBlock}
+    abcdef
+{/selfClosingBlock}
+{/selfClosingBlock}",
+          "start": Object {
+            "column": 1,
+            "line": 1,
+          },
+        },
+        "type": "SELF_CLOSING_BLOCK",
+      },
+    ],
+    Array [
+      "nodes",
+      Object {
+        "buffer": "
+",
+        "source": Object {
+          "end": Object {
+            "column": 20,
+            "line": 3,
+          },
+          "raw": "
+{/selfClosingBlock}",
+          "start": Object {
+            "column": 20,
+            "line": 3,
+          },
+        },
+        "type": "STRING_BUFFER",
+      },
+    ],
+  ],
+  "source": Object {
+    "end": Object {
+      "column": 20,
+      "line": 3,
+    },
+    "raw": "{+selfClosingBlock}
+    abcdef
+{/selfClosingBlock}
+{/selfClosingBlock}",
+    "start": Object {
+      "column": 1,
+      "line": 1,
+    },
+  },
+  "type": "ROOT",
+}
+`;
+
+exports[`toAst self-closing-html-tag 1`] = `
+Object {
+  "nodes": Array [
+    Array [
+      "nodes",
+      Object {
+        "attributes": Array [],
+        "body": null,
+        "isSelfClosing": true,
+        "source": Object {
+          "end": Object {
+            "column": 4,
+            "line": 1,
+          },
+          "raw": "<br>
+<br>",
+          "start": Object {
+            "column": 1,
+            "line": 1,
+          },
+        },
+        "tagName": "br",
+        "type": "HTML_TAG",
+      },
+    ],
+    Array [
+      "nodes",
+      Object {
+        "buffer": "
+",
+        "source": Object {
+          "end": Object {
+            "column": 5,
+            "line": 1,
+          },
+          "raw": "
+<br>",
+          "start": Object {
+            "column": 5,
+            "line": 1,
+          },
+        },
+        "type": "STRING_BUFFER",
+      },
+    ],
+  ],
+  "source": Object {
+    "end": Object {
+      "column": 5,
+      "line": 1,
+    },
+    "raw": "<br>
+<br>",
+    "start": Object {
+      "column": 1,
+      "line": 1,
+    },
+  },
+  "type": "ROOT",
+}
+`;
+
+exports[`toAst special 1`] = `
+Object {
+  "nodes": Array [
+    Array [
+      "nodes",
+      Object {
+        "key": "lb",
+        "source": Object {
+          "end": Object {
+            "column": 5,
+            "line": 1,
+          },
+          "raw": "{~lb}
+{~lb}",
+          "start": Object {
+            "column": 1,
+            "line": 1,
+          },
+        },
+        "type": "SPECIAL",
+      },
+    ],
+    Array [
+      "nodes",
+      Object {
+        "buffer": "
+",
+        "source": Object {
+          "end": Object {
+            "column": 6,
+            "line": 1,
+          },
+          "raw": "
+{~lb}",
+          "start": Object {
+            "column": 6,
+            "line": 1,
+          },
+        },
+        "type": "STRING_BUFFER",
+      },
+    ],
+  ],
+  "source": Object {
+    "end": Object {
+      "column": 6,
+      "line": 1,
+    },
+    "raw": "{~lb}
+{~lb}",
+    "start": Object {
+      "column": 1,
+      "line": 1,
+    },
+  },
+  "type": "ROOT",
+}
+`;

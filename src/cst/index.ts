@@ -49,10 +49,7 @@ import HtmlTag from './nodeTypes/HtmlTag';
 import Attribute from './nodeTypes/Attribute';
 import HtmlComment from './nodeTypes/HtmlComment';
 
-// todo: switch back to non default constructor
-const BaseDustHtmlVisitor = parserInstance.getBaseCstVisitorConstructorWithDefaults();
-
-class DustHtmlVisitor extends BaseDustHtmlVisitor {
+class DustHtmlVisitor extends parserInstance.getBaseCstVisitorConstructorWithDefaults() {
   private inputByLine: string[] = [];
 
   constructor() {
@@ -77,8 +74,10 @@ class DustHtmlVisitor extends BaseDustHtmlVisitor {
     { line: startLine = 0, column: startColumn = 0 }: IPosition,
     { line: endLine = 0, column: endColumn = 0 }: IPosition,
   ): string {
-    const startString = this.inputByLine[startLine - 1].slice(startColumn - 1);
-    const endString = this.inputByLine[endLine - 1].slice(0, endColumn);
+    const startString = (this.inputByLine[startLine - 1] || '').slice(
+      startColumn - 1,
+    );
+    const endString = (this.inputByLine[endLine - 1] || '').slice(0, endColumn);
 
     return [
       startString,
@@ -87,7 +86,7 @@ class DustHtmlVisitor extends BaseDustHtmlVisitor {
     ].join('\n');
   }
 
-  public body(cst: CstChildrenDictionary) {
+  private body(cst: CstChildrenDictionary) {
     const parts: INode[] = Optional.ofNullable(cst.part)
       .map(elements => elements.filter(isCstNode).map(node => this.visit(node)))
       .orElseGet(() => []);
@@ -109,7 +108,7 @@ class DustHtmlVisitor extends BaseDustHtmlVisitor {
     );
   }
 
-  public part(cst: CstChildrenDictionary) {
+  private part(cst: CstChildrenDictionary) {
     const alternationValue = Object.values(cst)[0][0];
     return this.visit(alternationValue as CstNode);
   }
@@ -119,7 +118,7 @@ class DustHtmlVisitor extends BaseDustHtmlVisitor {
   // stops adding the to the buffer token and determines whether the "{" is
   // a dustStart or simply a char. If it is determined to be a char, we can
   // manually add it to the buffer node in the cst visitor.
-  public part$buffer(cst: CstChildrenDictionary) {
+  private part$buffer(cst: CstChildrenDictionary) {
     const bufferOrCharSources: ISource[] = cst.bufferOrChar
       .filter(isCstNode)
       .map(node => this.visit(node));
@@ -134,7 +133,7 @@ class DustHtmlVisitor extends BaseDustHtmlVisitor {
     });
   }
 
-  public bufferOrChar(cst: CstChildrenDictionary): ISource {
+  private bufferOrChar(cst: CstChildrenDictionary): ISource {
     return Optional.ofNullable(cst.buffer)
       .or(() => Optional.ofNullable(cst.char))
       .map(elements => elements.filter(isIToken)[0])
@@ -143,7 +142,7 @@ class DustHtmlVisitor extends BaseDustHtmlVisitor {
   }
 
   // todo: if key !== closingDustTag key we should throw a parse error
-  public section(cst: CstChildrenDictionary) {
+  private section(cst: CstChildrenDictionary) {
     const dustSectionCharacterPrefix = (Object.values(
       (cst.dustSectionCharacterPrefix[0] as CstNode).children,
     )[0][0] as IToken).image;
@@ -240,7 +239,7 @@ class DustHtmlVisitor extends BaseDustHtmlVisitor {
     });
   }
 
-  public filters(cst: CstChildrenDictionary): IFilter[] {
+  private filters(cst: CstChildrenDictionary): IFilter[] {
     return Optional.ofNullable(cst.key)
       .map(keys => keys.filter(isIToken))
       .map(keys =>
@@ -260,7 +259,7 @@ class DustHtmlVisitor extends BaseDustHtmlVisitor {
       .orElseGet(() => []);
   }
 
-  public selfClosingBlock(cst: CstChildrenDictionary) {
+  private selfClosingBlock(cst: CstChildrenDictionary) {
     const dustSectionCharacterPrefix = (Object.values(
       (cst.dustSectionCharacterPrefix[0] as CstNode).children,
     )[0][0] as IToken).image;
@@ -289,10 +288,7 @@ class DustHtmlVisitor extends BaseDustHtmlVisitor {
     );
   }
 
-  public partial(cst: CstChildrenDictionary): ISection {
-    const dustSectionCharacterPrefix = (Object.values(
-      (cst.dustSectionCharacterPrefix[0] as CstNode).children,
-    )[0][0] as IToken).image;
+  private partial(cst: CstChildrenDictionary): ISection {
     const key = Optional.ofNullable(cst.quotedKey)
       .or(() => Optional.ofNullable(cst.key))
       .map(elements => elements.filter(isIToken)[0])
@@ -307,7 +303,7 @@ class DustHtmlVisitor extends BaseDustHtmlVisitor {
     );
 
     return new Section(
-      dustSectionCharacterPrefix,
+      '>',
       new Path(key.image, tokenToSource(key)),
       context,
       params,
@@ -321,7 +317,9 @@ class DustHtmlVisitor extends BaseDustHtmlVisitor {
     );
   }
 
-  public inlineWithoutStartQuote(cst: CstChildrenDictionary): IQuotedDustValue {
+  private inlineWithoutStartQuote(
+    cst: CstChildrenDictionary,
+  ): IQuotedDustValue {
     const maybeInlines = Optional.ofNullable(cst.inline)
       .map(inlineNodes => inlineNodes.filter(isCstNode))
       .map(
@@ -353,7 +351,7 @@ class DustHtmlVisitor extends BaseDustHtmlVisitor {
     });
   }
 
-  public inline(cst: CstChildrenDictionary): Inline {
+  private inline(cst: CstChildrenDictionary): Inline {
     return Optional.ofNullable(cst.special)
       .or(() => Optional.ofNullable(cst.reference))
       .map(elements => elements.filter(isCstNode)[0])
@@ -362,10 +360,10 @@ class DustHtmlVisitor extends BaseDustHtmlVisitor {
         (): IEscapedQuote | IStringBuffer => {
           const maybeEscapedQuote: Optional<
             IEscapedQuote | IStringBuffer
-          > = Optional.of(cst.escapedQuote)
+          > = Optional.ofNullable(cst.escapedQuote)
             .map(elements => elements.filter(isIToken)[0])
             .map(token => new EscapedQuote(token.image, tokenToSource(token)));
-          const maybeStringBuffer = Optional.of(cst.dustQuoteBuffer)
+          const maybeStringBuffer = Optional.ofNullable(cst.dustQuoteBuffer)
             .map(elements => elements.filter(isIToken)[0])
             .map(token => new StringBuffer(token.image, tokenToSource(token)));
 
@@ -568,7 +566,7 @@ class DustHtmlVisitor extends BaseDustHtmlVisitor {
       );
   }
 
-  public rawRule(cst: CstChildrenDictionary) {
+  private rawRule(cst: CstChildrenDictionary) {
     const rawNode = cst.raw[0];
 
     if (isIToken(rawNode)) {
@@ -579,43 +577,52 @@ class DustHtmlVisitor extends BaseDustHtmlVisitor {
   }
 
   // todo: make sure start and end tags are the same
-  public htmlTag(cst: CstChildrenDictionary) {
+  private htmlNonSelfClosingElement(cst: CstChildrenDictionary) {
     const startTag = cst.htmlStartTag.filter(isIToken)[0];
     const tagName = startTag.image.slice(1);
     const attributes = this.visit(cst.attributes.filter(isCstNode)[0]);
-    const maybeSelfClosing = Optional.ofNullable(cst.htmlSelfClosingTagEnd);
     const bodyOrNull = Optional.ofNullable(cst.body)
       .map(body => body.filter(isCstNode)[0])
       .map(body => this.visit(body))
       .orNull();
-    const endPosition = maybeSelfClosing
-      .or(() => Optional.ofNullable(cst.closingHtmlTag))
-      .map(elements => elements.filter(isIToken)[0])
-      .map(tokenToEndPosition)
-      .orElseThrow(() => new Error('expected end tag token'));
     const startPosition = tokenToStartPosition(startTag);
+    const endPosition = tokenToEndPosition(cst.closingHtmlTag[0] as IToken);
 
-    return new HtmlTag(
-      tagName,
-      attributes,
-      maybeSelfClosing.isPresent,
-      bodyOrNull,
-      {
-        raw: this.getRawSourceFromPosition(startPosition, endPosition),
-        start: startPosition,
-        end: endPosition,
-      },
-    );
+    return new HtmlTag(tagName, attributes, false, bodyOrNull, {
+      raw: this.getRawSourceFromPosition(startPosition, endPosition),
+      start: startPosition,
+      end: endPosition,
+    });
   }
 
-  public attributes(cst: CstChildrenDictionary): IAttribute[] {
+  private htmlSelfClosingElement(cst: CstChildrenDictionary) {
+    const startTag = cst.voidHtmlStartTag.filter(isIToken)[0];
+    const tagName = startTag.image.slice(1);
+    const attributes = this.visit(cst.attributes.filter(isCstNode)[0]);
+    const startPosition = tokenToStartPosition(startTag);
+    const endPosition = Optional.ofNullable(cst.htmlTagEnd)
+      .or(() => Optional.ofNullable(cst.htmlSelfClosingTagEnd))
+      .map(elements => elements.filter(isIToken)[0])
+      .map(tokenToEndPosition)
+      .orElseThrow(
+        () => new Error('expected self closing tag end, but none parsed'),
+      );
+
+    return new HtmlTag(tagName, attributes, true, null, {
+      raw: this.getRawSourceFromPosition(startPosition, endPosition),
+      start: startPosition,
+      end: endPosition,
+    });
+  }
+
+  private attributes(cst: CstChildrenDictionary): IAttribute[] {
     return Optional.ofNullable(cst.attributeValue)
       .map(elements => elements.filter(isCstNode))
       .map(nodes => nodes.map(node => this.visit(node)))
       .orElseGet(() => []);
   }
 
-  public attribute(cst: CstChildrenDictionary): IAttribute | null {
+  private attribute(cst: CstChildrenDictionary): IAttribute | null {
     const nameTokenOrReference: IToken | IReference = Optional.ofNullable(
       cst.attributeName.filter(isIToken)[0] as IToken | IReference,
     )
@@ -655,7 +662,7 @@ class DustHtmlVisitor extends BaseDustHtmlVisitor {
     );
   }
 
-  public attributeValueRule(cst: CstChildrenDictionary) {
+  private attributeValueRule(cst: CstChildrenDictionary) {
     const maybeEqualsToken = Optional.ofNullable(cst.attributeEquals).map(
       elements => elements.filter(isIToken)[0],
     );
