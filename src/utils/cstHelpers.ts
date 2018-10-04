@@ -30,6 +30,15 @@ export function tokenToStartPosition(node: IToken): IPosition {
  * @param node - the token
  */
 export function tokenToEndPosition(node: IToken): IPosition {
+  // the tokenizer doesn't properly account for tokens that end with newlines
+  // so manually add a line count and reset the column to 1
+  if (node.image.endsWith('\n')) {
+    return {
+      line: (node.endLine || 0) + 1,
+      column: 1,
+    };
+  }
+
   return {
     line: node.endLine,
     column: node.endColumn,

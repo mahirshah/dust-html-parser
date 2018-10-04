@@ -54,6 +54,16 @@ describe('Lexer', () => {
     expect(lexResult.errors).toHaveLength(0);
   });
 
+  test('multiline', () => {
+    const inputText = `{?some_key}
+  abc
+{/some_key}
+`;
+    const lexResult = lex(inputText);
+
+    expect(lexResult.errors).toHaveLength(0);
+  });
+
   test('can lex comments', () => {
     const inputText = '{! hello!\n\n hello! !}';
     const lexResult = lex(inputText);

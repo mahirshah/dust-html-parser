@@ -1,36 +1,42 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`toAst buffer 1`] = `
-Object {
+Root {
   "nodes": Array [
-    Array [
-      "nodes",
-      Object {
-        "buffer": "abcd
+    StringBuffer {
+      "buffer": "abcd
+abcddef
+abcdef
+abcdef
 ",
-        "source": Object {
-          "end": Object {
-            "column": 5,
-            "line": 1,
-          },
-          "raw": "abcd
-abcd",
-          "start": Object {
-            "column": 1,
-            "line": 1,
-          },
+      "source": Object {
+        "end": Object {
+          "column": 1,
+          "line": 5,
         },
-        "type": "STRING_BUFFER",
+        "raw": "abcd
+abcddef
+abcdef
+abcdef
+",
+        "start": Object {
+          "column": 1,
+          "line": 1,
+        },
       },
-    ],
+      "type": "STRING_BUFFER",
+    },
   ],
   "source": Object {
     "end": Object {
-      "column": 5,
-      "line": 1,
+      "column": 1,
+      "line": 5,
     },
     "raw": "abcd
-abcd",
+abcddef
+abcdef
+abcdef
+",
     "start": Object {
       "column": 1,
       "line": 1,
@@ -41,54 +47,48 @@ abcd",
 `;
 
 exports[`toAst dust-comment 1`] = `
-Object {
+Root {
   "nodes": Array [
-    Array [
-      "nodes",
-      Object {
-        "source": Object {
-          "end": Object {
-            "column": 13,
-            "line": 1,
-          },
-          "raw": "{! ab! bcc !}",
-          "start": Object {
-            "column": 1,
-            "line": 1,
-          },
+    DustComment {
+      "source": Object {
+        "end": Object {
+          "column": 13,
+          "line": 1,
         },
-        "text": " ab! bcc ",
-        "type": "DUST_COMMENT",
+        "raw": "{! ab! bcc !}",
+        "start": Object {
+          "column": 1,
+          "line": 1,
+        },
       },
-    ],
-    Array [
-      "nodes",
-      Object {
-        "buffer": "
+      "text": " ab! bcc ",
+      "type": "DUST_COMMENT",
+    },
+    StringBuffer {
+      "buffer": "
 ",
-        "source": Object {
-          "end": Object {
-            "column": 14,
-            "line": 1,
-          },
-          "raw": "
-{! ab! bcc !}",
-          "start": Object {
-            "column": 14,
-            "line": 1,
-          },
+      "source": Object {
+        "end": Object {
+          "column": 1,
+          "line": 2,
         },
-        "type": "STRING_BUFFER",
+        "raw": "
+",
+        "start": Object {
+          "column": 14,
+          "line": 1,
+        },
       },
-    ],
+      "type": "STRING_BUFFER",
+    },
   ],
   "source": Object {
     "end": Object {
-      "column": 14,
-      "line": 1,
+      "column": 1,
+      "line": 2,
     },
     "raw": "{! ab! bcc !}
-{! ab! bcc !}",
+",
     "start": Object {
       "column": 1,
       "line": 1,
@@ -99,234 +99,233 @@ Object {
 `;
 
 exports[`toAst dust-params 1`] = `
-Object {
+Root {
   "nodes": Array [
-    Array [
-      "nodes",
-      Object {
-        "bodies": Array [],
-        "context": null,
-        "isSelfClosing": true,
-        "key": Object {
-          "path": "section",
+    Section {
+      "bodies": Array [],
+      "context": null,
+      "isSelfClosing": true,
+      "key": Path {
+        "path": "section",
+        "source": Object {
+          "end": Object {
+            "column": 9,
+            "line": 1,
+          },
+          "raw": "section",
+          "start": Object {
+            "column": 3,
+            "line": 1,
+          },
+        },
+        "type": "PATH",
+      },
+      "params": Array [
+        Param {
+          "key": "param0",
           "source": Object {
             "end": Object {
-              "column": 9,
+              "column": 19,
               "line": 1,
             },
-            "raw": "section",
+            "raw": "param0=\\"\\"",
             "start": Object {
-              "column": 3,
+              "column": 11,
               "line": 1,
             },
           },
-          "type": "PATH",
-        },
-        "params": Array [
-          Array [
-            "params",
-            Object {
-              "key": "param1",
-              "source": Object {
-                "end": Object {
-                  "column": 22,
-                  "line": 1,
-                },
-                "raw": "param1=\\"abc\\" param2=1 param3=someKey param4=somePath[0][0] /}
-{#section param1=\\"abc\\"",
-                "start": Object {
-                  "column": 11,
-                  "line": 1,
-                },
+          "type": "PARAM",
+          "value": QuotedDustValue {
+            "source": Object {
+              "end": Object {
+                "column": 19,
+                "line": 1,
               },
-              "type": "PARAM",
-              "value": Object {
-                "source": Object {
-                  "end": Object {
-                    "column": 22,
-                    "line": 1,
-                  },
-                  "raw": "\\"abc\\" param2=1 param3=someKey param4=somePath[0][0] /}
-{#section param1=\\"abc\\"",
-                  "start": Object {
-                    "column": 18,
-                    "line": 1,
-                  },
-                },
-                "type": "QUOTED_DUST_VALUE",
-                "valueArray": Array [
-                  Array [
-                    "valueArray",
-                    Object {
-                      "buffer": "abc",
-                      "source": Object {
-                        "end": Object {
-                          "column": 21,
-                          "line": 1,
-                        },
-                        "raw": "abc",
-                        "start": Object {
-                          "column": 19,
-                          "line": 1,
-                        },
-                      },
-                      "type": "STRING_BUFFER",
-                    },
-                  ],
-                ],
+              "raw": "\\"\\"",
+              "start": Object {
+                "column": 18,
+                "line": 1,
               },
             },
-          ],
-          Array [
-            "params",
-            Object {
-              "key": "param2",
-              "source": Object {
-                "end": Object {
-                  "column": 31,
-                  "line": 1,
-                },
-                "raw": "param2=1 param3=someKey param4=somePath[0][0] /}
-{#section param1=\\"abc\\" param2=1",
-                "start": Object {
-                  "column": 24,
-                  "line": 1,
-                },
+            "type": "QUOTED_DUST_VALUE",
+            "valueArray": Array [],
+          },
+        },
+        Param {
+          "key": "param1",
+          "source": Object {
+            "end": Object {
+              "column": 32,
+              "line": 1,
+            },
+            "raw": "param1=\\"abc\\"",
+            "start": Object {
+              "column": 21,
+              "line": 1,
+            },
+          },
+          "type": "PARAM",
+          "value": QuotedDustValue {
+            "source": Object {
+              "end": Object {
+                "column": 32,
+                "line": 1,
               },
-              "type": "PARAM",
-              "value": Object {
-                "num": 1,
+              "raw": "\\"abc\\"",
+              "start": Object {
+                "column": 28,
+                "line": 1,
+              },
+            },
+            "type": "QUOTED_DUST_VALUE",
+            "valueArray": Array [
+              StringBuffer {
+                "buffer": "abc",
                 "source": Object {
                   "end": Object {
                     "column": 31,
                     "line": 1,
                   },
-                  "raw": "1",
+                  "raw": "abc",
                   "start": Object {
-                    "column": 31,
+                    "column": 29,
                     "line": 1,
                   },
                 },
-                "type": "NUMBER",
+                "type": "STRING_BUFFER",
               },
-            },
-          ],
-          Array [
-            "params",
-            Object {
-              "key": "param3",
-              "source": Object {
-                "end": Object {
-                  "column": 46,
-                  "line": 1,
-                },
-                "raw": "param3=someKey param4=somePath[0][0] /}
-{#section param1=\\"abc\\" param2=1 param3=someKey",
-                "start": Object {
-                  "column": 33,
-                  "line": 1,
-                },
-              },
-              "type": "PARAM",
-              "value": Object {
-                "path": "someKey",
-                "source": Object {
-                  "end": Object {
-                    "column": 46,
-                    "line": 1,
-                  },
-                  "raw": "someKey",
-                  "start": Object {
-                    "column": 40,
-                    "line": 1,
-                  },
-                },
-                "type": "PATH",
-              },
-            },
-          ],
-          Array [
-            "params",
-            Object {
-              "key": "param4",
-              "source": Object {
-                "end": Object {
-                  "column": 68,
-                  "line": 1,
-                },
-                "raw": "param4=somePath[0][0] /}
-{#section param1=\\"abc\\" param2=1 param3=someKey param4=somePath[0][0]",
-                "start": Object {
-                  "column": 48,
-                  "line": 1,
-                },
-              },
-              "type": "PARAM",
-              "value": Object {
-                "path": "somePath[0][0] /}
-{#section param1=\\"abc\\" param2=1 param3=someKey param4=somePath[0][0] /}
-{#section param1=\\"abc\\" param2=1 param3=someKey param4=somePath[0][0]",
-                "source": Object {
-                  "end": Object {
-                    "column": 68,
-                    "line": 1,
-                  },
-                  "raw": "somePath[0][0] /}
-{#section param1=\\"abc\\" param2=1 param3=someKey param4=somePath[0][0] /}
-{#section param1=\\"abc\\" param2=1 param3=someKey param4=somePath[0][0]",
-                  "start": Object {
-                    "column": 55,
-                    "line": 1,
-                  },
-                },
-                "type": "PATH",
-              },
-            },
-          ],
-        ],
-        "source": Object {
-          "end": Object {
-            "column": 71,
-            "line": 1,
-          },
-          "raw": "{#section param1=\\"abc\\" param2=1 param3=someKey param4=somePath[0][0] /}
-{#section param1=\\"abc\\" param2=1 param3=someKey param4=somePath[0][0] /}",
-          "start": Object {
-            "column": 1,
-            "line": 1,
+            ],
           },
         },
-        "type": "SECTION",
+        Param {
+          "key": "param2",
+          "source": Object {
+            "end": Object {
+              "column": 41,
+              "line": 1,
+            },
+            "raw": "param2=1",
+            "start": Object {
+              "column": 34,
+              "line": 1,
+            },
+          },
+          "type": "PARAM",
+          "value": NumberNode {
+            "num": 1,
+            "source": Object {
+              "end": Object {
+                "column": 41,
+                "line": 1,
+              },
+              "raw": "1",
+              "start": Object {
+                "column": 41,
+                "line": 1,
+              },
+            },
+            "type": "NUMBER",
+          },
+        },
+        Param {
+          "key": "param3",
+          "source": Object {
+            "end": Object {
+              "column": 56,
+              "line": 1,
+            },
+            "raw": "param3=someKey",
+            "start": Object {
+              "column": 43,
+              "line": 1,
+            },
+          },
+          "type": "PARAM",
+          "value": Path {
+            "path": "someKey",
+            "source": Object {
+              "end": Object {
+                "column": 56,
+                "line": 1,
+              },
+              "raw": "someKey",
+              "start": Object {
+                "column": 50,
+                "line": 1,
+              },
+            },
+            "type": "PATH",
+          },
+        },
+        Param {
+          "key": "param4",
+          "source": Object {
+            "end": Object {
+              "column": 78,
+              "line": 1,
+            },
+            "raw": "param4=somePath[0][0]",
+            "start": Object {
+              "column": 58,
+              "line": 1,
+            },
+          },
+          "type": "PARAM",
+          "value": Path {
+            "path": "somePath[0][0]",
+            "source": Object {
+              "end": Object {
+                "column": 78,
+                "line": 1,
+              },
+              "raw": "somePath[0][0]",
+              "start": Object {
+                "column": 65,
+                "line": 1,
+              },
+            },
+            "type": "PATH",
+          },
+        },
+      ],
+      "source": Object {
+        "end": Object {
+          "column": 81,
+          "line": 1,
+        },
+        "raw": "{#section param0=\\"\\" param1=\\"abc\\" param2=1 param3=someKey param4=somePath[0][0] /}",
+        "start": Object {
+          "column": 1,
+          "line": 1,
+        },
       },
-    ],
-    Array [
-      "nodes",
-      Object {
-        "buffer": "
+      "type": "SECTION",
+    },
+    StringBuffer {
+      "buffer": "
 ",
-        "source": Object {
-          "end": Object {
-            "column": 72,
-            "line": 1,
-          },
-          "raw": "
-{#section param1=\\"abc\\" param2=1 param3=someKey param4=somePath[0][0] /}",
-          "start": Object {
-            "column": 72,
-            "line": 1,
-          },
+      "source": Object {
+        "end": Object {
+          "column": 1,
+          "line": 2,
         },
-        "type": "STRING_BUFFER",
+        "raw": "
+",
+        "start": Object {
+          "column": 82,
+          "line": 1,
+        },
       },
-    ],
+      "type": "STRING_BUFFER",
+    },
   ],
   "source": Object {
     "end": Object {
-      "column": 72,
-      "line": 1,
+      "column": 1,
+      "line": 2,
     },
-    "raw": "{#section param1=\\"abc\\" param2=1 param3=someKey param4=somePath[0][0] /}
-{#section param1=\\"abc\\" param2=1 param3=someKey param4=somePath[0][0] /}",
+    "raw": "{#section param0=\\"\\" param1=\\"abc\\" param2=1 param3=someKey param4=somePath[0][0] /}
+",
     "start": Object {
       "column": 1,
       "line": 1,
@@ -337,54 +336,48 @@ Object {
 `;
 
 exports[`toAst dust-raw 1`] = `
-Object {
+Root {
   "nodes": Array [
-    Array [
-      "nodes",
-      Object {
-        "source": Object {
-          "end": Object {
-            "column": 23,
-            "line": 1,
-          },
-          "raw": "{\` some raw text \`bc \`}",
-          "start": Object {
-            "column": 1,
-            "line": 1,
-          },
+    Raw {
+      "source": Object {
+        "end": Object {
+          "column": 23,
+          "line": 1,
         },
-        "text": " some raw text \`bc ",
-        "type": "RAW",
+        "raw": "{\` some raw text \`bc \`}",
+        "start": Object {
+          "column": 1,
+          "line": 1,
+        },
       },
-    ],
-    Array [
-      "nodes",
-      Object {
-        "buffer": "
+      "text": " some raw text \`bc ",
+      "type": "RAW",
+    },
+    StringBuffer {
+      "buffer": "
 ",
-        "source": Object {
-          "end": Object {
-            "column": 24,
-            "line": 1,
-          },
-          "raw": "
-{\` some raw text \`bc \`}",
-          "start": Object {
-            "column": 24,
-            "line": 1,
-          },
+      "source": Object {
+        "end": Object {
+          "column": 1,
+          "line": 2,
         },
-        "type": "STRING_BUFFER",
+        "raw": "
+",
+        "start": Object {
+          "column": 24,
+          "line": 1,
+        },
       },
-    ],
+      "type": "STRING_BUFFER",
+    },
   ],
   "source": Object {
     "end": Object {
-      "column": 24,
-      "line": 1,
+      "column": 1,
+      "line": 2,
     },
     "raw": "{\` some raw text \`bc \`}
-{\` some raw text \`bc \`}",
+",
     "start": Object {
       "column": 1,
       "line": 1,
@@ -395,15 +388,14 @@ Object {
 `;
 
 exports[`toAst empty 1`] = `
-Object {
+Root {
   "nodes": Array [],
   "source": Object {
     "end": Object {
       "column": undefined,
       "line": undefined,
     },
-    "raw": "
-",
+    "raw": "",
     "start": Object {
       "column": undefined,
       "line": undefined,
@@ -414,128 +406,113 @@ Object {
 `;
 
 exports[`toAst escaped-quote 1`] = `
-Object {
+Root {
   "nodes": Array [
-    Array [
-      "nodes",
-      Object {
-        "bodies": Array [],
-        "context": null,
-        "isSelfClosing": true,
-        "key": Object {
-          "path": "section",
+    Section {
+      "bodies": Array [],
+      "context": null,
+      "isSelfClosing": true,
+      "key": Path {
+        "path": "section",
+        "source": Object {
+          "end": Object {
+            "column": 9,
+            "line": 1,
+          },
+          "raw": "section",
+          "start": Object {
+            "column": 3,
+            "line": 1,
+          },
+        },
+        "type": "PATH",
+      },
+      "params": Array [
+        Param {
+          "key": "param",
           "source": Object {
             "end": Object {
-              "column": 9,
+              "column": 21,
               "line": 1,
             },
-            "raw": "section",
+            "raw": "param=\\"\\\\\\\\\\"\\"",
             "start": Object {
-              "column": 3,
+              "column": 11,
               "line": 1,
             },
           },
-          "type": "PATH",
-        },
-        "params": Array [
-          Array [
-            "params",
-            Object {
-              "key": "param",
-              "source": Object {
-                "end": Object {
-                  "column": 21,
-                  "line": 1,
-                },
-                "raw": "param=\\"\\\\\\\\\\"\\" /}
-{#section param=\\"\\\\\\\\\\"\\"",
-                "start": Object {
-                  "column": 11,
-                  "line": 1,
-                },
+          "type": "PARAM",
+          "value": QuotedDustValue {
+            "source": Object {
+              "end": Object {
+                "column": 21,
+                "line": 1,
               },
-              "type": "PARAM",
-              "value": Object {
+              "raw": "\\"\\\\\\\\\\"\\"",
+              "start": Object {
+                "column": 17,
+                "line": 1,
+              },
+            },
+            "type": "QUOTED_DUST_VALUE",
+            "valueArray": Array [
+              EscapedQuote {
+                "escapedQuote": "\\\\\\\\\\"",
                 "source": Object {
                   "end": Object {
-                    "column": 21,
+                    "column": 20,
                     "line": 1,
                   },
-                  "raw": "\\"\\\\\\\\\\"\\" /}
-{#section param=\\"\\\\\\\\\\"\\"",
+                  "raw": "\\\\\\\\\\"",
                   "start": Object {
-                    "column": 17,
+                    "column": 18,
                     "line": 1,
                   },
                 },
-                "type": "QUOTED_DUST_VALUE",
-                "valueArray": Array [
-                  Array [
-                    "valueArray",
-                    Object {
-                      "escapedQuote": "\\\\\\\\\\"",
-                      "source": Object {
-                        "end": Object {
-                          "column": 20,
-                          "line": 1,
-                        },
-                        "raw": "\\\\\\\\\\"",
-                        "start": Object {
-                          "column": 18,
-                          "line": 1,
-                        },
-                      },
-                      "type": "ESCAPED_QUOTE",
-                    },
-                  ],
-                ],
+                "type": "ESCAPED_QUOTE",
               },
-            },
-          ],
-        ],
-        "source": Object {
-          "end": Object {
-            "column": 24,
-            "line": 1,
-          },
-          "raw": "{#section param=\\"\\\\\\\\\\"\\" /}
-{#section param=\\"\\\\\\\\\\"\\" /}",
-          "start": Object {
-            "column": 1,
-            "line": 1,
+            ],
           },
         },
-        "type": "SECTION",
+      ],
+      "source": Object {
+        "end": Object {
+          "column": 24,
+          "line": 1,
+        },
+        "raw": "{#section param=\\"\\\\\\\\\\"\\" /}",
+        "start": Object {
+          "column": 1,
+          "line": 1,
+        },
       },
-    ],
-    Array [
-      "nodes",
-      Object {
-        "buffer": "
+      "type": "SECTION",
+    },
+    StringBuffer {
+      "buffer": "
 ",
-        "source": Object {
-          "end": Object {
-            "column": 25,
-            "line": 1,
-          },
-          "raw": "
-{#section param=\\"\\\\\\\\\\"\\" /}",
-          "start": Object {
-            "column": 25,
-            "line": 1,
-          },
+      "source": Object {
+        "end": Object {
+          "column": 1,
+          "line": 2,
         },
-        "type": "STRING_BUFFER",
+        "raw": "
+",
+        "start": Object {
+          "column": 25,
+          "line": 1,
+        },
       },
-    ],
+      "type": "STRING_BUFFER",
+    },
   ],
   "source": Object {
     "end": Object {
-      "column": 25,
-      "line": 1,
+      "column": 1,
+      "line": 2,
     },
     "raw": "{#section param=\\"\\\\\\\\\\"\\" /}
-{#section param=\\"\\\\\\\\\\"\\" /}",
+",
     "start": Object {
       "column": 1,
       "line": 1,
@@ -546,138 +523,125 @@ Object {
 `;
 
 exports[`toAst exists 1`] = `
-Object {
+Root {
   "nodes": Array [
-    Array [
-      "nodes",
-      Object {
-        "bodies": Array [
-          Array [
-            "bodies",
-            Object {
-              "context": null,
-              "root": Object {
-                "nodes": Array [
-                  Array [
-                    "nodes",
-                    Object {
-                      "buffer": "
+    Section {
+      "bodies": Array [
+        Body {
+          "context": null,
+          "root": Root {
+            "nodes": Array [
+              StringBuffer {
+                "buffer": "
   abc
 ",
-                      "source": Object {
-                        "end": Object {
-                          "column": 1,
-                          "line": 2,
-                        },
-                        "raw": "
-  abc
- ",
-                        "start": Object {
-                          "column": 12,
-                          "line": 1,
-                        },
-                      },
-                      "type": "STRING_BUFFER",
-                    },
-                  ],
-                ],
                 "source": Object {
                   "end": Object {
                     "column": 1,
-                    "line": 2,
+                    "line": 3,
                   },
                   "raw": "
   abc
- ",
+",
                   "start": Object {
                     "column": 12,
                     "line": 1,
                   },
                 },
-                "type": "ROOT",
+                "type": "STRING_BUFFER",
               },
-              "source": Object {
-                "end": Object {
-                  "column": 1,
-                  "line": 2,
-                },
-                "raw": "
+            ],
+            "source": Object {
+              "end": Object {
+                "column": 1,
+                "line": 3,
+              },
+              "raw": "
   abc
- ",
-                "start": Object {
-                  "column": 12,
-                  "line": 1,
-                },
+",
+              "start": Object {
+                "column": 12,
+                "line": 1,
               },
-              "type": "BODY",
             },
-          ],
-        ],
-        "context": null,
-        "isSelfClosing": false,
-        "key": Object {
-          "path": "some_key",
+            "type": "ROOT",
+          },
           "source": Object {
             "end": Object {
-              "column": 10,
-              "line": 1,
+              "column": 1,
+              "line": 3,
             },
-            "raw": "some_key",
+            "raw": "
+  abc
+",
             "start": Object {
-              "column": 3,
+              "column": 12,
               "line": 1,
             },
           },
-          "type": "PATH",
+          "type": "BODY",
         },
-        "params": Array [],
+      ],
+      "context": null,
+      "isSelfClosing": false,
+      "key": Path {
+        "path": "some_key",
         "source": Object {
           "end": Object {
-            "column": 11,
-            "line": 3,
+            "column": 10,
+            "line": 1,
           },
-          "raw": "{?some_key}
-  abc
-{/some_key}
-{/some_key}",
+          "raw": "some_key",
           "start": Object {
-            "column": 1,
+            "column": 3,
             "line": 1,
           },
         },
-        "type": "EXISTS",
+        "type": "PATH",
       },
-    ],
-    Array [
-      "nodes",
-      Object {
-        "buffer": "
-",
-        "source": Object {
-          "end": Object {
-            "column": 12,
-            "line": 3,
-          },
-          "raw": "
-{/some_key}",
-          "start": Object {
-            "column": 12,
-            "line": 3,
-          },
+      "params": Array [],
+      "source": Object {
+        "end": Object {
+          "column": 11,
+          "line": 3,
         },
-        "type": "STRING_BUFFER",
+        "raw": "{?some_key}
+  abc
+{/some_key}",
+        "start": Object {
+          "column": 1,
+          "line": 1,
+        },
       },
-    ],
+      "type": "EXISTS",
+    },
+    StringBuffer {
+      "buffer": "
+",
+      "source": Object {
+        "end": Object {
+          "column": 1,
+          "line": 4,
+        },
+        "raw": "
+",
+        "start": Object {
+          "column": 12,
+          "line": 3,
+        },
+      },
+      "type": "STRING_BUFFER",
+    },
   ],
   "source": Object {
     "end": Object {
-      "column": 12,
-      "line": 3,
+      "column": 1,
+      "line": 4,
     },
     "raw": "{?some_key}
   abc
 {/some_key}
-{/some_key}",
+",
     "start": Object {
       "column": 1,
       "line": 1,
@@ -688,138 +652,125 @@ Object {
 `;
 
 exports[`toAst helper 1`] = `
-Object {
+Root {
   "nodes": Array [
-    Array [
-      "nodes",
-      Object {
-        "bodies": Array [
-          Array [
-            "bodies",
-            Object {
-              "context": null,
-              "root": Object {
-                "nodes": Array [
-                  Array [
-                    "nodes",
-                    Object {
-                      "buffer": "
+    Section {
+      "bodies": Array [
+        Body {
+          "context": null,
+          "root": Root {
+            "nodes": Array [
+              StringBuffer {
+                "buffer": "
   abc
 ",
-                      "source": Object {
-                        "end": Object {
-                          "column": 1,
-                          "line": 2,
-                        },
-                        "raw": "
-  abc
- ",
-                        "start": Object {
-                          "column": 10,
-                          "line": 1,
-                        },
-                      },
-                      "type": "STRING_BUFFER",
-                    },
-                  ],
-                ],
                 "source": Object {
                   "end": Object {
                     "column": 1,
-                    "line": 2,
+                    "line": 3,
                   },
                   "raw": "
   abc
- ",
+",
                   "start": Object {
                     "column": 10,
                     "line": 1,
                   },
                 },
-                "type": "ROOT",
+                "type": "STRING_BUFFER",
               },
-              "source": Object {
-                "end": Object {
-                  "column": 1,
-                  "line": 2,
-                },
-                "raw": "
+            ],
+            "source": Object {
+              "end": Object {
+                "column": 1,
+                "line": 3,
+              },
+              "raw": "
   abc
- ",
-                "start": Object {
-                  "column": 10,
-                  "line": 1,
-                },
+",
+              "start": Object {
+                "column": 10,
+                "line": 1,
               },
-              "type": "BODY",
             },
-          ],
-        ],
-        "context": null,
-        "isSelfClosing": false,
-        "key": Object {
-          "path": "helper",
+            "type": "ROOT",
+          },
           "source": Object {
             "end": Object {
-              "column": 8,
-              "line": 1,
+              "column": 1,
+              "line": 3,
             },
-            "raw": "helper",
+            "raw": "
+  abc
+",
             "start": Object {
-              "column": 3,
+              "column": 10,
               "line": 1,
             },
           },
-          "type": "PATH",
+          "type": "BODY",
         },
-        "params": Array [],
+      ],
+      "context": null,
+      "isSelfClosing": false,
+      "key": Path {
+        "path": "helper",
         "source": Object {
           "end": Object {
-            "column": 9,
-            "line": 3,
+            "column": 8,
+            "line": 1,
           },
-          "raw": "{@helper}
-  abc
-{/helper}
-{/helper}",
+          "raw": "helper",
           "start": Object {
-            "column": 1,
+            "column": 3,
             "line": 1,
           },
         },
-        "type": "HELPER",
+        "type": "PATH",
       },
-    ],
-    Array [
-      "nodes",
-      Object {
-        "buffer": "
-",
-        "source": Object {
-          "end": Object {
-            "column": 10,
-            "line": 3,
-          },
-          "raw": "
-{/helper}",
-          "start": Object {
-            "column": 10,
-            "line": 3,
-          },
+      "params": Array [],
+      "source": Object {
+        "end": Object {
+          "column": 9,
+          "line": 3,
         },
-        "type": "STRING_BUFFER",
+        "raw": "{@helper}
+  abc
+{/helper}",
+        "start": Object {
+          "column": 1,
+          "line": 1,
+        },
       },
-    ],
+      "type": "HELPER",
+    },
+    StringBuffer {
+      "buffer": "
+",
+      "source": Object {
+        "end": Object {
+          "column": 1,
+          "line": 4,
+        },
+        "raw": "
+",
+        "start": Object {
+          "column": 10,
+          "line": 3,
+        },
+      },
+      "type": "STRING_BUFFER",
+    },
   ],
   "source": Object {
     "end": Object {
-      "column": 10,
-      "line": 3,
+      "column": 1,
+      "line": 4,
     },
     "raw": "{@helper}
   abc
 {/helper}
-{/helper}",
+",
     "start": Object {
       "column": 1,
       "line": 1,
@@ -830,73 +781,65 @@ Object {
 `;
 
 exports[`toAst html-tag 1`] = `
-Object {
+Root {
   "nodes": Array [
-    Array [
-      "nodes",
-      Object {
-        "attributes": Array [],
-        "body": Object {
-          "nodes": Array [],
-          "source": Object {
-            "end": Object {
-              "column": undefined,
-              "line": undefined,
-            },
-            "raw": "
-",
-            "start": Object {
-              "column": undefined,
-              "line": undefined,
-            },
-          },
-          "type": "ROOT",
-        },
-        "isSelfClosing": false,
+    HtmlTag {
+      "attributes": Array [],
+      "body": Root {
+        "nodes": Array [],
         "source": Object {
           "end": Object {
-            "column": 11,
-            "line": 1,
+            "column": undefined,
+            "line": undefined,
           },
-          "raw": "<div></div>
-<div></div>",
+          "raw": "",
           "start": Object {
-            "column": 1,
-            "line": 1,
+            "column": undefined,
+            "line": undefined,
           },
         },
-        "tagName": "div",
-        "type": "HTML_TAG",
+        "type": "ROOT",
       },
-    ],
-    Array [
-      "nodes",
-      Object {
-        "buffer": "
+      "isSelfClosing": false,
+      "source": Object {
+        "end": Object {
+          "column": 11,
+          "line": 1,
+        },
+        "raw": "<div></div>",
+        "start": Object {
+          "column": 1,
+          "line": 1,
+        },
+      },
+      "tagName": "div",
+      "type": "HTML_TAG",
+    },
+    StringBuffer {
+      "buffer": "
 ",
-        "source": Object {
-          "end": Object {
-            "column": 12,
-            "line": 1,
-          },
-          "raw": "
-<div></div>",
-          "start": Object {
-            "column": 12,
-            "line": 1,
-          },
+      "source": Object {
+        "end": Object {
+          "column": 1,
+          "line": 2,
         },
-        "type": "STRING_BUFFER",
+        "raw": "
+",
+        "start": Object {
+          "column": 12,
+          "line": 1,
+        },
       },
-    ],
+      "type": "STRING_BUFFER",
+    },
   ],
   "source": Object {
     "end": Object {
-      "column": 12,
-      "line": 1,
+      "column": 1,
+      "line": 2,
     },
     "raw": "<div></div>
-<div></div>",
+",
     "start": Object {
       "column": 1,
       "line": 1,
@@ -907,116 +850,256 @@ Object {
 `;
 
 exports[`toAst html-with-attributes 1`] = `
-Object {
+Root {
   "nodes": Array [
-    Array [
-      "nodes",
-      Object {
-        "attributes": Array [],
-        "body": Object {
-          "nodes": Array [],
+    HtmlTag {
+      "attributes": Array [
+        Attribute {
+          "attributeName": "data-test-abc",
+          "attributeValue": true,
+          "isBooleanAttribute": true,
           "source": Object {
             "end": Object {
-              "column": undefined,
-              "line": undefined,
+              "column": 18,
+              "line": 1,
             },
-            "raw": "
-",
+            "raw": "data-test-abc",
             "start": Object {
-              "column": undefined,
-              "line": undefined,
+              "column": 6,
+              "line": 1,
             },
           },
-          "type": "ROOT",
+          "type": "ATTRIBUTE",
         },
-        "isSelfClosing": false,
+        Attribute {
+          "attributeName": "class",
+          "attributeValue": "\\"abc\\"",
+          "isBooleanAttribute": false,
+          "source": Object {
+            "end": Object {
+              "column": 30,
+              "line": 1,
+            },
+            "raw": "class=\\"abc\\"",
+            "start": Object {
+              "column": 20,
+              "line": 1,
+            },
+          },
+          "type": "ATTRIBUTE",
+        },
+        Attribute {
+          "attributeName": "align",
+          "attributeValue": "\\"left\\"",
+          "isBooleanAttribute": false,
+          "source": Object {
+            "end": Object {
+              "column": 43,
+              "line": 1,
+            },
+            "raw": "align=\\"left\\"",
+            "start": Object {
+              "column": 32,
+              "line": 1,
+            },
+          },
+          "type": "ATTRIBUTE",
+        },
+      ],
+      "body": Root {
+        "nodes": Array [],
         "source": Object {
           "end": Object {
-            "column": 50,
-            "line": 1,
+            "column": undefined,
+            "line": undefined,
           },
-          "raw": "<div data-test-abc class=\\"abc\\" align=\\"left\\"></div>
-<div data-test-abc class=\\"abc\\" align=\\"left\\"></div>",
+          "raw": "",
           "start": Object {
-            "column": 1,
-            "line": 1,
+            "column": undefined,
+            "line": undefined,
           },
         },
-        "tagName": "div",
-        "type": "HTML_TAG",
+        "type": "ROOT",
       },
-    ],
-    Array [
-      "nodes",
-      Object {
-        "buffer": "
+      "isSelfClosing": false,
+      "source": Object {
+        "end": Object {
+          "column": 50,
+          "line": 1,
+        },
+        "raw": "<div data-test-abc class=\\"abc\\" align=\\"left\\"></div>",
+        "start": Object {
+          "column": 1,
+          "line": 1,
+        },
+      },
+      "tagName": "div",
+      "type": "HTML_TAG",
+    },
+    StringBuffer {
+      "buffer": "
 ",
-        "source": Object {
-          "end": Object {
-            "column": 51,
-            "line": 1,
-          },
-          "raw": "
-<div data-test-abc class=\\"abc\\" align=\\"left\\"></div>",
-          "start": Object {
-            "column": 51,
-            "line": 1,
-          },
+      "source": Object {
+        "end": Object {
+          "column": 1,
+          "line": 2,
         },
-        "type": "STRING_BUFFER",
-      },
-    ],
-    Array [
-      "nodes",
-      Object {
-        "attributes": Array [],
-        "body": null,
-        "isSelfClosing": true,
-        "source": Object {
-          "end": Object {
-            "column": 16,
-            "line": 2,
-          },
-          "raw": "<input disabled>
-<input disabled>",
-          "start": Object {
-            "column": 1,
-            "line": 2,
-          },
-        },
-        "tagName": "input",
-        "type": "HTML_TAG",
-      },
-    ],
-    Array [
-      "nodes",
-      Object {
-        "buffer": "
+        "raw": "
 ",
-        "source": Object {
-          "end": Object {
-            "column": 17,
-            "line": 2,
-          },
-          "raw": "
-<input disabled>",
-          "start": Object {
-            "column": 17,
-            "line": 2,
-          },
+        "start": Object {
+          "column": 51,
+          "line": 1,
         },
-        "type": "STRING_BUFFER",
       },
-    ],
+      "type": "STRING_BUFFER",
+    },
+    HtmlTag {
+      "attributes": Array [
+        Attribute {
+          "attributeName": "disabled",
+          "attributeValue": true,
+          "isBooleanAttribute": true,
+          "source": Object {
+            "end": Object {
+              "column": 15,
+              "line": 2,
+            },
+            "raw": "disabled",
+            "start": Object {
+              "column": 8,
+              "line": 2,
+            },
+          },
+          "type": "ATTRIBUTE",
+        },
+      ],
+      "body": null,
+      "isSelfClosing": true,
+      "source": Object {
+        "end": Object {
+          "column": 16,
+          "line": 2,
+        },
+        "raw": "<input disabled>",
+        "start": Object {
+          "column": 1,
+          "line": 2,
+        },
+      },
+      "tagName": "input",
+      "type": "HTML_TAG",
+    },
+    StringBuffer {
+      "buffer": "
+",
+      "source": Object {
+        "end": Object {
+          "column": 1,
+          "line": 3,
+        },
+        "raw": "
+",
+        "start": Object {
+          "column": 17,
+          "line": 2,
+        },
+      },
+      "type": "STRING_BUFFER",
+    },
   ],
   "source": Object {
     "end": Object {
-      "column": 17,
-      "line": 2,
+      "column": 1,
+      "line": 3,
     },
     "raw": "<div data-test-abc class=\\"abc\\" align=\\"left\\"></div>
 <input disabled>
-<input disabled>",
+",
+    "start": Object {
+      "column": 1,
+      "line": 1,
+    },
+  },
+  "type": "ROOT",
+}
+`;
+
+exports[`toAst html-with-body 1`] = `
+Root {
+  "nodes": Array [
+    HtmlTag {
+      "attributes": Array [],
+      "body": Root {
+        "nodes": Array [
+          StringBuffer {
+            "buffer": "abcd",
+            "source": Object {
+              "end": Object {
+                "column": 9,
+                "line": 1,
+              },
+              "raw": "abcd",
+              "start": Object {
+                "column": 6,
+                "line": 1,
+              },
+            },
+            "type": "STRING_BUFFER",
+          },
+        ],
+        "source": Object {
+          "end": Object {
+            "column": 9,
+            "line": 1,
+          },
+          "raw": "abcd",
+          "start": Object {
+            "column": 6,
+            "line": 1,
+          },
+        },
+        "type": "ROOT",
+      },
+      "isSelfClosing": false,
+      "source": Object {
+        "end": Object {
+          "column": 15,
+          "line": 1,
+        },
+        "raw": "<div>abcd</div>",
+        "start": Object {
+          "column": 1,
+          "line": 1,
+        },
+      },
+      "tagName": "div",
+      "type": "HTML_TAG",
+    },
+    StringBuffer {
+      "buffer": "
+",
+      "source": Object {
+        "end": Object {
+          "column": 1,
+          "line": 2,
+        },
+        "raw": "
+",
+        "start": Object {
+          "column": 16,
+          "line": 1,
+        },
+      },
+      "type": "STRING_BUFFER",
+    },
+  ],
+  "source": Object {
+    "end": Object {
+      "column": 1,
+      "line": 2,
+    },
+    "raw": "<div>abcd</div>
+",
     "start": Object {
       "column": 1,
       "line": 1,
@@ -1027,128 +1110,864 @@ Object {
 `;
 
 exports[`toAst inline-partial 1`] = `
-Object {
+Root {
   "nodes": Array [
-    Array [
-      "nodes",
-      Object {
-        "bodies": Array [],
-        "context": null,
-        "isSelfClosing": true,
-        "key": Object {
-          "path": "\\"some literal {~lb} {abc}\\"",
+    Section {
+      "bodies": Array [],
+      "context": null,
+      "isSelfClosing": true,
+      "key": Path {
+        "path": "\\"some literal {~lb} {abc}\\"",
+        "source": Object {
+          "end": Object {
+            "column": 28,
+            "line": 1,
+          },
+          "raw": "\\"some literal {~lb} {abc}\\"",
+          "start": Object {
+            "column": 3,
+            "line": 1,
+          },
+        },
+        "type": "PATH",
+      },
+      "params": Array [
+        Param {
+          "key": "param1",
           "source": Object {
             "end": Object {
-              "column": 28,
+              "column": 41,
               "line": 1,
             },
-            "raw": "\\"some literal {~lb} {abc}\\"",
+            "raw": "param1=\\"abc\\"",
             "start": Object {
-              "column": 3,
+              "column": 30,
               "line": 1,
             },
           },
-          "type": "PATH",
-        },
-        "params": Array [
-          Array [
-            "params",
-            Object {
-              "key": "param1",
-              "source": Object {
-                "end": Object {
-                  "column": 41,
-                  "line": 1,
-                },
-                "raw": "param1=\\"abc\\" /}
-{>\\"some literal {~lb} {abc}\\" param1=\\"abc\\"",
-                "start": Object {
-                  "column": 30,
-                  "line": 1,
-                },
+          "type": "PARAM",
+          "value": QuotedDustValue {
+            "source": Object {
+              "end": Object {
+                "column": 41,
+                "line": 1,
               },
-              "type": "PARAM",
-              "value": Object {
+              "raw": "\\"abc\\"",
+              "start": Object {
+                "column": 37,
+                "line": 1,
+              },
+            },
+            "type": "QUOTED_DUST_VALUE",
+            "valueArray": Array [
+              StringBuffer {
+                "buffer": "abc",
                 "source": Object {
                   "end": Object {
-                    "column": 41,
+                    "column": 40,
                     "line": 1,
                   },
-                  "raw": "\\"abc\\" /}
-{>\\"some literal {~lb} {abc}\\" param1=\\"abc\\"",
+                  "raw": "abc",
                   "start": Object {
-                    "column": 37,
+                    "column": 38,
                     "line": 1,
                   },
                 },
-                "type": "QUOTED_DUST_VALUE",
-                "valueArray": Array [
-                  Array [
-                    "valueArray",
-                    Object {
-                      "buffer": "abc",
+                "type": "STRING_BUFFER",
+              },
+            ],
+          },
+        },
+      ],
+      "source": Object {
+        "end": Object {
+          "column": 44,
+          "line": 1,
+        },
+        "raw": "{>\\"some literal {~lb} {abc}\\" param1=\\"abc\\" /}",
+        "start": Object {
+          "column": 1,
+          "line": 1,
+        },
+      },
+      "type": "PARTIAL",
+    },
+    StringBuffer {
+      "buffer": "
+",
+      "source": Object {
+        "end": Object {
+          "column": 1,
+          "line": 2,
+        },
+        "raw": "
+",
+        "start": Object {
+          "column": 45,
+          "line": 1,
+        },
+      },
+      "type": "STRING_BUFFER",
+    },
+  ],
+  "source": Object {
+    "end": Object {
+      "column": 1,
+      "line": 2,
+    },
+    "raw": "{>\\"some literal {~lb} {abc}\\" param1=\\"abc\\" /}
+",
+    "start": Object {
+      "column": 1,
+      "line": 1,
+    },
+  },
+  "type": "ROOT",
+}
+`;
+
+exports[`toAst mixed-dust-and-html 1`] = `
+Root {
+  "nodes": Array [
+    HtmlTag {
+      "attributes": Array [
+        Attribute {
+          "attributeName": "class",
+          "attributeValue": "\\"abc\\"",
+          "isBooleanAttribute": false,
+          "source": Object {
+            "end": Object {
+              "column": 16,
+              "line": 1,
+            },
+            "raw": "class=\\"abc\\"",
+            "start": Object {
+              "column": 6,
+              "line": 1,
+            },
+          },
+          "type": "ATTRIBUTE",
+        },
+      ],
+      "body": Root {
+        "nodes": Array [
+          StringBuffer {
+            "buffer": "
+    ",
+            "source": Object {
+              "end": Object {
+                "column": 4,
+                "line": 2,
+              },
+              "raw": "
+    ",
+              "start": Object {
+                "column": 18,
+                "line": 1,
+              },
+            },
+            "type": "STRING_BUFFER",
+          },
+          Section {
+            "bodies": Array [
+              Body {
+                "context": null,
+                "root": Root {
+                  "nodes": Array [
+                    StringBuffer {
+                      "buffer": "
+      abc
+      ",
                       "source": Object {
                         "end": Object {
-                          "column": 40,
-                          "line": 1,
+                          "column": 6,
+                          "line": 4,
                         },
-                        "raw": "abc",
+                        "raw": "
+      abc
+      ",
                         "start": Object {
-                          "column": 38,
-                          "line": 1,
+                          "column": 25,
+                          "line": 2,
+                        },
+                      },
+                      "type": "STRING_BUFFER",
+                    },
+                    HtmlTag {
+                      "attributes": Array [],
+                      "body": Root {
+                        "nodes": Array [
+                          StringBuffer {
+                            "buffer": "abc",
+                            "source": Object {
+                              "end": Object {
+                                "column": 15,
+                                "line": 4,
+                              },
+                              "raw": "abc",
+                              "start": Object {
+                                "column": 13,
+                                "line": 4,
+                              },
+                            },
+                            "type": "STRING_BUFFER",
+                          },
+                        ],
+                        "source": Object {
+                          "end": Object {
+                            "column": 15,
+                            "line": 4,
+                          },
+                          "raw": "abc",
+                          "start": Object {
+                            "column": 13,
+                            "line": 4,
+                          },
+                        },
+                        "type": "ROOT",
+                      },
+                      "isSelfClosing": false,
+                      "source": Object {
+                        "end": Object {
+                          "column": 22,
+                          "line": 4,
+                        },
+                        "raw": "<span>abc</span>",
+                        "start": Object {
+                          "column": 7,
+                          "line": 4,
+                        },
+                      },
+                      "tagName": "span",
+                      "type": "HTML_TAG",
+                    },
+                    StringBuffer {
+                      "buffer": "
+      ",
+                      "source": Object {
+                        "end": Object {
+                          "column": 6,
+                          "line": 5,
+                        },
+                        "raw": "
+      ",
+                        "start": Object {
+                          "column": 23,
+                          "line": 4,
+                        },
+                      },
+                      "type": "STRING_BUFFER",
+                    },
+                    Reference {
+                      "filters": Array [
+                        Filter {
+                          "filter": "a",
+                          "source": Object {
+                            "end": Object {
+                              "column": 18,
+                              "line": 5,
+                            },
+                            "raw": "|a",
+                            "start": Object {
+                              "column": 17,
+                              "line": 5,
+                            },
+                          },
+                          "type": "FILTER",
+                        },
+                        Filter {
+                          "filter": "b",
+                          "source": Object {
+                            "end": Object {
+                              "column": 20,
+                              "line": 5,
+                            },
+                            "raw": "|b",
+                            "start": Object {
+                              "column": 19,
+                              "line": 5,
+                            },
+                          },
+                          "type": "FILTER",
+                        },
+                      ],
+                      "path": Path {
+                        "path": "reference",
+                        "source": Object {
+                          "end": Object {
+                            "column": 16,
+                            "line": 5,
+                          },
+                          "raw": "reference",
+                          "start": Object {
+                            "column": 8,
+                            "line": 5,
+                          },
+                        },
+                        "type": "PATH",
+                      },
+                      "source": Object {
+                        "end": Object {
+                          "column": 21,
+                          "line": 5,
+                        },
+                        "raw": "{reference|a|b}",
+                        "start": Object {
+                          "column": 7,
+                          "line": 5,
+                        },
+                      },
+                      "type": "REFERENCE",
+                    },
+                    StringBuffer {
+                      "buffer": "
+    ",
+                      "source": Object {
+                        "end": Object {
+                          "column": 4,
+                          "line": 6,
+                        },
+                        "raw": "
+    ",
+                        "start": Object {
+                          "column": 22,
+                          "line": 5,
                         },
                       },
                       "type": "STRING_BUFFER",
                     },
                   ],
-                ],
+                  "source": Object {
+                    "end": Object {
+                      "column": 4,
+                      "line": 6,
+                    },
+                    "raw": "
+      abc
+      <span>abc</span>
+      {reference|a|b}
+    ",
+                    "start": Object {
+                      "column": 25,
+                      "line": 2,
+                    },
+                  },
+                  "type": "ROOT",
+                },
+                "source": Object {
+                  "end": Object {
+                    "column": 4,
+                    "line": 6,
+                  },
+                  "raw": "
+      abc
+      <span>abc</span>
+      {reference|a|b}
+    ",
+                  "start": Object {
+                    "column": 25,
+                    "line": 2,
+                  },
+                },
+                "type": "BODY",
+              },
+            ],
+            "context": null,
+            "isSelfClosing": false,
+            "key": Path {
+              "path": "section",
+              "source": Object {
+                "end": Object {
+                  "column": 13,
+                  "line": 2,
+                },
+                "raw": "section",
+                "start": Object {
+                  "column": 7,
+                  "line": 2,
+                },
+              },
+              "type": "PATH",
+            },
+            "params": Array [
+              Param {
+                "key": "key",
+                "source": Object {
+                  "end": Object {
+                    "column": 23,
+                    "line": 2,
+                  },
+                  "raw": "key=\\"abc\\"",
+                  "start": Object {
+                    "column": 15,
+                    "line": 2,
+                  },
+                },
+                "type": "PARAM",
+                "value": QuotedDustValue {
+                  "source": Object {
+                    "end": Object {
+                      "column": 23,
+                      "line": 2,
+                    },
+                    "raw": "\\"abc\\"",
+                    "start": Object {
+                      "column": 19,
+                      "line": 2,
+                    },
+                  },
+                  "type": "QUOTED_DUST_VALUE",
+                  "valueArray": Array [
+                    StringBuffer {
+                      "buffer": "abc",
+                      "source": Object {
+                        "end": Object {
+                          "column": 22,
+                          "line": 2,
+                        },
+                        "raw": "abc",
+                        "start": Object {
+                          "column": 20,
+                          "line": 2,
+                        },
+                      },
+                      "type": "STRING_BUFFER",
+                    },
+                  ],
+                },
+              },
+            ],
+            "source": Object {
+              "end": Object {
+                "column": 14,
+                "line": 6,
+              },
+              "raw": "{#section key=\\"abc\\"}
+      abc
+      <span>abc</span>
+      {reference|a|b}
+    {/section}",
+              "start": Object {
+                "column": 5,
+                "line": 2,
               },
             },
-          ],
+            "type": "SECTION",
+          },
+          StringBuffer {
+            "buffer": "
+    bcd
+    ",
+            "source": Object {
+              "end": Object {
+                "column": 4,
+                "line": 8,
+              },
+              "raw": "
+    bcd
+    ",
+              "start": Object {
+                "column": 15,
+                "line": 6,
+              },
+            },
+            "type": "STRING_BUFFER",
+          },
+          HtmlTag {
+            "attributes": Array [],
+            "body": null,
+            "isSelfClosing": true,
+            "source": Object {
+              "end": Object {
+                "column": 8,
+                "line": 8,
+              },
+              "raw": "<br>",
+              "start": Object {
+                "column": 5,
+                "line": 8,
+              },
+            },
+            "tagName": "br",
+            "type": "HTML_TAG",
+          },
+          StringBuffer {
+            "buffer": "
+    abc
+    ",
+            "source": Object {
+              "end": Object {
+                "column": 4,
+                "line": 10,
+              },
+              "raw": "
+    abc
+    ",
+              "start": Object {
+                "column": 9,
+                "line": 8,
+              },
+            },
+            "type": "STRING_BUFFER",
+          },
+          HtmlTag {
+            "attributes": Array [],
+            "body": Root {
+              "nodes": Array [
+                StringBuffer {
+                  "buffer": "
+        ",
+                  "source": Object {
+                    "end": Object {
+                      "column": 8,
+                      "line": 11,
+                    },
+                    "raw": "
+        ",
+                    "start": Object {
+                      "column": 10,
+                      "line": 10,
+                    },
+                  },
+                  "type": "STRING_BUFFER",
+                },
+                HtmlTag {
+                  "attributes": Array [],
+                  "body": Root {
+                    "nodes": Array [
+                      StringBuffer {
+                        "buffer": "
+            ",
+                        "source": Object {
+                          "end": Object {
+                            "column": 12,
+                            "line": 12,
+                          },
+                          "raw": "
+            ",
+                          "start": Object {
+                            "column": 18,
+                            "line": 11,
+                          },
+                        },
+                        "type": "STRING_BUFFER",
+                      },
+                      HtmlTag {
+                        "attributes": Array [],
+                        "body": Root {
+                          "nodes": Array [
+                            HtmlTag {
+                              "attributes": Array [
+                                Attribute {
+                                  "attributeName": "id",
+                                  "attributeValue": "\\"abc\\"",
+                                  "isBooleanAttribute": false,
+                                  "source": Object {
+                                    "end": Object {
+                                      "column": 28,
+                                      "line": 12,
+                                    },
+                                    "raw": "id=\\"abc\\"",
+                                    "start": Object {
+                                      "column": 21,
+                                      "line": 12,
+                                    },
+                                  },
+                                  "type": "ATTRIBUTE",
+                                },
+                              ],
+                              "body": Root {
+                                "nodes": Array [
+                                  StringBuffer {
+                                    "buffer": "aaaa",
+                                    "source": Object {
+                                      "end": Object {
+                                        "column": 33,
+                                        "line": 12,
+                                      },
+                                      "raw": "aaaa",
+                                      "start": Object {
+                                        "column": 30,
+                                        "line": 12,
+                                      },
+                                    },
+                                    "type": "STRING_BUFFER",
+                                  },
+                                ],
+                                "source": Object {
+                                  "end": Object {
+                                    "column": 33,
+                                    "line": 12,
+                                  },
+                                  "raw": "aaaa",
+                                  "start": Object {
+                                    "column": 30,
+                                    "line": 12,
+                                  },
+                                },
+                                "type": "ROOT",
+                              },
+                              "isSelfClosing": false,
+                              "source": Object {
+                                "end": Object {
+                                  "column": 38,
+                                  "line": 12,
+                                },
+                                "raw": "<li id=\\"abc\\">aaaa</li>",
+                                "start": Object {
+                                  "column": 17,
+                                  "line": 12,
+                                },
+                              },
+                              "tagName": "li",
+                              "type": "HTML_TAG",
+                            },
+                          ],
+                          "source": Object {
+                            "end": Object {
+                              "column": 38,
+                              "line": 12,
+                            },
+                            "raw": "<li id=\\"abc\\">aaaa</li>",
+                            "start": Object {
+                              "column": 17,
+                              "line": 12,
+                            },
+                          },
+                          "type": "ROOT",
+                        },
+                        "isSelfClosing": false,
+                        "source": Object {
+                          "end": Object {
+                            "column": 43,
+                            "line": 12,
+                          },
+                          "raw": "<ul><li id=\\"abc\\">aaaa</li></ul>",
+                          "start": Object {
+                            "column": 13,
+                            "line": 12,
+                          },
+                        },
+                        "tagName": "ul",
+                        "type": "HTML_TAG",
+                      },
+                      StringBuffer {
+                        "buffer": "
+        ",
+                        "source": Object {
+                          "end": Object {
+                            "column": 8,
+                            "line": 13,
+                          },
+                          "raw": "
+        ",
+                          "start": Object {
+                            "column": 44,
+                            "line": 12,
+                          },
+                        },
+                        "type": "STRING_BUFFER",
+                      },
+                    ],
+                    "source": Object {
+                      "end": Object {
+                        "column": 8,
+                        "line": 13,
+                      },
+                      "raw": "
+            <ul><li id=\\"abc\\">aaaa</li></ul>
+        ",
+                      "start": Object {
+                        "column": 18,
+                        "line": 11,
+                      },
+                    },
+                    "type": "ROOT",
+                  },
+                  "isSelfClosing": false,
+                  "source": Object {
+                    "end": Object {
+                      "column": 18,
+                      "line": 13,
+                    },
+                    "raw": "<section>
+            <ul><li id=\\"abc\\">aaaa</li></ul>
+        </section>",
+                    "start": Object {
+                      "column": 9,
+                      "line": 11,
+                    },
+                  },
+                  "tagName": "section",
+                  "type": "HTML_TAG",
+                },
+                StringBuffer {
+                  "buffer": "
+    ",
+                  "source": Object {
+                    "end": Object {
+                      "column": 4,
+                      "line": 14,
+                    },
+                    "raw": "
+    ",
+                    "start": Object {
+                      "column": 19,
+                      "line": 13,
+                    },
+                  },
+                  "type": "STRING_BUFFER",
+                },
+              ],
+              "source": Object {
+                "end": Object {
+                  "column": 4,
+                  "line": 14,
+                },
+                "raw": "
+        <section>
+            <ul><li id=\\"abc\\">aaaa</li></ul>
+        </section>
+    ",
+                "start": Object {
+                  "column": 10,
+                  "line": 10,
+                },
+              },
+              "type": "ROOT",
+            },
+            "isSelfClosing": false,
+            "source": Object {
+              "end": Object {
+                "column": 10,
+                "line": 14,
+              },
+              "raw": "<div>
+        <section>
+            <ul><li id=\\"abc\\">aaaa</li></ul>
+        </section>
+    </div>",
+              "start": Object {
+                "column": 5,
+                "line": 10,
+              },
+            },
+            "tagName": "div",
+            "type": "HTML_TAG",
+          },
+          StringBuffer {
+            "buffer": "
+",
+            "source": Object {
+              "end": Object {
+                "column": 1,
+                "line": 15,
+              },
+              "raw": "
+",
+              "start": Object {
+                "column": 11,
+                "line": 14,
+              },
+            },
+            "type": "STRING_BUFFER",
+          },
         ],
         "source": Object {
           "end": Object {
-            "column": 44,
-            "line": 1,
-          },
-          "raw": "{>\\"some literal {~lb} {abc}\\" param1=\\"abc\\" /}
-{>\\"some literal {~lb} {abc}\\" param1=\\"abc\\" /}",
-          "start": Object {
             "column": 1,
-            "line": 1,
-          },
-        },
-        "type": "PARTIAL",
-      },
-    ],
-    Array [
-      "nodes",
-      Object {
-        "buffer": "
-",
-        "source": Object {
-          "end": Object {
-            "column": 45,
-            "line": 1,
+            "line": 15,
           },
           "raw": "
-{>\\"some literal {~lb} {abc}\\" param1=\\"abc\\" /}",
+    {#section key=\\"abc\\"}
+      abc
+      <span>abc</span>
+      {reference|a|b}
+    {/section}
+    bcd
+    <br>
+    abc
+    <div>
+        <section>
+            <ul><li id=\\"abc\\">aaaa</li></ul>
+        </section>
+    </div>
+",
           "start": Object {
-            "column": 45,
+            "column": 18,
             "line": 1,
           },
         },
-        "type": "STRING_BUFFER",
+        "type": "ROOT",
       },
-    ],
+      "isSelfClosing": false,
+      "source": Object {
+        "end": Object {
+          "column": 6,
+          "line": 15,
+        },
+        "raw": "<div class=\\"abc\\">
+    {#section key=\\"abc\\"}
+      abc
+      <span>abc</span>
+      {reference|a|b}
+    {/section}
+    bcd
+    <br>
+    abc
+    <div>
+        <section>
+            <ul><li id=\\"abc\\">aaaa</li></ul>
+        </section>
+    </div>
+</div>",
+        "start": Object {
+          "column": 1,
+          "line": 1,
+        },
+      },
+      "tagName": "div",
+      "type": "HTML_TAG",
+    },
+    StringBuffer {
+      "buffer": "
+",
+      "source": Object {
+        "end": Object {
+          "column": 1,
+          "line": 16,
+        },
+        "raw": "
+",
+        "start": Object {
+          "column": 7,
+          "line": 15,
+        },
+      },
+      "type": "STRING_BUFFER",
+    },
   ],
   "source": Object {
     "end": Object {
-      "column": 45,
-      "line": 1,
+      "column": 1,
+      "line": 16,
     },
-    "raw": "{>\\"some literal {~lb} {abc}\\" param1=\\"abc\\" /}
-{>\\"some literal {~lb} {abc}\\" param1=\\"abc\\" /}",
+    "raw": "<div class=\\"abc\\">
+    {#section key=\\"abc\\"}
+      abc
+      <span>abc</span>
+      {reference|a|b}
+    {/section}
+    bcd
+    <br>
+    abc
+    <div>
+        <section>
+            <ul><li id=\\"abc\\">aaaa</li></ul>
+        </section>
+    </div>
+</div>
+",
     "start": Object {
       "column": 1,
       "line": 1,
@@ -1159,138 +1978,125 @@ Object {
 `;
 
 exports[`toAst not-exists 1`] = `
-Object {
+Root {
   "nodes": Array [
-    Array [
-      "nodes",
-      Object {
-        "bodies": Array [
-          Array [
-            "bodies",
-            Object {
-              "context": null,
-              "root": Object {
-                "nodes": Array [
-                  Array [
-                    "nodes",
-                    Object {
-                      "buffer": "
+    Section {
+      "bodies": Array [
+        Body {
+          "context": null,
+          "root": Root {
+            "nodes": Array [
+              StringBuffer {
+                "buffer": "
   abc
 ",
-                      "source": Object {
-                        "end": Object {
-                          "column": 1,
-                          "line": 2,
-                        },
-                        "raw": "
-  abc
- ",
-                        "start": Object {
-                          "column": 12,
-                          "line": 1,
-                        },
-                      },
-                      "type": "STRING_BUFFER",
-                    },
-                  ],
-                ],
                 "source": Object {
                   "end": Object {
                     "column": 1,
-                    "line": 2,
+                    "line": 3,
                   },
                   "raw": "
   abc
- ",
+",
                   "start": Object {
                     "column": 12,
                     "line": 1,
                   },
                 },
-                "type": "ROOT",
+                "type": "STRING_BUFFER",
               },
-              "source": Object {
-                "end": Object {
-                  "column": 1,
-                  "line": 2,
-                },
-                "raw": "
+            ],
+            "source": Object {
+              "end": Object {
+                "column": 1,
+                "line": 3,
+              },
+              "raw": "
   abc
- ",
-                "start": Object {
-                  "column": 12,
-                  "line": 1,
-                },
+",
+              "start": Object {
+                "column": 12,
+                "line": 1,
               },
-              "type": "BODY",
             },
-          ],
-        ],
-        "context": null,
-        "isSelfClosing": false,
-        "key": Object {
-          "path": "some_key",
+            "type": "ROOT",
+          },
           "source": Object {
             "end": Object {
-              "column": 10,
-              "line": 1,
+              "column": 1,
+              "line": 3,
             },
-            "raw": "some_key",
+            "raw": "
+  abc
+",
             "start": Object {
-              "column": 3,
+              "column": 12,
               "line": 1,
             },
           },
-          "type": "PATH",
+          "type": "BODY",
         },
-        "params": Array [],
+      ],
+      "context": null,
+      "isSelfClosing": false,
+      "key": Path {
+        "path": "some_key",
         "source": Object {
           "end": Object {
-            "column": 11,
-            "line": 3,
+            "column": 10,
+            "line": 1,
           },
-          "raw": "{^some_key}
-  abc
-{/some_key}
-{/some_key}",
+          "raw": "some_key",
           "start": Object {
-            "column": 1,
+            "column": 3,
             "line": 1,
           },
         },
-        "type": "NOT_EXISTS",
+        "type": "PATH",
       },
-    ],
-    Array [
-      "nodes",
-      Object {
-        "buffer": "
-",
-        "source": Object {
-          "end": Object {
-            "column": 12,
-            "line": 3,
-          },
-          "raw": "
-{/some_key}",
-          "start": Object {
-            "column": 12,
-            "line": 3,
-          },
+      "params": Array [],
+      "source": Object {
+        "end": Object {
+          "column": 11,
+          "line": 3,
         },
-        "type": "STRING_BUFFER",
+        "raw": "{^some_key}
+  abc
+{/some_key}",
+        "start": Object {
+          "column": 1,
+          "line": 1,
+        },
       },
-    ],
+      "type": "NOT_EXISTS",
+    },
+    StringBuffer {
+      "buffer": "
+",
+      "source": Object {
+        "end": Object {
+          "column": 1,
+          "line": 4,
+        },
+        "raw": "
+",
+        "start": Object {
+          "column": 12,
+          "line": 3,
+        },
+      },
+      "type": "STRING_BUFFER",
+    },
   ],
   "source": Object {
     "end": Object {
-      "column": 12,
-      "line": 3,
+      "column": 1,
+      "line": 4,
     },
     "raw": "{^some_key}
   abc
 {/some_key}
-{/some_key}",
+",
     "start": Object {
       "column": 1,
       "line": 1,
@@ -1301,125 +2107,109 @@ Object {
 `;
 
 exports[`toAst reference 1`] = `
-Object {
+Root {
   "nodes": Array [
-    Array [
-      "nodes",
-      Object {
-        "filters": Array [
-          Array [
-            "filters",
-            Object {
-              "filter": "filter1",
-              "source": Object {
-                "end": Object {
-                  "column": 18,
-                  "line": 1,
-                },
-                "raw": "|filter1",
-                "start": Object {
-                  "column": 11,
-                  "line": 1,
-                },
-              },
-              "type": "FILTER",
-            },
-          ],
-          Array [
-            "filters",
-            Object {
-              "filter": "filter2",
-              "source": Object {
-                "end": Object {
-                  "column": 26,
-                  "line": 1,
-                },
-                "raw": "|filter2",
-                "start": Object {
-                  "column": 19,
-                  "line": 1,
-                },
-              },
-              "type": "FILTER",
-            },
-          ],
-          Array [
-            "filters",
-            Object {
-              "filter": "filter3",
-              "source": Object {
-                "end": Object {
-                  "column": 34,
-                  "line": 1,
-                },
-                "raw": "|filter3",
-                "start": Object {
-                  "column": 27,
-                  "line": 1,
-                },
-              },
-              "type": "FILTER",
-            },
-          ],
-        ],
-        "path": Object {
-          "path": "reference",
+    Reference {
+      "filters": Array [
+        Filter {
+          "filter": "filter1",
           "source": Object {
             "end": Object {
-              "column": 10,
+              "column": 18,
               "line": 1,
             },
-            "raw": "reference",
+            "raw": "|filter1",
             "start": Object {
-              "column": 2,
+              "column": 11,
               "line": 1,
             },
           },
-          "type": "PATH",
+          "type": "FILTER",
         },
+        Filter {
+          "filter": "filter2",
+          "source": Object {
+            "end": Object {
+              "column": 26,
+              "line": 1,
+            },
+            "raw": "|filter2",
+            "start": Object {
+              "column": 19,
+              "line": 1,
+            },
+          },
+          "type": "FILTER",
+        },
+        Filter {
+          "filter": "filter3",
+          "source": Object {
+            "end": Object {
+              "column": 34,
+              "line": 1,
+            },
+            "raw": "|filter3",
+            "start": Object {
+              "column": 27,
+              "line": 1,
+            },
+          },
+          "type": "FILTER",
+        },
+      ],
+      "path": Path {
+        "path": "reference",
         "source": Object {
           "end": Object {
-            "column": 35,
+            "column": 10,
             "line": 1,
           },
-          "raw": "{reference|filter1|filter2|filter3}
-{reference|filter1|filter2|filter3}",
+          "raw": "reference",
           "start": Object {
-            "column": 1,
+            "column": 2,
             "line": 1,
           },
         },
-        "type": "REFERENCE",
+        "type": "PATH",
       },
-    ],
-    Array [
-      "nodes",
-      Object {
-        "buffer": "
+      "source": Object {
+        "end": Object {
+          "column": 35,
+          "line": 1,
+        },
+        "raw": "{reference|filter1|filter2|filter3}",
+        "start": Object {
+          "column": 1,
+          "line": 1,
+        },
+      },
+      "type": "REFERENCE",
+    },
+    StringBuffer {
+      "buffer": "
 ",
-        "source": Object {
-          "end": Object {
-            "column": 36,
-            "line": 1,
-          },
-          "raw": "
-{reference|filter1|filter2|filter3}",
-          "start": Object {
-            "column": 36,
-            "line": 1,
-          },
+      "source": Object {
+        "end": Object {
+          "column": 1,
+          "line": 2,
         },
-        "type": "STRING_BUFFER",
+        "raw": "
+",
+        "start": Object {
+          "column": 36,
+          "line": 1,
+        },
       },
-    ],
+      "type": "STRING_BUFFER",
+    },
   ],
   "source": Object {
     "end": Object {
-      "column": 36,
-      "line": 1,
+      "column": 1,
+      "line": 2,
     },
     "raw": "{reference|filter1|filter2|filter3}
-{reference|filter1|filter2|filter3}",
+",
     "start": Object {
       "column": 1,
       "line": 1,
@@ -1430,138 +2220,125 @@ Object {
 `;
 
 exports[`toAst section 1`] = `
-Object {
+Root {
   "nodes": Array [
-    Array [
-      "nodes",
-      Object {
-        "bodies": Array [
-          Array [
-            "bodies",
-            Object {
-              "context": null,
-              "root": Object {
-                "nodes": Array [
-                  Array [
-                    "nodes",
-                    Object {
-                      "buffer": "
+    Section {
+      "bodies": Array [
+        Body {
+          "context": null,
+          "root": Root {
+            "nodes": Array [
+              StringBuffer {
+                "buffer": "
   abc
 ",
-                      "source": Object {
-                        "end": Object {
-                          "column": 1,
-                          "line": 2,
-                        },
-                        "raw": "
-  abc
- ",
-                        "start": Object {
-                          "column": 11,
-                          "line": 1,
-                        },
-                      },
-                      "type": "STRING_BUFFER",
-                    },
-                  ],
-                ],
                 "source": Object {
                   "end": Object {
                     "column": 1,
-                    "line": 2,
+                    "line": 3,
                   },
                   "raw": "
   abc
- ",
+",
                   "start": Object {
                     "column": 11,
                     "line": 1,
                   },
                 },
-                "type": "ROOT",
+                "type": "STRING_BUFFER",
               },
-              "source": Object {
-                "end": Object {
-                  "column": 1,
-                  "line": 2,
-                },
-                "raw": "
+            ],
+            "source": Object {
+              "end": Object {
+                "column": 1,
+                "line": 3,
+              },
+              "raw": "
   abc
- ",
-                "start": Object {
-                  "column": 11,
-                  "line": 1,
-                },
+",
+              "start": Object {
+                "column": 11,
+                "line": 1,
               },
-              "type": "BODY",
             },
-          ],
-        ],
-        "context": null,
-        "isSelfClosing": false,
-        "key": Object {
-          "path": "section",
+            "type": "ROOT",
+          },
           "source": Object {
             "end": Object {
-              "column": 9,
-              "line": 1,
+              "column": 1,
+              "line": 3,
             },
-            "raw": "section",
+            "raw": "
+  abc
+",
             "start": Object {
-              "column": 3,
+              "column": 11,
               "line": 1,
             },
           },
-          "type": "PATH",
+          "type": "BODY",
         },
-        "params": Array [],
+      ],
+      "context": null,
+      "isSelfClosing": false,
+      "key": Path {
+        "path": "section",
         "source": Object {
           "end": Object {
-            "column": 10,
-            "line": 3,
+            "column": 9,
+            "line": 1,
           },
-          "raw": "{#section}
-  abc
-{/section}
-{/section}",
+          "raw": "section",
           "start": Object {
-            "column": 1,
+            "column": 3,
             "line": 1,
           },
         },
-        "type": "SECTION",
+        "type": "PATH",
       },
-    ],
-    Array [
-      "nodes",
-      Object {
-        "buffer": "
-",
-        "source": Object {
-          "end": Object {
-            "column": 11,
-            "line": 3,
-          },
-          "raw": "
-{/section}",
-          "start": Object {
-            "column": 11,
-            "line": 3,
-          },
+      "params": Array [],
+      "source": Object {
+        "end": Object {
+          "column": 10,
+          "line": 3,
         },
-        "type": "STRING_BUFFER",
+        "raw": "{#section}
+  abc
+{/section}",
+        "start": Object {
+          "column": 1,
+          "line": 1,
+        },
       },
-    ],
+      "type": "SECTION",
+    },
+    StringBuffer {
+      "buffer": "
+",
+      "source": Object {
+        "end": Object {
+          "column": 1,
+          "line": 4,
+        },
+        "raw": "
+",
+        "start": Object {
+          "column": 11,
+          "line": 3,
+        },
+      },
+      "type": "STRING_BUFFER",
+    },
   ],
   "source": Object {
     "end": Object {
-      "column": 11,
-      "line": 3,
+      "column": 1,
+      "line": 4,
     },
     "raw": "{#section}
   abc
 {/section}
-{/section}",
+",
     "start": Object {
       "column": 1,
       "line": 1,
@@ -1572,313 +2349,288 @@ Object {
 `;
 
 exports[`toAst section-with-context-bodies 1`] = `
-Object {
+Root {
   "nodes": Array [
-    Array [
-      "nodes",
-      Object {
-        "bodies": Array [
-          Array [
-            "bodies",
-            Object {
-              "context": null,
-              "root": Object {
-                "nodes": Array [
-                  Array [
-                    "nodes",
-                    Object {
-                      "buffer": "
+    Section {
+      "bodies": Array [
+        Body {
+          "context": null,
+          "root": Root {
+            "nodes": Array [
+              StringBuffer {
+                "buffer": "
   first body main
 ",
-                      "source": Object {
-                        "end": Object {
-                          "column": 1,
-                          "line": 2,
-                        },
-                        "raw": "
-  first body main
- ",
-                        "start": Object {
-                          "column": 11,
-                          "line": 1,
-                        },
-                      },
-                      "type": "STRING_BUFFER",
-                    },
-                  ],
-                ],
                 "source": Object {
                   "end": Object {
                     "column": 1,
-                    "line": 2,
+                    "line": 3,
                   },
                   "raw": "
   first body main
- ",
+",
                   "start": Object {
                     "column": 11,
                     "line": 1,
                   },
                 },
-                "type": "ROOT",
+                "type": "STRING_BUFFER",
               },
-              "source": Object {
-                "end": Object {
-                  "column": 1,
-                  "line": 2,
-                },
-                "raw": "
+            ],
+            "source": Object {
+              "end": Object {
+                "column": 1,
+                "line": 3,
+              },
+              "raw": "
   first body main
- ",
-                "start": Object {
-                  "column": 11,
-                  "line": 1,
-                },
-              },
-              "type": "BODY",
-            },
-          ],
-          Array [
-            "bodies",
-            Object {
-              "context": Object {
-                "identifier": Object {
-                  "path": "someContext",
-                  "source": Object {
-                    "end": Object {
-                      "column": 14,
-                      "line": 3,
-                    },
-                    "raw": "{:someContext}",
-                    "start": Object {
-                      "column": 1,
-                      "line": 3,
-                    },
-                  },
-                  "type": "PATH",
-                },
-                "source": Object {
-                  "end": Object {
-                    "column": 14,
-                    "line": 3,
-                  },
-                  "raw": "{:someContext}",
-                  "start": Object {
-                    "column": 1,
-                    "line": 3,
-                  },
-                },
-                "type": "CONTEXT",
-              },
-              "root": Object {
-                "nodes": Array [
-                  Array [
-                    "nodes",
-                    Object {
-                      "buffer": "
-  someContextBody
 ",
-                      "source": Object {
-                        "end": Object {
-                          "column": 1,
-                          "line": 4,
-                        },
-                        "raw": "
-  someContextBody
- ",
-                        "start": Object {
-                          "column": 15,
-                          "line": 3,
-                        },
-                      },
-                      "type": "STRING_BUFFER",
-                    },
-                  ],
-                ],
-                "source": Object {
-                  "end": Object {
-                    "column": 1,
-                    "line": 4,
-                  },
-                  "raw": "
-  someContextBody
- ",
-                  "start": Object {
-                    "column": 15,
-                    "line": 3,
-                  },
-                },
-                "type": "ROOT",
+              "start": Object {
+                "column": 11,
+                "line": 1,
               },
+            },
+            "type": "ROOT",
+          },
+          "source": Object {
+            "end": Object {
+              "column": 1,
+              "line": 3,
+            },
+            "raw": "
+  first body main
+",
+            "start": Object {
+              "column": 11,
+              "line": 1,
+            },
+          },
+          "type": "BODY",
+        },
+        Body {
+          "context": Context {
+            "identifier": Path {
+              "path": "someContext",
               "source": Object {
                 "end": Object {
-                  "column": 1,
-                  "line": 4,
+                  "column": 14,
+                  "line": 3,
                 },
-                "raw": "{:someContext}
-  someContextBody
- ",
+                "raw": "{:someContext}",
                 "start": Object {
                   "column": 1,
                   "line": 3,
                 },
               },
-              "type": "BODY",
+              "type": "PATH",
             },
-          ],
-          Array [
-            "bodies",
-            Object {
-              "context": Object {
-                "identifier": Object {
-                  "path": "else",
-                  "source": Object {
-                    "end": Object {
-                      "column": 7,
-                      "line": 5,
-                    },
-                    "raw": "{:else}",
-                    "start": Object {
-                      "column": 1,
-                      "line": 5,
-                    },
-                  },
-                  "type": "PATH",
-                },
-                "source": Object {
-                  "end": Object {
-                    "column": 7,
-                    "line": 5,
-                  },
-                  "raw": "{:else}",
-                  "start": Object {
-                    "column": 1,
-                    "line": 5,
-                  },
-                },
-                "type": "CONTEXT",
+            "source": Object {
+              "end": Object {
+                "column": 14,
+                "line": 3,
               },
-              "root": Object {
-                "nodes": Array [
-                  Array [
-                    "nodes",
-                    Object {
-                      "buffer": "
-  elseBody
+              "raw": "{:someContext}",
+              "start": Object {
+                "column": 1,
+                "line": 3,
+              },
+            },
+            "type": "CONTEXT",
+          },
+          "root": Root {
+            "nodes": Array [
+              StringBuffer {
+                "buffer": "
+  someContextBody
 ",
-                      "source": Object {
-                        "end": Object {
-                          "column": 1,
-                          "line": 6,
-                        },
-                        "raw": "
-  elseBody
- ",
-                        "start": Object {
-                          "column": 8,
-                          "line": 5,
-                        },
-                      },
-                      "type": "STRING_BUFFER",
-                    },
-                  ],
-                ],
                 "source": Object {
                   "end": Object {
                     "column": 1,
-                    "line": 6,
+                    "line": 5,
                   },
                   "raw": "
-  elseBody
- ",
+  someContextBody
+",
                   "start": Object {
-                    "column": 8,
-                    "line": 5,
+                    "column": 15,
+                    "line": 3,
                   },
                 },
-                "type": "ROOT",
+                "type": "STRING_BUFFER",
               },
+            ],
+            "source": Object {
+              "end": Object {
+                "column": 1,
+                "line": 5,
+              },
+              "raw": "
+  someContextBody
+",
+              "start": Object {
+                "column": 15,
+                "line": 3,
+              },
+            },
+            "type": "ROOT",
+          },
+          "source": Object {
+            "end": Object {
+              "column": 1,
+              "line": 5,
+            },
+            "raw": "{:someContext}
+  someContextBody
+",
+            "start": Object {
+              "column": 1,
+              "line": 3,
+            },
+          },
+          "type": "BODY",
+        },
+        Body {
+          "context": Context {
+            "identifier": Path {
+              "path": "else",
               "source": Object {
                 "end": Object {
-                  "column": 1,
-                  "line": 6,
+                  "column": 7,
+                  "line": 5,
                 },
-                "raw": "{:else}
-  elseBody
- ",
+                "raw": "{:else}",
                 "start": Object {
                   "column": 1,
                   "line": 5,
                 },
               },
-              "type": "BODY",
+              "type": "PATH",
             },
-          ],
-        ],
-        "context": null,
-        "isSelfClosing": false,
-        "key": Object {
-          "path": "section",
+            "source": Object {
+              "end": Object {
+                "column": 7,
+                "line": 5,
+              },
+              "raw": "{:else}",
+              "start": Object {
+                "column": 1,
+                "line": 5,
+              },
+            },
+            "type": "CONTEXT",
+          },
+          "root": Root {
+            "nodes": Array [
+              StringBuffer {
+                "buffer": "
+  elseBody
+",
+                "source": Object {
+                  "end": Object {
+                    "column": 1,
+                    "line": 7,
+                  },
+                  "raw": "
+  elseBody
+",
+                  "start": Object {
+                    "column": 8,
+                    "line": 5,
+                  },
+                },
+                "type": "STRING_BUFFER",
+              },
+            ],
+            "source": Object {
+              "end": Object {
+                "column": 1,
+                "line": 7,
+              },
+              "raw": "
+  elseBody
+",
+              "start": Object {
+                "column": 8,
+                "line": 5,
+              },
+            },
+            "type": "ROOT",
+          },
           "source": Object {
             "end": Object {
-              "column": 9,
-              "line": 1,
+              "column": 1,
+              "line": 7,
             },
-            "raw": "section",
+            "raw": "{:else}
+  elseBody
+",
             "start": Object {
-              "column": 3,
-              "line": 1,
+              "column": 1,
+              "line": 5,
             },
           },
-          "type": "PATH",
+          "type": "BODY",
         },
-        "params": Array [],
+      ],
+      "context": null,
+      "isSelfClosing": false,
+      "key": Path {
+        "path": "section",
         "source": Object {
           "end": Object {
-            "column": 10,
-            "line": 7,
+            "column": 9,
+            "line": 1,
           },
-          "raw": "{#section}
+          "raw": "section",
+          "start": Object {
+            "column": 3,
+            "line": 1,
+          },
+        },
+        "type": "PATH",
+      },
+      "params": Array [],
+      "source": Object {
+        "end": Object {
+          "column": 10,
+          "line": 7,
+        },
+        "raw": "{#section}
   first body main
 {:someContext}
   someContextBody
 {:else}
   elseBody
-{/section}
 {/section}",
-          "start": Object {
-            "column": 1,
-            "line": 1,
-          },
+        "start": Object {
+          "column": 1,
+          "line": 1,
         },
-        "type": "SECTION",
       },
-    ],
-    Array [
-      "nodes",
-      Object {
-        "buffer": "
+      "type": "SECTION",
+    },
+    StringBuffer {
+      "buffer": "
 ",
-        "source": Object {
-          "end": Object {
-            "column": 11,
-            "line": 7,
-          },
-          "raw": "
-{/section}",
-          "start": Object {
-            "column": 11,
-            "line": 7,
-          },
+      "source": Object {
+        "end": Object {
+          "column": 1,
+          "line": 8,
         },
-        "type": "STRING_BUFFER",
+        "raw": "
+",
+        "start": Object {
+          "column": 11,
+          "line": 7,
+        },
       },
-    ],
+      "type": "STRING_BUFFER",
+    },
   ],
   "source": Object {
     "end": Object {
-      "column": 11,
-      "line": 7,
+      "column": 1,
+      "line": 8,
     },
     "raw": "{#section}
   first body main
@@ -1887,7 +2639,7 @@ Object {
 {:else}
   elseBody
 {/section}
-{/section}",
+",
     "start": Object {
       "column": 1,
       "line": 1,
@@ -1898,73 +2650,66 @@ Object {
 `;
 
 exports[`toAst self-closing-block 1`] = `
-Object {
+Root {
   "nodes": Array [
-    Array [
-      "nodes",
-      Object {
-        "bodies": Array [],
-        "context": null,
-        "isSelfClosing": true,
-        "key": Object {
-          "path": "selfClosingBlock",
-          "source": Object {
-            "end": Object {
-              "column": 18,
-              "line": 1,
-            },
-            "raw": "selfClosingBlock",
-            "start": Object {
-              "column": 3,
-              "line": 1,
-            },
-          },
-          "type": "PATH",
-        },
-        "params": Array [],
+    Section {
+      "bodies": Array [],
+      "context": null,
+      "isSelfClosing": true,
+      "key": Path {
+        "path": "selfClosingBlock",
         "source": Object {
           "end": Object {
-            "column": 21,
+            "column": 18,
             "line": 1,
           },
-          "raw": "{+selfClosingBlock /}
-{+selfClosingBlock /}",
+          "raw": "selfClosingBlock",
           "start": Object {
-            "column": 1,
+            "column": 3,
             "line": 1,
           },
         },
-        "type": "SELF_CLOSING_BLOCK",
+        "type": "PATH",
       },
-    ],
-    Array [
-      "nodes",
-      Object {
-        "buffer": "
+      "params": Array [],
+      "source": Object {
+        "end": Object {
+          "column": 21,
+          "line": 1,
+        },
+        "raw": "{+selfClosingBlock /}",
+        "start": Object {
+          "column": 1,
+          "line": 1,
+        },
+      },
+      "type": "SELF_CLOSING_BLOCK",
+    },
+    StringBuffer {
+      "buffer": "
 ",
-        "source": Object {
-          "end": Object {
-            "column": 22,
-            "line": 1,
-          },
-          "raw": "
-{+selfClosingBlock /}",
-          "start": Object {
-            "column": 22,
-            "line": 1,
-          },
+      "source": Object {
+        "end": Object {
+          "column": 1,
+          "line": 2,
         },
-        "type": "STRING_BUFFER",
+        "raw": "
+",
+        "start": Object {
+          "column": 22,
+          "line": 1,
+        },
       },
-    ],
+      "type": "STRING_BUFFER",
+    },
   ],
   "source": Object {
     "end": Object {
-      "column": 22,
-      "line": 1,
+      "column": 1,
+      "line": 2,
     },
     "raw": "{+selfClosingBlock /}
-{+selfClosingBlock /}",
+",
     "start": Object {
       "column": 1,
       "line": 1,
@@ -1975,138 +2720,125 @@ Object {
 `;
 
 exports[`toAst self-closing-block-with-body 1`] = `
-Object {
+Root {
   "nodes": Array [
-    Array [
-      "nodes",
-      Object {
-        "bodies": Array [
-          Array [
-            "bodies",
-            Object {
-              "context": null,
-              "root": Object {
-                "nodes": Array [
-                  Array [
-                    "nodes",
-                    Object {
-                      "buffer": "
+    Section {
+      "bodies": Array [
+        Body {
+          "context": null,
+          "root": Root {
+            "nodes": Array [
+              StringBuffer {
+                "buffer": "
     abcdef
 ",
-                      "source": Object {
-                        "end": Object {
-                          "column": 1,
-                          "line": 2,
-                        },
-                        "raw": "
-    abcdef
- ",
-                        "start": Object {
-                          "column": 20,
-                          "line": 1,
-                        },
-                      },
-                      "type": "STRING_BUFFER",
-                    },
-                  ],
-                ],
                 "source": Object {
                   "end": Object {
                     "column": 1,
-                    "line": 2,
+                    "line": 3,
                   },
                   "raw": "
     abcdef
- ",
+",
                   "start": Object {
                     "column": 20,
                     "line": 1,
                   },
                 },
-                "type": "ROOT",
+                "type": "STRING_BUFFER",
               },
-              "source": Object {
-                "end": Object {
-                  "column": 1,
-                  "line": 2,
-                },
-                "raw": "
+            ],
+            "source": Object {
+              "end": Object {
+                "column": 1,
+                "line": 3,
+              },
+              "raw": "
     abcdef
- ",
-                "start": Object {
-                  "column": 20,
-                  "line": 1,
-                },
+",
+              "start": Object {
+                "column": 20,
+                "line": 1,
               },
-              "type": "BODY",
             },
-          ],
-        ],
-        "context": null,
-        "isSelfClosing": false,
-        "key": Object {
-          "path": "selfClosingBlock",
+            "type": "ROOT",
+          },
           "source": Object {
             "end": Object {
-              "column": 18,
-              "line": 1,
+              "column": 1,
+              "line": 3,
             },
-            "raw": "selfClosingBlock",
+            "raw": "
+    abcdef
+",
             "start": Object {
-              "column": 3,
+              "column": 20,
               "line": 1,
             },
           },
-          "type": "PATH",
+          "type": "BODY",
         },
-        "params": Array [],
+      ],
+      "context": null,
+      "isSelfClosing": false,
+      "key": Path {
+        "path": "selfClosingBlock",
         "source": Object {
           "end": Object {
-            "column": 19,
-            "line": 3,
+            "column": 18,
+            "line": 1,
           },
-          "raw": "{+selfClosingBlock}
-    abcdef
-{/selfClosingBlock}
-{/selfClosingBlock}",
+          "raw": "selfClosingBlock",
           "start": Object {
-            "column": 1,
+            "column": 3,
             "line": 1,
           },
         },
-        "type": "SELF_CLOSING_BLOCK",
+        "type": "PATH",
       },
-    ],
-    Array [
-      "nodes",
-      Object {
-        "buffer": "
-",
-        "source": Object {
-          "end": Object {
-            "column": 20,
-            "line": 3,
-          },
-          "raw": "
-{/selfClosingBlock}",
-          "start": Object {
-            "column": 20,
-            "line": 3,
-          },
+      "params": Array [],
+      "source": Object {
+        "end": Object {
+          "column": 19,
+          "line": 3,
         },
-        "type": "STRING_BUFFER",
+        "raw": "{+selfClosingBlock}
+    abcdef
+{/selfClosingBlock}",
+        "start": Object {
+          "column": 1,
+          "line": 1,
+        },
       },
-    ],
+      "type": "SELF_CLOSING_BLOCK",
+    },
+    StringBuffer {
+      "buffer": "
+",
+      "source": Object {
+        "end": Object {
+          "column": 1,
+          "line": 4,
+        },
+        "raw": "
+",
+        "start": Object {
+          "column": 20,
+          "line": 3,
+        },
+      },
+      "type": "STRING_BUFFER",
+    },
   ],
   "source": Object {
     "end": Object {
-      "column": 20,
-      "line": 3,
+      "column": 1,
+      "line": 4,
     },
     "raw": "{+selfClosingBlock}
     abcdef
 {/selfClosingBlock}
-{/selfClosingBlock}",
+",
     "start": Object {
       "column": 1,
       "line": 1,
@@ -2117,58 +2849,195 @@ Object {
 `;
 
 exports[`toAst self-closing-html-tag 1`] = `
-Object {
+Root {
   "nodes": Array [
-    Array [
-      "nodes",
-      Object {
-        "attributes": Array [],
-        "body": null,
-        "isSelfClosing": true,
-        "source": Object {
-          "end": Object {
-            "column": 4,
-            "line": 1,
-          },
-          "raw": "<br>
-<br>",
-          "start": Object {
-            "column": 1,
-            "line": 1,
-          },
+    HtmlTag {
+      "attributes": Array [],
+      "body": null,
+      "isSelfClosing": true,
+      "source": Object {
+        "end": Object {
+          "column": 4,
+          "line": 1,
         },
-        "tagName": "br",
-        "type": "HTML_TAG",
+        "raw": "<br>",
+        "start": Object {
+          "column": 1,
+          "line": 1,
+        },
       },
-    ],
-    Array [
-      "nodes",
-      Object {
-        "buffer": "
+      "tagName": "br",
+      "type": "HTML_TAG",
+    },
+    StringBuffer {
+      "buffer": "
 ",
-        "source": Object {
-          "end": Object {
-            "column": 5,
-            "line": 1,
-          },
-          "raw": "
-<br>",
-          "start": Object {
-            "column": 5,
-            "line": 1,
-          },
+      "source": Object {
+        "end": Object {
+          "column": 1,
+          "line": 2,
         },
-        "type": "STRING_BUFFER",
+        "raw": "
+",
+        "start": Object {
+          "column": 5,
+          "line": 1,
+        },
       },
-    ],
+      "type": "STRING_BUFFER",
+    },
+    HtmlTag {
+      "attributes": Array [],
+      "body": null,
+      "isSelfClosing": true,
+      "source": Object {
+        "end": Object {
+          "column": 5,
+          "line": 2,
+        },
+        "raw": "<br/>",
+        "start": Object {
+          "column": 1,
+          "line": 2,
+        },
+      },
+      "tagName": "br",
+      "type": "HTML_TAG",
+    },
+    StringBuffer {
+      "buffer": "
+",
+      "source": Object {
+        "end": Object {
+          "column": 1,
+          "line": 3,
+        },
+        "raw": "
+",
+        "start": Object {
+          "column": 6,
+          "line": 2,
+        },
+      },
+      "type": "STRING_BUFFER",
+    },
+    HtmlTag {
+      "attributes": Array [
+        Attribute {
+          "attributeName": "class",
+          "attributeValue": "\\"abc\\"",
+          "isBooleanAttribute": false,
+          "source": Object {
+            "end": Object {
+              "column": 15,
+              "line": 3,
+            },
+            "raw": "class=\\"abc\\"",
+            "start": Object {
+              "column": 5,
+              "line": 3,
+            },
+          },
+          "type": "ATTRIBUTE",
+        },
+      ],
+      "body": null,
+      "isSelfClosing": true,
+      "source": Object {
+        "end": Object {
+          "column": 16,
+          "line": 3,
+        },
+        "raw": "<hr class=\\"abc\\">",
+        "start": Object {
+          "column": 1,
+          "line": 3,
+        },
+      },
+      "tagName": "hr",
+      "type": "HTML_TAG",
+    },
+    StringBuffer {
+      "buffer": "
+",
+      "source": Object {
+        "end": Object {
+          "column": 1,
+          "line": 4,
+        },
+        "raw": "
+",
+        "start": Object {
+          "column": 17,
+          "line": 3,
+        },
+      },
+      "type": "STRING_BUFFER",
+    },
+    HtmlTag {
+      "attributes": Array [
+        Attribute {
+          "attributeName": "class",
+          "attributeValue": "\\"abc\\"",
+          "isBooleanAttribute": false,
+          "source": Object {
+            "end": Object {
+              "column": 15,
+              "line": 4,
+            },
+            "raw": "class=\\"abc\\"",
+            "start": Object {
+              "column": 5,
+              "line": 4,
+            },
+          },
+          "type": "ATTRIBUTE",
+        },
+      ],
+      "body": null,
+      "isSelfClosing": true,
+      "source": Object {
+        "end": Object {
+          "column": 17,
+          "line": 4,
+        },
+        "raw": "<hr class=\\"abc\\"/>",
+        "start": Object {
+          "column": 1,
+          "line": 4,
+        },
+      },
+      "tagName": "hr",
+      "type": "HTML_TAG",
+    },
+    StringBuffer {
+      "buffer": "
+",
+      "source": Object {
+        "end": Object {
+          "column": 1,
+          "line": 5,
+        },
+        "raw": "
+",
+        "start": Object {
+          "column": 18,
+          "line": 4,
+        },
+      },
+      "type": "STRING_BUFFER",
+    },
   ],
   "source": Object {
     "end": Object {
-      "column": 5,
-      "line": 1,
+      "column": 1,
+      "line": 5,
     },
     "raw": "<br>
-<br>",
+<br/>
+<hr class=\\"abc\\">
+<hr class=\\"abc\\"/>
+",
     "start": Object {
       "column": 1,
       "line": 1,
@@ -2179,55 +3048,48 @@ Object {
 `;
 
 exports[`toAst special 1`] = `
-Object {
+Root {
   "nodes": Array [
-    Array [
-      "nodes",
-      Object {
-        "key": "lb",
-        "source": Object {
-          "end": Object {
-            "column": 5,
-            "line": 1,
-          },
-          "raw": "{~lb}
-{~lb}",
-          "start": Object {
-            "column": 1,
-            "line": 1,
-          },
+    Special {
+      "key": "lb",
+      "source": Object {
+        "end": Object {
+          "column": 5,
+          "line": 1,
         },
-        "type": "SPECIAL",
+        "raw": "{~lb}",
+        "start": Object {
+          "column": 1,
+          "line": 1,
+        },
       },
-    ],
-    Array [
-      "nodes",
-      Object {
-        "buffer": "
+      "type": "SPECIAL",
+    },
+    StringBuffer {
+      "buffer": "
 ",
-        "source": Object {
-          "end": Object {
-            "column": 6,
-            "line": 1,
-          },
-          "raw": "
-{~lb}",
-          "start": Object {
-            "column": 6,
-            "line": 1,
-          },
+      "source": Object {
+        "end": Object {
+          "column": 1,
+          "line": 2,
         },
-        "type": "STRING_BUFFER",
+        "raw": "
+",
+        "start": Object {
+          "column": 6,
+          "line": 1,
+        },
       },
-    ],
+      "type": "STRING_BUFFER",
+    },
   ],
   "source": Object {
     "end": Object {
-      "column": 6,
-      "line": 1,
+      "column": 1,
+      "line": 2,
     },
     "raw": "{~lb}
-{~lb}",
+",
     "start": Object {
       "column": 1,
       "line": 1,

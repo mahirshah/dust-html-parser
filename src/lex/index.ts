@@ -14,6 +14,7 @@ enum MODE {
   DUST = 'DUST',
   DUST_QUOTE = 'DUST_QUOTE',
 }
+
 const WhiteSpace = createToken({
   name: 'WhiteSpace',
   pattern: /\s+/,
@@ -24,8 +25,16 @@ const comment = createToken({
   pattern: /{!(?:[^!]|!(?!}))*!}/,
   line_breaks: true,
 });
-const raw = createToken({ name: 'raw', pattern: /{`(?:[^`]|`(?!}))*`}/, line_breaks: true });
-const htmlComment = createToken({ name: 'htmlComment', pattern: /(?=<!--)([\s\S]*?)-->/, line_breaks: true });
+const raw = createToken({
+  name: 'raw',
+  pattern: /{`(?:[^`]|`(?!}))*`}/,
+  line_breaks: true,
+});
+const htmlComment = createToken({
+  name: 'htmlComment',
+  pattern: /(?=<!--)([\s\S]*?)-->/,
+  line_breaks: true,
+});
 const dustStart = createToken({
   name: 'dustStart',
   pattern: matchTag,
@@ -46,7 +55,10 @@ const closingDustTag = createToken({
   name: 'closingDustTag',
   pattern: /{\/[^}]+}/,
 });
-const dustContext = createToken({ name: 'dustContext', pattern: /{:[a-zA-Z_$][0-9a-zA-Z_$-]*}/ });
+const dustContext = createToken({
+  name: 'dustContext',
+  pattern: /{:[a-zA-Z_$][0-9a-zA-Z_$-]*}/,
+});
 const startDustQuotedParam = createToken({
   name: 'startDustQuotedParam',
   pattern: /="/,
@@ -92,7 +104,7 @@ const char = createToken({ name: 'char', pattern: /\s|\S/ });
 // html tokens
 const voidHtmlStartTag = createToken({
   name: 'voidHtmlStartTag',
-  pattern: new RegExp(`<(?:${voidElementTagNames.join('|')})(?=[\\s>])`),
+  pattern: new RegExp(`<(?:${voidElementTagNames.join('|')})(?=[\\s>/])`),
   push_mode: MODE.TAG_OPEN_STATE,
 });
 const htmlStartTag = createToken({

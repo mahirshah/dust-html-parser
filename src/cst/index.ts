@@ -49,6 +49,14 @@ import HtmlTag from './nodeTypes/HtmlTag';
 import Attribute from './nodeTypes/Attribute';
 import HtmlComment from './nodeTypes/HtmlComment';
 
+/**
+ * The CST Visitor for the Dust-HTML parser--{@link parserInstance}. Each method
+ * on this class corresponds to a parser rule on the {@link parserInstance}.
+ * When a parser rule is encountered, the produced {@link CstChildrenDictionary}
+ * is passed to the corresponding method on the {@link DustHtmlVisitor} class.
+ *
+ * @see {@link http://sap.github.io/chevrotain/docs/guide/concrete_syntax_tree.html#cst-visitor}
+ */
 class DustHtmlVisitor extends parserInstance.getBaseCstVisitorConstructorWithDefaults() {
   private inputByLine: string[] = [];
 
@@ -74,23 +82,24 @@ class DustHtmlVisitor extends parserInstance.getBaseCstVisitorConstructorWithDef
     { line: startLine = 0, column: startColumn = 0 }: IPosition,
     { line: endLine = 0, column: endColumn = 0 }: IPosition,
   ): string {
-    const startString = (this.inputByLine[startLine - 1] || '').slice(
-      startColumn - 1,
-    );
-    const endString = (this.inputByLine[endLine - 1] || '').slice(0, endColumn);
+    const startString = this.inputByLine[startLine - 1] || '';
+    const endString = this.inputByLine[endLine - 1] || '';
 
-    return [
-      startString,
-      ...this.inputByLine.slice(startLine, endLine),
-      endString,
-    ].join('\n');
+    // if the given positions don't span multiple lines, return the
+    // start string from startColumn to endColumn. Else return the joined lines
+    return startLine === endLine
+      ? startString.slice(startColumn - 1, endColumn)
+      : [
+          startString.slice(startColumn - 1),
+          ...this.inputByLine.slice(startLine, endLine - 1),
+          endColumn === 1 ? '' : endString.slice(0, endColumn),
+        ].join('\n');
   }
 
   private body(cst: CstChildrenDictionary) {
     const parts: INode[] = Optional.ofNullable(cst.part)
       .map(elements => elements.filter(isCstNode).map(node => this.visit(node)))
       .orElseGet(() => []);
-    const rawParts = parts.map(part => part.source.raw).join('');
     const startPosition = Optional.ofNullable(parts[0])
       .map(part => part.source.start)
       .orElseGet(() => ({ line: undefined, column: undefined }));
@@ -322,9 +331,7 @@ class DustHtmlVisitor extends parserInstance.getBaseCstVisitorConstructorWithDef
   ): IQuotedDustValue {
     const maybeInlines = Optional.ofNullable(cst.inline)
       .map(inlineNodes => inlineNodes.filter(isCstNode))
-      .map(
-        (inlineNodes): Inline[] => inlineNodes.map(node => this.visit(node)),
-      );
+      .map(inlineNodes => inlineNodes.map(node => this.visit(node)));
     const inlines = maybeInlines.orElseGet(() => []);
     const endPosition = tokenToEndPosition(
       cst.endDustQuote.filter(isIToken)[0],
@@ -616,7 +623,7 @@ class DustHtmlVisitor extends parserInstance.getBaseCstVisitorConstructorWithDef
   }
 
   private attributes(cst: CstChildrenDictionary): IAttribute[] {
-    return Optional.ofNullable(cst.attributeValue)
+    return Optional.ofNullable(cst.attribute)
       .map(elements => elements.filter(isCstNode))
       .map(nodes => nodes.map(node => this.visit(node)))
       .orElseGet(() => []);
@@ -636,60 +643,59 @@ class DustHtmlVisitor extends parserInstance.getBaseCstVisitorConstructorWithDef
       ? nameTokenOrReference.image
       : nameTokenOrReference;
     const maybeValue = Optional.ofNullable(
-      this.visit(cst.attributeValue.filter(isCstNode)[0]),
+      this.visit(cst.attributeValueRule.filter(isCstNode)[0]),
     );
-    // if the value node is not present, it is a boolean attribute, therefore
-    // the name will be the value.
     const valueNode = maybeValue
       .map(valueObject => valueObject.value)
-      .orElse(name);
+      .orElse(true);
     const startPosition = isIToken(nameTokenOrReference)
       ? tokenToStartPosition(nameTokenOrReference)
       : nameTokenOrReference.source.start;
-    const endPosition = isIToken(valueNode)
-      ? tokenToStartPosition(valueNode)
-      : valueNode.source.end;
+    const endPosition = maybeValue
+      .map(value => value.source.end)
+      .orElseGet(
+        () =>
+          isIToken(nameTokenOrReference)
+            ? tokenToEndPosition(nameTokenOrReference)
+            : nameTokenOrReference.source.end,
+      );
 
-    return new Attribute(
-      maybeValue.map(() => name as AttributeName).orNull(),
-      valueNode,
-      maybeValue.isEmpty,
-      {
-        raw: this.getRawSourceFromPosition(startPosition, endPosition),
-        start: startPosition,
-        end: endPosition,
-      },
-    );
+    return new Attribute(name, valueNode, maybeValue.isEmpty, {
+      raw: this.getRawSourceFromPosition(startPosition, endPosition),
+      start: startPosition,
+      end: endPosition,
+    });
   }
 
   private attributeValueRule(cst: CstChildrenDictionary) {
     const maybeEqualsToken = Optional.ofNullable(cst.attributeEquals).map(
       elements => elements.filter(isIToken)[0],
     );
-    const maybeValue: Optional<IToken | IReference> = Optional.ofNullable(
-      cst.attributeValue.filter(isIToken)[0],
-    ).or(() =>
-      Optional.ofNullable(cst.reference.filter(isCstNode)[0]).map(node =>
-        this.visit(node),
-      ),
-    );
-    const value = maybeValue.orElseThrow(
-      () => new Error('expected token or reference as attribute value'),
-    );
-    const rawValue = isIToken(value) ? value.image : value.source.raw;
 
     if (maybeEqualsToken.isEmpty) {
       return null;
     }
+
+    const maybeValue: Optional<IToken | IReference> = Optional.ofNullable(
+      cst.attributeValue,
+    )
+      .map(elements => elements.filter(isIToken)[0])
+      .or(() =>
+        Optional.ofNullable(cst.reference)
+          .map(elements => elements.filter(isCstNode)[0])
+          .map(node => this.visit(node)),
+      );
+    const value = maybeValue.orElseThrow(
+      () => new Error('expected token or reference as attribute value'),
+    );
+    const rawValue = isIToken(value) ? value.image : value.source.raw;
 
     return {
       value: isIToken(value) ? value.image : value,
       source: {
         raw: `=${rawValue}`,
         start: maybeEqualsToken.map(tokenToStartPosition).get(),
-        end: maybeValue.map(
-          v => (isIToken(v) ? tokenToEndPosition(v) : v.source.end),
-        ),
+        end: isIToken(value) ? tokenToEndPosition(value) : value.source.end,
       },
     };
   }

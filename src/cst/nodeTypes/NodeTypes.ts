@@ -131,5 +131,5 @@ export declare interface IHtmlComment extends INode {
   text: string;
 }
 
-export declare type AttributeName = string | null;
-export declare type AttributeValue = string | IReference;
+export declare type AttributeName = string | IReference;
+export declare type AttributeValue = string | IReference | boolean;

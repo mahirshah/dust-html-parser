@@ -20,6 +20,7 @@ const DUST_FILES = readdirSync(DUST_FILES_DIR)
 
 describe('toAst', () => {
   test.each(DUST_FILES)('%s', (testName, fileSource) => {
-    expect(toAst(fileSource).toObject()).toMatchSnapshot();
+    // if(testName === 'exists')
+    expect(toAst(fileSource)).toMatchSnapshot();
   });
 });
