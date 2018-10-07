@@ -1,0 +1,504 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Lexing &mdash; Dust HTML Lexer Parser 1.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Parsing" href="parsing.html" />
+    <link rel="prev" title="Introduction" href="intro.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Dust HTML Lexer Parser
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Lexing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#token-vocabulary">Token Vocabulary</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="parsing.html">Parsing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="node-types.html">Node Types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="limitations.html">Limitations</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Dust HTML Lexer Parser</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Lexing</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/lexing.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="lexing">
+<h1>Lexing<a class="headerlink" href="#lexing" title="Permalink to this headline">¶</a></h1>
+<p>Use the lex function to lex an input stream into a token vector:</p>
+<dl class="function">
+<dt id="lex">
+<code class="descname">lex</code><span class="sig-paren">(</span><em>inputText</em><span class="sig-paren">)</span><a class="headerlink" href="#lex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given an input string to lex, returns a ILexingResult, which contains
+the token vector produced by lexing the <cite>inputText</cite>. Each token will be a
+token contained in the <cite>tokenVocabulary</cite>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>inputText</strong> (<em>string</em>) – the input string to lex</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>ILexingResult</strong> – the lexing result containing the token vector or the errors encountered when lexing the <cite>inputText</cite>.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>As an example:</p>
+<div class="highlight-js notranslate"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="p">{</span> <span class="nx">lex</span><span class="p">,</span> <span class="nx">tokenVocabulary</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;dust-html-lexer-parser&#39;</span><span class="p">;</span>
+
+<span class="c1">// tokens is an array of lexed tokens from the tokenVocabulary</span>
+<span class="kr">const</span> <span class="p">{</span> <span class="nx">tokens</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">lex</span><span class="p">(</span><span class="s1">&#39;input string&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+<div class="section" id="token-vocabulary">
+<h2>Token Vocabulary<a class="headerlink" href="#token-vocabulary" title="Permalink to this headline">¶</a></h2>
+<p>The token vocabulary definitions can be seen from the lexing code copied below. See <a class="reference external" href="http://sap.github.io/chevrotain/docs/tutorial/step1_lexing.html#introduction">chevrotain lexing</a> for documentation on how lexing tokens work.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Whitespace tokens are skipped, meaning they will not show up in the produced token vector.</p>
+</div>
+<div class="highlight-typescript notranslate"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="p">{</span>
+  <span class="nx">createToken</span><span class="p">,</span> <span class="nx">ILexingResult</span><span class="p">,</span>
+  <span class="nx">IMultiModeLexerDefinition</span><span class="p">,</span>
+  <span class="nx">Lexer</span><span class="p">,</span>
+  <span class="nx">TokenType</span><span class="p">,</span>
+<span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;chevrotain&#39;</span><span class="p">;</span>
+<span class="kr">import</span> <span class="nx">voidElementTagNames</span> <span class="nx">from</span> <span class="s1">&#39;self-closing-tags&#39;</span><span class="p">;</span>
+<span class="kr">import</span> <span class="p">{</span> <span class="nx">matchTag</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;../utils/dustHelpers&#39;</span><span class="p">;</span>
+
+<span class="kr">enum</span> <span class="nx">MODE</span> <span class="p">{</span>
+  <span class="nx">TAG_OPEN_STATE</span> <span class="o">=</span> <span class="s1">&#39;TAG_OPEN_STATE&#39;</span><span class="p">,</span>
+  <span class="nx">ATTRIBUTE_NAME_STATE</span> <span class="o">=</span> <span class="s1">&#39;ATTRIBUTE_NAME_STATE&#39;</span><span class="p">,</span>
+  <span class="nx">DATA</span> <span class="o">=</span> <span class="s1">&#39;DATA&#39;</span><span class="p">,</span>
+  <span class="nx">DUST</span> <span class="o">=</span> <span class="s1">&#39;DUST&#39;</span><span class="p">,</span>
+  <span class="nx">DUST_QUOTE</span> <span class="o">=</span> <span class="s1">&#39;DUST_QUOTE&#39;</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="kr">const</span> <span class="nx">WhiteSpace</span> <span class="o">=</span> <span class="nx">createToken</span><span class="p">({</span>
+  <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;WhiteSpace&#39;</span><span class="p">,</span>
+  <span class="nx">pattern</span><span class="o">:</span> <span class="sr">/\s+/</span><span class="p">,</span>
+  <span class="nx">group</span>: <span class="kt">Lexer.SKIPPED</span><span class="p">,</span>
+<span class="p">});</span>
+<span class="kr">const</span> <span class="nx">comment</span> <span class="o">=</span> <span class="nx">createToken</span><span class="p">({</span>
+  <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;comment&#39;</span><span class="p">,</span>
+  <span class="nx">pattern</span><span class="o">:</span> <span class="sr">/{!(?:[^!]|!(?!}))*!}/</span><span class="p">,</span>
+  <span class="nx">line_breaks</span>: <span class="kt">true</span><span class="p">,</span>
+<span class="p">});</span>
+<span class="kr">const</span> <span class="nx">raw</span> <span class="o">=</span> <span class="nx">createToken</span><span class="p">({</span>
+  <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;raw&#39;</span><span class="p">,</span>
+  <span class="nx">pattern</span><span class="o">:</span> <span class="sr">/{`(?:[^`]|`(?!}))*`}/</span><span class="p">,</span>
+  <span class="nx">line_breaks</span>: <span class="kt">true</span><span class="p">,</span>
+<span class="p">});</span>
+<span class="kr">const</span> <span class="nx">htmlComment</span> <span class="o">=</span> <span class="nx">createToken</span><span class="p">({</span>
+  <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;htmlComment&#39;</span><span class="p">,</span>
+  <span class="nx">pattern</span><span class="o">:</span> <span class="sr">/(?=&lt;!--)([\s\S]*?)--&gt;/</span><span class="p">,</span>
+  <span class="nx">line_breaks</span>: <span class="kt">true</span><span class="p">,</span>
+<span class="p">});</span>
+<span class="kr">const</span> <span class="nx">dustStart</span> <span class="o">=</span> <span class="nx">createToken</span><span class="p">({</span>
+  <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;dustStart&#39;</span><span class="p">,</span>
+  <span class="nx">pattern</span>: <span class="kt">matchTag</span><span class="p">,</span>
+  <span class="nx">push_mode</span>: <span class="kt">MODE.DUST</span><span class="p">,</span>
+  <span class="nx">line_breaks</span>: <span class="kt">false</span><span class="p">,</span>
+<span class="p">});</span>
+<span class="kr">const</span> <span class="nx">selfClosingDustTagEnd</span> <span class="o">=</span> <span class="nx">createToken</span><span class="p">({</span>
+  <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;selfClosingDustTagEnd&#39;</span><span class="p">,</span>
+  <span class="nx">pattern</span><span class="o">:</span> <span class="sr">/\/}/</span><span class="p">,</span>
+  <span class="nx">pop_mode</span>: <span class="kt">true</span><span class="p">,</span>
+<span class="p">});</span>
+<span class="kr">const</span> <span class="nx">closingDustTagEnd</span> <span class="o">=</span> <span class="nx">createToken</span><span class="p">({</span>
+  <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;closingDustTagEnd&#39;</span><span class="p">,</span>
+  <span class="nx">pattern</span><span class="o">:</span> <span class="sr">/}/</span><span class="p">,</span>
+  <span class="nx">pop_mode</span>: <span class="kt">true</span><span class="p">,</span>
+<span class="p">});</span>
+<span class="kr">const</span> <span class="nx">closingDustTag</span> <span class="o">=</span> <span class="nx">createToken</span><span class="p">({</span>
+  <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;closingDustTag&#39;</span><span class="p">,</span>
+  <span class="nx">pattern</span><span class="o">:</span> <span class="sr">/{\/[^}]+}/</span><span class="p">,</span>
+<span class="p">});</span>
+<span class="kr">const</span> <span class="nx">dustContext</span> <span class="o">=</span> <span class="nx">createToken</span><span class="p">({</span>
+  <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;dustContext&#39;</span><span class="p">,</span>
+  <span class="nx">pattern</span><span class="o">:</span> <span class="sr">/{:[a-zA-Z_$][0-9a-zA-Z_$-]*}/</span><span class="p">,</span>
+<span class="p">});</span>
+<span class="kr">const</span> <span class="nx">startDustQuotedParam</span> <span class="o">=</span> <span class="nx">createToken</span><span class="p">({</span>
+  <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;startDustQuotedParam&#39;</span><span class="p">,</span>
+  <span class="nx">pattern</span><span class="o">:</span> <span class="sr">/=&quot;/</span><span class="p">,</span>
+  <span class="nx">push_mode</span>: <span class="kt">MODE.DUST_QUOTE</span><span class="p">,</span>
+<span class="p">});</span>
+<span class="kr">const</span> <span class="nx">endDustQuote</span> <span class="o">=</span> <span class="nx">createToken</span><span class="p">({</span>
+  <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;endDustQuote&#39;</span><span class="p">,</span>
+  <span class="nx">pattern</span><span class="o">:</span> <span class="sr">/&quot;/</span><span class="p">,</span>
+  <span class="nx">pop_mode</span>: <span class="kt">true</span><span class="p">,</span>
+<span class="p">});</span>
+<span class="kr">const</span> <span class="nx">lb</span> <span class="o">=</span> <span class="nx">createToken</span><span class="p">({</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;lb&#39;</span><span class="p">,</span> <span class="nx">pattern</span><span class="o">:</span> <span class="sr">/\[/</span> <span class="p">});</span>
+<span class="kr">const</span> <span class="nx">rb</span> <span class="o">=</span> <span class="nx">createToken</span><span class="p">({</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;rb&#39;</span><span class="p">,</span> <span class="nx">pattern</span><span class="o">:</span> <span class="sr">/]/</span> <span class="p">});</span>
+<span class="kr">const</span> <span class="nx">bar</span> <span class="o">=</span> <span class="nx">createToken</span><span class="p">({</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;bar&#39;</span><span class="p">,</span> <span class="nx">pattern</span><span class="o">:</span> <span class="sr">/\|/</span> <span class="p">});</span>
+<span class="kr">const</span> <span class="nx">hash</span> <span class="o">=</span> <span class="nx">createToken</span><span class="p">({</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;hash&#39;</span><span class="p">,</span> <span class="nx">pattern</span><span class="o">:</span> <span class="sr">/#/</span> <span class="p">});</span>
+<span class="kr">const</span> <span class="nx">carat</span> <span class="o">=</span> <span class="nx">createToken</span><span class="p">({</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;carat&#39;</span><span class="p">,</span> <span class="nx">pattern</span><span class="o">:</span> <span class="sr">/\^/</span> <span class="p">});</span>
+<span class="kr">const</span> <span class="nx">escapedQuote</span> <span class="o">=</span> <span class="nx">createToken</span><span class="p">({</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;escapedQuote&#39;</span><span class="p">,</span> <span class="nx">pattern</span><span class="o">:</span> <span class="sr">/\\\\&quot;/</span> <span class="p">});</span>
+<span class="kr">const</span> <span class="nx">quotedKey</span> <span class="o">=</span> <span class="nx">createToken</span><span class="p">({</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;quotedKey&#39;</span><span class="p">,</span> <span class="nx">pattern</span><span class="o">:</span> <span class="sr">/&quot;[^&quot;]*&quot;/</span> <span class="p">});</span>
+<span class="kr">const</span> <span class="nx">questionMark</span> <span class="o">=</span> <span class="nx">createToken</span><span class="p">({</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;questionMark&#39;</span><span class="p">,</span> <span class="nx">pattern</span><span class="o">:</span> <span class="sr">/\?/</span> <span class="p">});</span>
+<span class="kr">const</span> <span class="nx">gt</span> <span class="o">=</span> <span class="nx">createToken</span><span class="p">({</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;gt&#39;</span><span class="p">,</span> <span class="nx">pattern</span><span class="o">:</span> <span class="sr">/&gt;/</span> <span class="p">});</span>
+<span class="kr">const</span> <span class="nx">lt</span> <span class="o">=</span> <span class="nx">createToken</span><span class="p">({</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;lt&#39;</span><span class="p">,</span> <span class="nx">pattern</span><span class="o">:</span> <span class="sr">/&lt;/</span> <span class="p">});</span>
+<span class="kr">const</span> <span class="nx">plus</span> <span class="o">=</span> <span class="nx">createToken</span><span class="p">({</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;plus&#39;</span><span class="p">,</span> <span class="nx">pattern</span><span class="o">:</span> <span class="sr">/\+/</span> <span class="p">});</span>
+<span class="kr">const</span> <span class="nx">equals</span> <span class="o">=</span> <span class="nx">createToken</span><span class="p">({</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;equals&#39;</span><span class="p">,</span> <span class="nx">pattern</span><span class="o">:</span> <span class="sr">/=/</span> <span class="p">});</span>
+<span class="kr">const</span> <span class="nx">percent</span> <span class="o">=</span> <span class="nx">createToken</span><span class="p">({</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;percent&#39;</span><span class="p">,</span> <span class="nx">pattern</span><span class="o">:</span> <span class="sr">/%/</span> <span class="p">});</span>
+<span class="kr">const</span> <span class="nx">colon</span> <span class="o">=</span> <span class="nx">createToken</span><span class="p">({</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;colon&#39;</span><span class="p">,</span> <span class="nx">pattern</span><span class="o">:</span> <span class="sr">/:/</span> <span class="p">});</span>
+<span class="kr">const</span> <span class="nx">at</span> <span class="o">=</span> <span class="nx">createToken</span><span class="p">({</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;at&#39;</span><span class="p">,</span> <span class="nx">pattern</span><span class="o">:</span> <span class="sr">/@/</span> <span class="p">});</span>
+<span class="kr">const</span> <span class="nx">tilde</span> <span class="o">=</span> <span class="nx">createToken</span><span class="p">({</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;tilde&#39;</span><span class="p">,</span> <span class="nx">pattern</span><span class="o">:</span> <span class="sr">/~/</span> <span class="p">});</span>
+<span class="kr">const</span> <span class="nx">key</span> <span class="o">=</span> <span class="nx">createToken</span><span class="p">({</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;key&#39;</span><span class="p">,</span> <span class="nx">pattern</span><span class="o">:</span> <span class="sr">/[a-zA-Z_$][0-9a-zA-Z_$-]*/</span> <span class="p">});</span>
+<span class="kr">const</span> <span class="nx">dot</span> <span class="o">=</span> <span class="nx">createToken</span><span class="p">({</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;dot&#39;</span><span class="p">,</span> <span class="nx">pattern</span><span class="o">:</span> <span class="sr">/\./</span> <span class="p">});</span>
+<span class="kr">const</span> <span class="nx">unsignedInteger</span> <span class="o">=</span> <span class="nx">createToken</span><span class="p">({</span>
+  <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;unsignedInteger&#39;</span><span class="p">,</span>
+  <span class="nx">pattern</span><span class="o">:</span> <span class="sr">/[0-9]+/</span><span class="p">,</span>
+<span class="p">});</span>
+<span class="kr">const</span> <span class="kr">float</span> <span class="o">=</span> <span class="nx">createToken</span><span class="p">({</span>
+  <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;float&#39;</span><span class="p">,</span>
+  <span class="nx">pattern</span><span class="o">:</span> <span class="sr">/-?[0-9]+\.[0-9]+/</span><span class="p">,</span>
+<span class="p">});</span>
+<span class="kr">const</span> <span class="nx">signedInteger</span> <span class="o">=</span> <span class="nx">createToken</span><span class="p">({</span>
+  <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;signedInteger&#39;</span><span class="p">,</span>
+  <span class="nx">pattern</span><span class="o">:</span> <span class="sr">/-[0-9]+/</span><span class="p">,</span>
+<span class="p">});</span>
+<span class="kr">const</span> <span class="kr">char</span> <span class="o">=</span> <span class="nx">createToken</span><span class="p">({</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;char&#39;</span><span class="p">,</span> <span class="nx">pattern</span><span class="o">:</span> <span class="sr">/\s|\S/</span> <span class="p">});</span>
+
+<span class="c1">// html tokens</span>
+<span class="kr">const</span> <span class="nx">voidHtmlStartTag</span> <span class="o">=</span> <span class="nx">createToken</span><span class="p">({</span>
+  <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;voidHtmlStartTag&#39;</span><span class="p">,</span>
+  <span class="nx">pattern</span>: <span class="kt">new</span> <span class="nb">RegExp</span><span class="p">(</span><span class="sb">`&lt;(?:</span><span class="si">${</span><span class="nx">voidElementTagNames</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="p">)</span><span class="si">}</span><span class="sb">)(?=[\\s&gt;/])`</span><span class="p">),</span>
+  <span class="nx">push_mode</span>: <span class="kt">MODE.TAG_OPEN_STATE</span><span class="p">,</span>
+<span class="p">});</span>
+<span class="kr">const</span> <span class="nx">htmlStartTag</span> <span class="o">=</span> <span class="nx">createToken</span><span class="p">({</span>
+  <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;htmlStartTag&#39;</span><span class="p">,</span>
+  <span class="nx">pattern</span><span class="o">:</span> <span class="sr">/&lt;[a-zA-Z][^\s/&gt;]+/</span><span class="p">,</span>
+  <span class="nx">push_mode</span>: <span class="kt">MODE.TAG_OPEN_STATE</span><span class="p">,</span>
+<span class="p">});</span>
+<span class="kr">const</span> <span class="nx">closingHtmlTag</span> <span class="o">=</span> <span class="nx">createToken</span><span class="p">({</span>
+  <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;closingHtmlTag&#39;</span><span class="p">,</span>
+  <span class="nx">pattern</span><span class="o">:</span> <span class="sr">/&lt;\/[^&gt;]+&gt;/</span><span class="p">,</span>
+<span class="p">});</span>
+<span class="kr">const</span> <span class="nx">htmlTagEnd</span> <span class="o">=</span> <span class="nx">createToken</span><span class="p">({</span>
+  <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;htmlTagEnd&#39;</span><span class="p">,</span>
+  <span class="nx">pattern</span><span class="o">:</span> <span class="sr">/&gt;/</span><span class="p">,</span>
+  <span class="nx">pop_mode</span>: <span class="kt">true</span><span class="p">,</span>
+<span class="p">});</span>
+<span class="kr">const</span> <span class="nx">htmlSelfClosingTagEnd</span> <span class="o">=</span> <span class="nx">createToken</span><span class="p">({</span>
+  <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;htmlSelfClosingTagEnd&#39;</span><span class="p">,</span>
+  <span class="nx">pattern</span><span class="o">:</span> <span class="sr">/\/&gt;/</span><span class="p">,</span>
+  <span class="nx">pop_mode</span>: <span class="kt">true</span><span class="p">,</span>
+<span class="p">});</span>
+<span class="kr">const</span> <span class="nx">attributeName</span> <span class="o">=</span> <span class="nx">createToken</span><span class="p">({</span>
+  <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;attributeName&#39;</span><span class="p">,</span>
+  <span class="nx">pattern</span><span class="o">:</span> <span class="sr">/[^\s=/&gt;&quot;&#39;]+/</span><span class="p">,</span>
+<span class="p">});</span>
+<span class="kr">const</span> <span class="nx">attributeValue</span> <span class="o">=</span> <span class="nx">createToken</span><span class="p">({</span>
+  <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;attributeValue&#39;</span><span class="p">,</span>
+  <span class="nx">pattern</span><span class="o">:</span> <span class="sr">/[^&quot;&#39;&lt;=`\s&gt;]+|(?:&quot;[^&quot;]*&quot;)|(?:&#39;[^&#39;]*&#39;)/</span><span class="p">,</span>
+  <span class="nx">pop_mode</span>: <span class="kt">true</span><span class="p">,</span>
+<span class="p">});</span>
+<span class="kr">const</span> <span class="nx">attributeEquals</span> <span class="o">=</span> <span class="nx">createToken</span><span class="p">({</span>
+  <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;attributeEquals&#39;</span><span class="p">,</span>
+  <span class="nx">pattern</span><span class="o">:</span> <span class="sr">/\s*=\s*/</span><span class="p">,</span>
+  <span class="nx">push_mode</span>: <span class="kt">MODE.ATTRIBUTE_NAME_STATE</span><span class="p">,</span>
+<span class="p">});</span>
+<span class="kr">const</span> <span class="nx">attributeWhiteSpace</span> <span class="o">=</span> <span class="nx">createToken</span><span class="p">({</span>
+  <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;attributeWhiteSpace&#39;</span><span class="p">,</span>
+  <span class="nx">pattern</span><span class="o">:</span> <span class="sr">/\s/</span><span class="p">,</span>
+  <span class="nx">pop_mode</span>: <span class="kt">true</span><span class="p">,</span>
+<span class="p">});</span>
+<span class="kr">const</span> <span class="nx">buffer</span> <span class="o">=</span> <span class="nx">createToken</span><span class="p">({</span>
+  <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;buffer&#39;</span><span class="p">,</span>
+  <span class="nx">pattern</span><span class="o">:</span> <span class="sr">/[^{&lt;]+/</span><span class="p">,</span>
+<span class="p">});</span>
+<span class="kr">const</span> <span class="nx">dustQuoteBuffer</span> <span class="o">=</span> <span class="nx">createToken</span><span class="p">({</span>
+  <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;dustQuoteBuffer&#39;</span><span class="p">,</span>
+  <span class="nx">pattern</span><span class="o">:</span> <span class="sr">/[^{\\&quot;]+/</span><span class="p">,</span>
+<span class="p">});</span>
+
+<span class="kr">export</span> <span class="kr">const</span> <span class="nx">lexerDefinition</span>: <span class="kt">IMultiModeLexerDefinition</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">modes</span><span class="o">:</span> <span class="p">{</span>
+    <span class="p">[</span><span class="nx">MODE</span><span class="p">.</span><span class="nx">DATA</span><span class="p">]</span><span class="o">:</span> <span class="p">[</span>
+      <span class="nx">comment</span><span class="p">,</span>
+      <span class="nx">raw</span><span class="p">,</span>
+      <span class="nx">htmlComment</span><span class="p">,</span>
+      <span class="nx">dustContext</span><span class="p">,</span>
+      <span class="nx">closingDustTag</span><span class="p">,</span>
+      <span class="nx">dustStart</span><span class="p">,</span>
+      <span class="nx">voidHtmlStartTag</span><span class="p">,</span>
+      <span class="nx">htmlStartTag</span><span class="p">,</span>
+      <span class="nx">closingHtmlTag</span><span class="p">,</span>
+      <span class="nx">buffer</span><span class="p">,</span>
+      <span class="kr">char</span><span class="p">,</span>
+    <span class="p">],</span>
+    <span class="p">[</span><span class="nx">MODE</span><span class="p">.</span><span class="nx">DUST</span><span class="p">]</span><span class="o">:</span> <span class="p">[</span>
+      <span class="nx">WhiteSpace</span><span class="p">,</span>
+      <span class="nx">comment</span><span class="p">,</span>
+      <span class="nx">raw</span><span class="p">,</span>
+      <span class="nx">dustStart</span><span class="p">,</span>
+      <span class="nx">selfClosingDustTagEnd</span><span class="p">,</span>
+      <span class="nx">closingDustTagEnd</span><span class="p">,</span>
+      <span class="nx">startDustQuotedParam</span><span class="p">,</span>
+      <span class="nx">quotedKey</span><span class="p">,</span>
+      <span class="nx">lb</span><span class="p">,</span>
+      <span class="nx">rb</span><span class="p">,</span>
+      <span class="nx">bar</span><span class="p">,</span>
+      <span class="nx">hash</span><span class="p">,</span>
+      <span class="nx">carat</span><span class="p">,</span>
+      <span class="nx">escapedQuote</span><span class="p">,</span>
+      <span class="nx">questionMark</span><span class="p">,</span>
+      <span class="nx">gt</span><span class="p">,</span>
+      <span class="nx">lt</span><span class="p">,</span>
+      <span class="nx">plus</span><span class="p">,</span>
+      <span class="nx">equals</span><span class="p">,</span>
+      <span class="nx">percent</span><span class="p">,</span>
+      <span class="nx">colon</span><span class="p">,</span>
+      <span class="nx">at</span><span class="p">,</span>
+      <span class="nx">tilde</span><span class="p">,</span>
+      <span class="nx">key</span><span class="p">,</span>
+      <span class="kr">float</span><span class="p">,</span>
+      <span class="nx">unsignedInteger</span><span class="p">,</span>
+      <span class="nx">signedInteger</span><span class="p">,</span>
+      <span class="nx">dot</span><span class="p">,</span>
+      <span class="kr">char</span><span class="p">,</span>
+    <span class="p">],</span>
+    <span class="c1">// inside dust params we can have literals, references, or specials</span>
+    <span class="p">[</span><span class="nx">MODE</span><span class="p">.</span><span class="nx">DUST_QUOTE</span><span class="p">]</span><span class="o">:</span> <span class="p">[</span><span class="nx">dustStart</span><span class="p">,</span> <span class="nx">escapedQuote</span><span class="p">,</span> <span class="nx">endDustQuote</span><span class="p">,</span> <span class="nx">dustQuoteBuffer</span><span class="p">],</span>
+    <span class="p">[</span><span class="nx">MODE</span><span class="p">.</span><span class="nx">TAG_OPEN_STATE</span><span class="p">]</span><span class="o">:</span> <span class="p">[</span>
+      <span class="nx">WhiteSpace</span><span class="p">,</span>
+      <span class="nx">comment</span><span class="p">,</span>
+      <span class="nx">raw</span><span class="p">,</span>
+      <span class="nx">dustStart</span><span class="p">,</span>
+      <span class="nx">htmlSelfClosingTagEnd</span><span class="p">,</span>
+      <span class="nx">htmlTagEnd</span><span class="p">,</span>
+      <span class="nx">attributeName</span><span class="p">,</span>
+      <span class="nx">attributeEquals</span><span class="p">,</span>
+    <span class="p">],</span>
+    <span class="p">[</span><span class="nx">MODE</span><span class="p">.</span><span class="nx">ATTRIBUTE_NAME_STATE</span><span class="p">]</span><span class="o">:</span> <span class="p">[</span><span class="nx">attributeValue</span><span class="p">,</span> <span class="nx">attributeWhiteSpace</span><span class="p">],</span>
+  <span class="p">},</span>
+  <span class="nx">defaultMode</span>: <span class="kt">MODE.DATA</span><span class="p">,</span>
+<span class="p">};</span>
+<span class="kr">export</span> <span class="kr">const</span> <span class="nx">DustLexer</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Lexer</span><span class="p">(</span><span class="nx">lexerDefinition</span><span class="p">);</span>
+<span class="kr">export</span> <span class="kr">const</span> <span class="nx">tokenVocabulary</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">()</span>
+  <span class="p">.</span><span class="nx">concat</span><span class="p">(...</span><span class="nb">Object</span><span class="p">.</span><span class="nx">values</span><span class="p">(</span><span class="nx">lexerDefinition</span><span class="p">.</span><span class="nx">modes</span><span class="p">))</span>
+  <span class="p">.</span><span class="nx">reduce</span><span class="o">&lt;</span><span class="p">{</span> <span class="p">[</span><span class="nx">key</span>: <span class="kt">string</span><span class="p">]</span><span class="o">:</span> <span class="nx">TokenType</span> <span class="p">}</span><span class="o">&gt;</span><span class="p">(</span>
+    <span class="p">(</span><span class="nx">vocab</span><span class="p">,</span> <span class="nx">token</span>: <span class="kt">TokenType</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">({</span>
+      <span class="p">[</span><span class="nx">token</span><span class="p">.</span><span class="nx">name</span><span class="p">]</span><span class="o">:</span> <span class="nx">token</span><span class="p">,</span>
+      <span class="p">...</span><span class="nx">vocab</span><span class="p">,</span>
+    <span class="p">}),</span>
+    <span class="p">{},</span>
+  <span class="p">);</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * Given an input string to lex, returns a ILexingResult, which contains</span>
+<span class="cm"> * the token vector produced by lexing the `inputText`. Each token will be a</span>
+<span class="cm"> * token contained in the `tokenVocabulary`.</span>
+<span class="cm"> * @param inputText - the input string to lex</span>
+<span class="cm"> * @return the lexing result containing the token vector or the errors</span>
+<span class="cm"> *   encountered when lexing the `inputText`.</span>
+<span class="cm"> */</span>
+<span class="kr">export</span> <span class="kd">function</span> <span class="nx">lex</span><span class="p">(</span><span class="nx">inputText</span>: <span class="kt">string</span><span class="p">)</span><span class="o">:</span> <span class="nx">ILexingResult</span> <span class="p">{</span>
+  <span class="kr">const</span> <span class="nx">lexingResult</span> <span class="o">=</span> <span class="nx">DustLexer</span><span class="p">.</span><span class="nx">tokenize</span><span class="p">(</span><span class="nx">inputText</span><span class="p">);</span>
+
+  <span class="k">if</span> <span class="p">(</span><span class="nx">lexingResult</span><span class="p">.</span><span class="nx">errors</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">throw</span> <span class="nb">Error</span><span class="p">(</span><span class="sb">`Error lexing input text: </span><span class="si">${</span><span class="nx">lexingResult</span><span class="p">.</span><span class="nx">errors</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">message</span><span class="si">}</span><span class="sb">`</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="k">return</span> <span class="nx">lexingResult</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="parsing.html" class="btn btn-neutral float-right" title="Parsing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="intro.html" class="btn btn-neutral" title="Introduction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Mahir Shah
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

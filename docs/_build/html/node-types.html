@@ -1,0 +1,1309 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Node Types &mdash; Dust HTML Lexer Parser 1.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Limitations" href="limitations.html" />
+    <link rel="prev" title="Parsing" href="parsing.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Dust HTML Lexer Parser
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lexing.html">Lexing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parsing.html">Parsing</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Node Types</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#node">Node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#attribute">Attribute</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#body">Body</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#context">Context</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#dustcomment">DustComment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#escapedquote">EscapedQuote</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#filter">Filter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#htmlcomment">HtmlComment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#htmltag">HtmlTag</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#numbernode">NumberNode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#param">Param</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#path">Path</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#quoteddustvalue">QuotedDustValue</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#raw">Raw</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#reference">Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#root">Root</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#section">Section</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#special">Special</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#stringbuffer">StringBuffer</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="limitations.html">Limitations</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Dust HTML Lexer Parser</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Node Types</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/node-types.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="node-types">
+<h1>Node Types<a class="headerlink" href="#node-types" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="node">
+<h2>Node<a class="headerlink" href="#node" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="Node.Node">
+<em class="property">class </em><code class="descclassname">Node.</code><code class="descname">Node</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Node.Node" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>exported from</em> <code class="xref js js-mod docutils literal notranslate"><span class="pre">cst/nodeTypes/Node</span></code></p>
+<dl class="docutils">
+<dt><strong>Implements:</strong></dt>
+<dd><ul class="first last simple">
+<li><code class="xref js js-class docutils literal notranslate"><span class="pre">cst/nodeTypes/NodeTypes.INode()</span></code></li>
+</ul>
+</dd>
+</dl>
+<p>Parent class of all AST nodes.</p>
+<dl class="function">
+<dt id="Node.Node.clone">
+<code class="descclassname">Node.Node.</code><code class="descname">clone</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Node.Node.clone" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a copy of this <a class="reference external" href="mailto:{&#37;&#52;&#48;link">{<span>&#64;</span>link</a> Node}</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>cst/nodeTypes/Node.Node</strong> – a new copy of this Node</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Node.Node.new Node">
+<code class="descclassname">Node.Node.</code><code class="descname">new Node</code><span class="sig-paren">(</span><em>type</em>, <em>source</em><span class="sig-paren">)</span><a class="headerlink" href="#Node.Node.new Node" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>type</strong> (<em>cst/nodeTypes/NodeTypes.NODE_TYPE</em>) – </li>
+<li><strong>source</strong> (<em>cst/nodeTypes/NodeTypes.ISource</em>) – </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>cst/nodeTypes/Node.Node</strong> –</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Node.Node.source">
+<code class="descclassname">Node.Node.</code><code class="descname">source</code><a class="headerlink" href="#Node.Node.source" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>type:</strong> cst/nodeTypes/NodeTypes.ISource</p>
+<p>An object containing the source code info of this node,
+including the raw text this node represents from the input stream,
+as well as the line/column info for the start and end of this node in
+the input stream.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Node.Node.toObject">
+<code class="descclassname">Node.Node.</code><code class="descname">toObject</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Node.Node.toObject" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a POJO representation of this node, while recursively
+providing a POJO representation for all child nodes, by calling
+<a class="reference external" href="mailto:{&#37;&#52;&#48;link">{<span>&#64;</span>link</a> toObject} on child nodes. This is very useful for testing
+and debugging processes, when the entire AST needs to be easily examined.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>object</strong> –</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Node.Node.toString">
+<code class="descclassname">Node.Node.</code><code class="descname">toString</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Node.Node.toString" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the raw text associated with this node.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>string</strong> – the raw text this node represents.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Node.Node.type">
+<code class="descclassname">Node.Node.</code><code class="descname">type</code><a class="headerlink" href="#Node.Node.type" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>type:</strong> cst/nodeTypes/NodeTypes.NODE_TYPE</p>
+<p>see NODE_TYPE</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="attribute">
+<h2>Attribute<a class="headerlink" href="#attribute" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="Attribute.Attribute">
+<em class="property">class </em><code class="descclassname">Attribute.</code><code class="descname">Attribute</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Attribute.Attribute" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>exported from</em> <code class="xref js js-mod docutils literal notranslate"><span class="pre">cst/nodeTypes/Attribute</span></code></p>
+<dl class="docutils">
+<dt><strong>Extends:</strong></dt>
+<dd><ul class="first last simple">
+<li><code class="xref js js-class docutils literal notranslate"><span class="pre">cst/nodeTypes/Node.Node()</span></code></li>
+</ul>
+</dd>
+<dt><strong>Implements:</strong></dt>
+<dd><ul class="first last simple">
+<li><code class="xref js js-class docutils literal notranslate"><span class="pre">cst/nodeTypes/NodeTypes.INode()</span></code></li>
+<li><code class="xref js js-class docutils literal notranslate"><span class="pre">cst/nodeTypes/NodeTypes.IAttribute()</span></code></li>
+</ul>
+</dd>
+</dl>
+<p>An HTML attribute</p>
+<dl class="attribute">
+<dt id="Attribute.Attribute.attributeName">
+<code class="descclassname">Attribute.Attribute.</code><code class="descname">attributeName</code><a class="headerlink" href="#Attribute.Attribute.attributeName" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>type:</strong> cst/nodeTypes/NodeTypes.AttributeName</p>
+<p>The attribute name for this attribute. Can be either a string or
+a reference. If this attribute is a boolean attribute (disabled, for
+example), only attribute name will be set.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Attribute.Attribute.attributeValue">
+<code class="descclassname">Attribute.Attribute.</code><code class="descname">attributeValue</code><a class="headerlink" href="#Attribute.Attribute.attributeValue" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>type:</strong> cst/nodeTypes/NodeTypes.AttributeValue</p>
+<p>The attribute value for this attribute. Can be either a string,
+containing the surrounding attribute quotes (“foo”, for example), or
+a dust reference. This value will be null for boolean attributes.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Attribute.Attribute.isBooleanAttribute">
+<code class="descclassname">Attribute.Attribute.</code><code class="descname">isBooleanAttribute</code><a class="headerlink" href="#Attribute.Attribute.isBooleanAttribute" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>type:</strong> boolean</p>
+<p>Indicates if this attribute is a boolean HTML attribute. See
+<a class="reference external" href="https://www.w3.org/TR/2008/WD-html5-20080610/semantics.html">html boolean attributes</a></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Attribute.Attribute.new Attribute">
+<code class="descclassname">Attribute.Attribute.</code><code class="descname">new Attribute</code><span class="sig-paren">(</span><em>attributeName</em>, <em>attributeValue</em>, <em>isBooleanAttribute</em>, <em>source</em><span class="sig-paren">)</span><a class="headerlink" href="#Attribute.Attribute.new Attribute" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>attributeName</strong> (<em>cst/nodeTypes/NodeTypes.AttributeName</em>) – </li>
+<li><strong>attributeValue</strong> (<em>cst/nodeTypes/NodeTypes.AttributeValue</em>) – </li>
+<li><strong>isBooleanAttribute</strong> (<em>boolean</em>) – </li>
+<li><strong>source</strong> (<em>cst/nodeTypes/NodeTypes.ISource</em>) – </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>cst/nodeTypes/Attribute.Attribute</strong> –</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="body">
+<h2>Body<a class="headerlink" href="#body" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="Body.Body">
+<em class="property">class </em><code class="descclassname">Body.</code><code class="descname">Body</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Body.Body" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>exported from</em> <code class="xref js js-mod docutils literal notranslate"><span class="pre">cst/nodeTypes/Body</span></code></p>
+<dl class="docutils">
+<dt><strong>Extends:</strong></dt>
+<dd><ul class="first last simple">
+<li><code class="xref js js-class docutils literal notranslate"><span class="pre">cst/nodeTypes/Node.Node()</span></code></li>
+</ul>
+</dd>
+<dt><strong>Implements:</strong></dt>
+<dd><ul class="first last simple">
+<li><code class="xref js js-class docutils literal notranslate"><span class="pre">cst/nodeTypes/NodeTypes.INode()</span></code></li>
+<li><code class="xref js js-class docutils literal notranslate"><span class="pre">cst/nodeTypes/NodeTypes.IBody()</span></code></li>
+</ul>
+</dd>
+</dl>
+<dl class="attribute">
+<dt id="Body.Body.context">
+<code class="descclassname">Body.Body.</code><code class="descname">context</code><a class="headerlink" href="#Body.Body.context" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>type:</strong> cst/nodeTypes/NodeTypes.IContext | null</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Body.Body.new Body">
+<code class="descclassname">Body.Body.</code><code class="descname">new Body</code><span class="sig-paren">(</span><em>context</em>, <em>root</em>, <em>source</em><span class="sig-paren">)</span><a class="headerlink" href="#Body.Body.new Body" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>| null context</strong> (<em>cst/nodeTypes/NodeTypes.IContext</em>) – </li>
+<li><strong>root</strong> (<em>cst/nodeTypes/NodeTypes.IRoot</em>) – </li>
+<li><strong>source</strong> (<em>cst/nodeTypes/NodeTypes.ISource</em>) – </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>cst/nodeTypes/Body.Body</strong> –</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Body.Body.root">
+<code class="descclassname">Body.Body.</code><code class="descname">root</code><a class="headerlink" href="#Body.Body.root" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>type:</strong> cst/nodeTypes/NodeTypes.IRoot</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="context">
+<h2>Context<a class="headerlink" href="#context" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="Context.Context">
+<em class="property">class </em><code class="descclassname">Context.</code><code class="descname">Context</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Context.Context" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>exported from</em> <code class="xref js js-mod docutils literal notranslate"><span class="pre">cst/nodeTypes/Context</span></code></p>
+<dl class="docutils">
+<dt><strong>Extends:</strong></dt>
+<dd><ul class="first last simple">
+<li><code class="xref js js-class docutils literal notranslate"><span class="pre">cst/nodeTypes/Node.Node()</span></code></li>
+</ul>
+</dd>
+<dt><strong>Implements:</strong></dt>
+<dd><ul class="first last simple">
+<li><code class="xref js js-class docutils literal notranslate"><span class="pre">cst/nodeTypes/NodeTypes.INode()</span></code></li>
+<li><code class="xref js js-class docutils literal notranslate"><span class="pre">cst/nodeTypes/NodeTypes.IContext()</span></code></li>
+</ul>
+</dd>
+</dl>
+<dl class="attribute">
+<dt id="Context.Context.identifier">
+<code class="descclassname">Context.Context.</code><code class="descname">identifier</code><a class="headerlink" href="#Context.Context.identifier" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>type:</strong> cst/nodeTypes/Path.Path</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Context.Context.new Context">
+<code class="descclassname">Context.Context.</code><code class="descname">new Context</code><span class="sig-paren">(</span><em>identifier</em>, <em>source</em><span class="sig-paren">)</span><a class="headerlink" href="#Context.Context.new Context" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>identifier</strong> (<em>cst/nodeTypes/Path.Path</em>) – </li>
+<li><strong>source</strong> (<em>cst/nodeTypes/NodeTypes.ISource</em>) – </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>cst/nodeTypes/Context.Context</strong> –</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="dustcomment">
+<h2>DustComment<a class="headerlink" href="#dustcomment" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="DustComment.DustComment">
+<em class="property">class </em><code class="descclassname">DustComment.</code><code class="descname">DustComment</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#DustComment.DustComment" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>exported from</em> <code class="xref js js-mod docutils literal notranslate"><span class="pre">cst/nodeTypes/DustComment</span></code></p>
+<dl class="docutils">
+<dt><strong>Extends:</strong></dt>
+<dd><ul class="first last simple">
+<li><code class="xref js js-class docutils literal notranslate"><span class="pre">cst/nodeTypes/Node.Node()</span></code></li>
+</ul>
+</dd>
+<dt><strong>Implements:</strong></dt>
+<dd><ul class="first last simple">
+<li><code class="xref js js-class docutils literal notranslate"><span class="pre">cst/nodeTypes/NodeTypes.INode()</span></code></li>
+<li><code class="xref js js-class docutils literal notranslate"><span class="pre">cst/nodeTypes/NodeTypes.IDustComment()</span></code></li>
+</ul>
+</dd>
+</dl>
+<dl class="function">
+<dt id="DustComment.DustComment.new DustComment">
+<code class="descclassname">DustComment.DustComment.</code><code class="descname">new DustComment</code><span class="sig-paren">(</span><em>source</em><span class="sig-paren">)</span><a class="headerlink" href="#DustComment.DustComment.new DustComment" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>source</strong> (<em>cst/nodeTypes/NodeTypes.ISource</em>) – </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>cst/nodeTypes/DustComment.DustComment</strong> –</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="DustComment.DustComment.text">
+<code class="descclassname">DustComment.DustComment.</code><code class="descname">text</code><a class="headerlink" href="#DustComment.DustComment.text" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>type:</strong> string</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="escapedquote">
+<h2>EscapedQuote<a class="headerlink" href="#escapedquote" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="EscapedQuote.EscapedQuote">
+<em class="property">class </em><code class="descclassname">EscapedQuote.</code><code class="descname">EscapedQuote</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#EscapedQuote.EscapedQuote" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>exported from</em> <code class="xref js js-mod docutils literal notranslate"><span class="pre">cst/nodeTypes/EscapedQuote</span></code></p>
+<dl class="docutils">
+<dt><strong>Extends:</strong></dt>
+<dd><ul class="first last simple">
+<li><code class="xref js js-class docutils literal notranslate"><span class="pre">cst/nodeTypes/Node.Node()</span></code></li>
+</ul>
+</dd>
+<dt><strong>Implements:</strong></dt>
+<dd><ul class="first last simple">
+<li><code class="xref js js-class docutils literal notranslate"><span class="pre">cst/nodeTypes/NodeTypes.INode()</span></code></li>
+<li><code class="xref js js-class docutils literal notranslate"><span class="pre">cst/nodeTypes/NodeTypes.IEscapedQuote()</span></code></li>
+</ul>
+</dd>
+</dl>
+<dl class="attribute">
+<dt id="EscapedQuote.EscapedQuote.escapedQuote">
+<code class="descclassname">EscapedQuote.EscapedQuote.</code><code class="descname">escapedQuote</code><a class="headerlink" href="#EscapedQuote.EscapedQuote.escapedQuote" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>type:</strong> string</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="EscapedQuote.EscapedQuote.new EscapedQuote">
+<code class="descclassname">EscapedQuote.EscapedQuote.</code><code class="descname">new EscapedQuote</code><span class="sig-paren">(</span><em>escapedQuote</em>, <em>source</em><span class="sig-paren">)</span><a class="headerlink" href="#EscapedQuote.EscapedQuote.new EscapedQuote" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>escapedQuote</strong> (<em>string</em>) – </li>
+<li><strong>source</strong> (<em>cst/nodeTypes/NodeTypes.ISource</em>) – </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>cst/nodeTypes/EscapedQuote.EscapedQuote</strong> –</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="filter">
+<h2>Filter<a class="headerlink" href="#filter" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="Filter.Filter">
+<em class="property">class </em><code class="descclassname">Filter.</code><code class="descname">Filter</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Filter.Filter" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>exported from</em> <code class="xref js js-mod docutils literal notranslate"><span class="pre">cst/nodeTypes/Filter</span></code></p>
+<dl class="docutils">
+<dt><strong>Extends:</strong></dt>
+<dd><ul class="first last simple">
+<li><code class="xref js js-class docutils literal notranslate"><span class="pre">cst/nodeTypes/Node.Node()</span></code></li>
+</ul>
+</dd>
+<dt><strong>Implements:</strong></dt>
+<dd><ul class="first last simple">
+<li><code class="xref js js-class docutils literal notranslate"><span class="pre">cst/nodeTypes/NodeTypes.INode()</span></code></li>
+<li><code class="xref js js-class docutils literal notranslate"><span class="pre">cst/nodeTypes/NodeTypes.IFilter()</span></code></li>
+</ul>
+</dd>
+</dl>
+<dl class="attribute">
+<dt id="Filter.Filter.filter">
+<code class="descclassname">Filter.Filter.</code><code class="descname">filter</code><a class="headerlink" href="#Filter.Filter.filter" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>type:</strong> string</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Filter.Filter.new Filter">
+<code class="descclassname">Filter.Filter.</code><code class="descname">new Filter</code><span class="sig-paren">(</span><em>filter</em>, <em>source</em><span class="sig-paren">)</span><a class="headerlink" href="#Filter.Filter.new Filter" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>filter</strong> (<em>string</em>) – </li>
+<li><strong>source</strong> (<em>cst/nodeTypes/NodeTypes.ISource</em>) – </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>cst/nodeTypes/Filter.Filter</strong> –</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="htmlcomment">
+<h2>HtmlComment<a class="headerlink" href="#htmlcomment" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="HtmlComment.HtmlComment">
+<em class="property">class </em><code class="descclassname">HtmlComment.</code><code class="descname">HtmlComment</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#HtmlComment.HtmlComment" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>exported from</em> <code class="xref js js-mod docutils literal notranslate"><span class="pre">cst/nodeTypes/HtmlComment</span></code></p>
+<dl class="docutils">
+<dt><strong>Extends:</strong></dt>
+<dd><ul class="first last simple">
+<li><code class="xref js js-class docutils literal notranslate"><span class="pre">cst/nodeTypes/Node.Node()</span></code></li>
+</ul>
+</dd>
+<dt><strong>Implements:</strong></dt>
+<dd><ul class="first last simple">
+<li><code class="xref js js-class docutils literal notranslate"><span class="pre">cst/nodeTypes/NodeTypes.INode()</span></code></li>
+<li><code class="xref js js-class docutils literal notranslate"><span class="pre">cst/nodeTypes/NodeTypes.IHtmlComment()</span></code></li>
+</ul>
+</dd>
+</dl>
+<dl class="function">
+<dt id="HtmlComment.HtmlComment.new HtmlComment">
+<code class="descclassname">HtmlComment.HtmlComment.</code><code class="descname">new HtmlComment</code><span class="sig-paren">(</span><em>source</em><span class="sig-paren">)</span><a class="headerlink" href="#HtmlComment.HtmlComment.new HtmlComment" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>source</strong> (<em>cst/nodeTypes/NodeTypes.ISource</em>) – </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>cst/nodeTypes/HtmlComment.HtmlComment</strong> –</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="HtmlComment.HtmlComment.text">
+<code class="descclassname">HtmlComment.HtmlComment.</code><code class="descname">text</code><a class="headerlink" href="#HtmlComment.HtmlComment.text" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>type:</strong> string</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="htmltag">
+<h2>HtmlTag<a class="headerlink" href="#htmltag" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="HtmlTag.HtmlTag">
+<em class="property">class </em><code class="descclassname">HtmlTag.</code><code class="descname">HtmlTag</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#HtmlTag.HtmlTag" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>exported from</em> <code class="xref js js-mod docutils literal notranslate"><span class="pre">cst/nodeTypes/HtmlTag</span></code></p>
+<dl class="docutils">
+<dt><strong>Extends:</strong></dt>
+<dd><ul class="first last simple">
+<li><code class="xref js js-class docutils literal notranslate"><span class="pre">cst/nodeTypes/Node.Node()</span></code></li>
+</ul>
+</dd>
+<dt><strong>Implements:</strong></dt>
+<dd><ul class="first last simple">
+<li><code class="xref js js-class docutils literal notranslate"><span class="pre">cst/nodeTypes/NodeTypes.INode()</span></code></li>
+<li><code class="xref js js-class docutils literal notranslate"><span class="pre">cst/nodeTypes/NodeTypes.IHtmlTag()</span></code></li>
+</ul>
+</dd>
+</dl>
+<dl class="attribute">
+<dt id="HtmlTag.HtmlTag.attributes">
+<code class="descclassname">HtmlTag.HtmlTag.</code><code class="descname">attributes</code><a class="headerlink" href="#HtmlTag.HtmlTag.attributes" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>type:</strong> cst/nodeTypes/NodeTypes.IAttribute[]</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="HtmlTag.HtmlTag.body">
+<code class="descclassname">HtmlTag.HtmlTag.</code><code class="descname">body</code><a class="headerlink" href="#HtmlTag.HtmlTag.body" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>type:</strong> cst/nodeTypes/NodeTypes.IRoot | null</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="HtmlTag.HtmlTag.isSelfClosing">
+<code class="descclassname">HtmlTag.HtmlTag.</code><code class="descname">isSelfClosing</code><a class="headerlink" href="#HtmlTag.HtmlTag.isSelfClosing" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>type:</strong> boolean</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="HtmlTag.HtmlTag.new HtmlTag">
+<code class="descclassname">HtmlTag.HtmlTag.</code><code class="descname">new HtmlTag</code><span class="sig-paren">(</span><em>tagName</em>, <em>attributes</em>, <em>isSelfClosing</em>, <em>body</em>, <em>source</em><span class="sig-paren">)</span><a class="headerlink" href="#HtmlTag.HtmlTag.new HtmlTag" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>tagName</strong> (<em>string</em>) – </li>
+<li><strong>attributes</strong> (<em>cst/nodeTypes/NodeTypes.IAttribute[]</em>) – </li>
+<li><strong>isSelfClosing</strong> (<em>boolean</em>) – </li>
+<li><strong>| null body</strong> (<em>cst/nodeTypes/NodeTypes.IRoot</em>) – </li>
+<li><strong>source</strong> (<em>cst/nodeTypes/NodeTypes.ISource</em>) – </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>cst/nodeTypes/HtmlTag.HtmlTag</strong> –</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="HtmlTag.HtmlTag.tagName">
+<code class="descclassname">HtmlTag.HtmlTag.</code><code class="descname">tagName</code><a class="headerlink" href="#HtmlTag.HtmlTag.tagName" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>type:</strong> string</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="numbernode">
+<h2>NumberNode<a class="headerlink" href="#numbernode" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="NumberNode.NumberNode">
+<em class="property">class </em><code class="descclassname">NumberNode.</code><code class="descname">NumberNode</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#NumberNode.NumberNode" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>exported from</em> <code class="xref js js-mod docutils literal notranslate"><span class="pre">cst/nodeTypes/NumberNode</span></code></p>
+<dl class="docutils">
+<dt><strong>Extends:</strong></dt>
+<dd><ul class="first last simple">
+<li><code class="xref js js-class docutils literal notranslate"><span class="pre">cst/nodeTypes/Node.Node()</span></code></li>
+</ul>
+</dd>
+<dt><strong>Implements:</strong></dt>
+<dd><ul class="first last simple">
+<li><code class="xref js js-class docutils literal notranslate"><span class="pre">cst/nodeTypes/NodeTypes.INode()</span></code></li>
+<li><code class="xref js js-class docutils literal notranslate"><span class="pre">cst/nodeTypes/NodeTypes.INumber()</span></code></li>
+</ul>
+</dd>
+</dl>
+<dl class="function">
+<dt id="NumberNode.NumberNode.new NumberNode">
+<code class="descclassname">NumberNode.NumberNode.</code><code class="descname">new NumberNode</code><span class="sig-paren">(</span><em>num</em>, <em>source</em><span class="sig-paren">)</span><a class="headerlink" href="#NumberNode.NumberNode.new NumberNode" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>num</strong> (<em>number</em>) – </li>
+<li><strong>source</strong> (<em>cst/nodeTypes/NodeTypes.ISource</em>) – </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>cst/nodeTypes/NumberNode.NumberNode</strong> –</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="NumberNode.NumberNode.num">
+<code class="descclassname">NumberNode.NumberNode.</code><code class="descname">num</code><a class="headerlink" href="#NumberNode.NumberNode.num" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>type:</strong> number</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="param">
+<h2>Param<a class="headerlink" href="#param" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="Param.Param">
+<em class="property">class </em><code class="descclassname">Param.</code><code class="descname">Param</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Param.Param" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>exported from</em> <code class="xref js js-mod docutils literal notranslate"><span class="pre">cst/nodeTypes/Param</span></code></p>
+<dl class="docutils">
+<dt><strong>Extends:</strong></dt>
+<dd><ul class="first last simple">
+<li><code class="xref js js-class docutils literal notranslate"><span class="pre">cst/nodeTypes/Node.Node()</span></code></li>
+</ul>
+</dd>
+<dt><strong>Implements:</strong></dt>
+<dd><ul class="first last simple">
+<li><code class="xref js js-class docutils literal notranslate"><span class="pre">cst/nodeTypes/NodeTypes.INode()</span></code></li>
+<li><code class="xref js js-class docutils literal notranslate"><span class="pre">cst/nodeTypes/NodeTypes.IParam()</span></code></li>
+</ul>
+</dd>
+</dl>
+<dl class="attribute">
+<dt id="Param.Param.key">
+<code class="descclassname">Param.Param.</code><code class="descname">key</code><a class="headerlink" href="#Param.Param.key" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>type:</strong> string</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Param.Param.new Param">
+<code class="descclassname">Param.Param.</code><code class="descname">new Param</code><span class="sig-paren">(</span><em>key</em>, <em>value</em>, <em>source</em><span class="sig-paren">)</span><a class="headerlink" href="#Param.Param.new Param" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>key</strong> (<em>string</em>) – </li>
+<li><strong>value</strong> (<em>cst/nodeTypes/NodeTypes.ParamValue</em>) – </li>
+<li><strong>source</strong> (<em>cst/nodeTypes/NodeTypes.ISource</em>) – </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>cst/nodeTypes/Param.Param</strong> –</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Param.Param.value">
+<code class="descclassname">Param.Param.</code><code class="descname">value</code><a class="headerlink" href="#Param.Param.value" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>type:</strong> cst/nodeTypes/NodeTypes.ParamValue</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="path">
+<h2>Path<a class="headerlink" href="#path" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="Path.Path">
+<em class="property">class </em><code class="descclassname">Path.</code><code class="descname">Path</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Path.Path" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>exported from</em> <code class="xref js js-mod docutils literal notranslate"><span class="pre">cst/nodeTypes/Path</span></code></p>
+<dl class="docutils">
+<dt><strong>Extends:</strong></dt>
+<dd><ul class="first last simple">
+<li><code class="xref js js-class docutils literal notranslate"><span class="pre">cst/nodeTypes/Node.Node()</span></code></li>
+</ul>
+</dd>
+<dt><strong>Implements:</strong></dt>
+<dd><ul class="first last simple">
+<li><code class="xref js js-class docutils literal notranslate"><span class="pre">cst/nodeTypes/NodeTypes.INode()</span></code></li>
+<li><code class="xref js js-class docutils literal notranslate"><span class="pre">cst/nodeTypes/NodeTypes.IPath()</span></code></li>
+</ul>
+</dd>
+</dl>
+<dl class="function">
+<dt id="Path.Path.new Path">
+<code class="descclassname">Path.Path.</code><code class="descname">new Path</code><span class="sig-paren">(</span><em>path</em>, <em>source</em><span class="sig-paren">)</span><a class="headerlink" href="#Path.Path.new Path" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>path</strong> (<em>string</em>) – </li>
+<li><strong>source</strong> (<em>cst/nodeTypes/NodeTypes.ISource</em>) – </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>cst/nodeTypes/Path.Path</strong> –</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Path.Path.path">
+<code class="descclassname">Path.Path.</code><code class="descname">path</code><a class="headerlink" href="#Path.Path.path" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>type:</strong> string</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="quoteddustvalue">
+<h2>QuotedDustValue<a class="headerlink" href="#quoteddustvalue" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="QuotedDustValue.QuotedDustValue">
+<em class="property">class </em><code class="descclassname">QuotedDustValue.</code><code class="descname">QuotedDustValue</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#QuotedDustValue.QuotedDustValue" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>exported from</em> <code class="xref js js-mod docutils literal notranslate"><span class="pre">cst/nodeTypes/QuotedDustValue</span></code></p>
+<dl class="docutils">
+<dt><strong>Extends:</strong></dt>
+<dd><ul class="first last simple">
+<li><code class="xref js js-class docutils literal notranslate"><span class="pre">cst/nodeTypes/Node.Node()</span></code></li>
+</ul>
+</dd>
+<dt><strong>Implements:</strong></dt>
+<dd><ul class="first last simple">
+<li><code class="xref js js-class docutils literal notranslate"><span class="pre">cst/nodeTypes/NodeTypes.INode()</span></code></li>
+<li><code class="xref js js-class docutils literal notranslate"><span class="pre">cst/nodeTypes/NodeTypes.IQuotedDustValue()</span></code></li>
+</ul>
+</dd>
+</dl>
+<dl class="function">
+<dt id="QuotedDustValue.QuotedDustValue.new QuotedDustValue">
+<code class="descclassname">QuotedDustValue.QuotedDustValue.</code><code class="descname">new QuotedDustValue</code><span class="sig-paren">(</span><em>valueArray</em>, <em>source</em><span class="sig-paren">)</span><a class="headerlink" href="#QuotedDustValue.QuotedDustValue.new QuotedDustValue" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>valueArray</strong> (<em>cst/nodeTypes/NodeTypes.Inline[]</em>) – </li>
+<li><strong>source</strong> (<em>cst/nodeTypes/NodeTypes.ISource</em>) – </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>cst/nodeTypes/QuotedDustValue.QuotedDustValue</strong> –</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="QuotedDustValue.QuotedDustValue.valueArray">
+<code class="descclassname">QuotedDustValue.QuotedDustValue.</code><code class="descname">valueArray</code><a class="headerlink" href="#QuotedDustValue.QuotedDustValue.valueArray" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>type:</strong> cst/nodeTypes/NodeTypes.Inline[]</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="raw">
+<h2>Raw<a class="headerlink" href="#raw" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="Raw.Raw">
+<em class="property">class </em><code class="descclassname">Raw.</code><code class="descname">Raw</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Raw.Raw" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>exported from</em> <code class="xref js js-mod docutils literal notranslate"><span class="pre">cst/nodeTypes/Raw</span></code></p>
+<dl class="docutils">
+<dt><strong>Extends:</strong></dt>
+<dd><ul class="first last simple">
+<li><code class="xref js js-class docutils literal notranslate"><span class="pre">cst/nodeTypes/Node.Node()</span></code></li>
+</ul>
+</dd>
+<dt><strong>Implements:</strong></dt>
+<dd><ul class="first last simple">
+<li><code class="xref js js-class docutils literal notranslate"><span class="pre">cst/nodeTypes/NodeTypes.INode()</span></code></li>
+<li><code class="xref js js-class docutils literal notranslate"><span class="pre">cst/nodeTypes/NodeTypes.IRaw()</span></code></li>
+</ul>
+</dd>
+</dl>
+<dl class="function">
+<dt id="Raw.Raw.new Raw">
+<code class="descclassname">Raw.Raw.</code><code class="descname">new Raw</code><span class="sig-paren">(</span><em>source</em><span class="sig-paren">)</span><a class="headerlink" href="#Raw.Raw.new Raw" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>source</strong> (<em>cst/nodeTypes/NodeTypes.ISource</em>) – </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>cst/nodeTypes/Raw.Raw</strong> –</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Raw.Raw.text">
+<code class="descclassname">Raw.Raw.</code><code class="descname">text</code><a class="headerlink" href="#Raw.Raw.text" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>type:</strong> string</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="reference">
+<h2>Reference<a class="headerlink" href="#reference" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="Reference.Reference">
+<em class="property">class </em><code class="descclassname">Reference.</code><code class="descname">Reference</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Reference.Reference" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>exported from</em> <code class="xref js js-mod docutils literal notranslate"><span class="pre">cst/nodeTypes/Reference</span></code></p>
+<dl class="docutils">
+<dt><strong>Extends:</strong></dt>
+<dd><ul class="first last simple">
+<li><code class="xref js js-class docutils literal notranslate"><span class="pre">cst/nodeTypes/Node.Node()</span></code></li>
+</ul>
+</dd>
+<dt><strong>Implements:</strong></dt>
+<dd><ul class="first last simple">
+<li><code class="xref js js-class docutils literal notranslate"><span class="pre">cst/nodeTypes/NodeTypes.INode()</span></code></li>
+<li><code class="xref js js-class docutils literal notranslate"><span class="pre">cst/nodeTypes/NodeTypes.IReference()</span></code></li>
+</ul>
+</dd>
+</dl>
+<dl class="attribute">
+<dt id="Reference.Reference.filters">
+<code class="descclassname">Reference.Reference.</code><code class="descname">filters</code><a class="headerlink" href="#Reference.Reference.filters" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>type:</strong> cst/nodeTypes/NodeTypes.IFilter[]</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Reference.Reference.new Reference">
+<code class="descclassname">Reference.Reference.</code><code class="descname">new Reference</code><span class="sig-paren">(</span><em>path</em>, <em>filters</em>, <em>source</em><span class="sig-paren">)</span><a class="headerlink" href="#Reference.Reference.new Reference" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>path</strong> (<em>cst/nodeTypes/NodeTypes.IPath</em>) – </li>
+<li><strong>filters</strong> (<em>cst/nodeTypes/NodeTypes.IFilter[]</em>) – </li>
+<li><strong>source</strong> (<em>cst/nodeTypes/NodeTypes.ISource</em>) – </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>cst/nodeTypes/Reference.Reference</strong> –</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Reference.Reference.path">
+<code class="descclassname">Reference.Reference.</code><code class="descname">path</code><a class="headerlink" href="#Reference.Reference.path" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>type:</strong> cst/nodeTypes/NodeTypes.IPath</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="root">
+<h2>Root<a class="headerlink" href="#root" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="Root.Root">
+<em class="property">class </em><code class="descclassname">Root.</code><code class="descname">Root</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Root.Root" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>exported from</em> <code class="xref js js-mod docutils literal notranslate"><span class="pre">cst/nodeTypes/Root</span></code></p>
+<dl class="docutils">
+<dt><strong>Extends:</strong></dt>
+<dd><ul class="first last simple">
+<li><code class="xref js js-class docutils literal notranslate"><span class="pre">cst/nodeTypes/Node.Node()</span></code></li>
+</ul>
+</dd>
+<dt><strong>Implements:</strong></dt>
+<dd><ul class="first last simple">
+<li><code class="xref js js-class docutils literal notranslate"><span class="pre">cst/nodeTypes/NodeTypes.INode()</span></code></li>
+<li><code class="xref js js-class docutils literal notranslate"><span class="pre">cst/nodeTypes/NodeTypes.IRoot()</span></code></li>
+</ul>
+</dd>
+</dl>
+<dl class="function">
+<dt id="Root.Root.new Root">
+<code class="descclassname">Root.Root.</code><code class="descname">new Root</code><span class="sig-paren">(</span><em>source</em>, <em>nodes</em><span class="sig-paren">)</span><a class="headerlink" href="#Root.Root.new Root" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>source</strong> (<em>cst/nodeTypes/NodeTypes.ISource</em>) – </li>
+<li><strong>nodes</strong> (<em>cst/nodeTypes/NodeTypes.INode[]</em>) – </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>cst/nodeTypes/Root.Root</strong> –</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Root.Root.nodes">
+<code class="descclassname">Root.Root.</code><code class="descname">nodes</code><a class="headerlink" href="#Root.Root.nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>type:</strong> cst/nodeTypes/NodeTypes.INode[]</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="section">
+<h2>Section<a class="headerlink" href="#section" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="Section.Section">
+<em class="property">class </em><code class="descclassname">Section.</code><code class="descname">Section</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Section.Section" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>exported from</em> <code class="xref js js-mod docutils literal notranslate"><span class="pre">cst/nodeTypes/Section</span></code></p>
+<dl class="docutils">
+<dt><strong>Extends:</strong></dt>
+<dd><ul class="first last simple">
+<li><code class="xref js js-class docutils literal notranslate"><span class="pre">cst/nodeTypes/Node.Node()</span></code></li>
+</ul>
+</dd>
+<dt><strong>Implements:</strong></dt>
+<dd><ul class="first last simple">
+<li><code class="xref js js-class docutils literal notranslate"><span class="pre">cst/nodeTypes/NodeTypes.INode()</span></code></li>
+<li><code class="xref js js-class docutils literal notranslate"><span class="pre">cst/nodeTypes/NodeTypes.ISection()</span></code></li>
+</ul>
+</dd>
+</dl>
+<dl class="attribute">
+<dt id="Section.Section.bodies">
+<code class="descclassname">Section.Section.</code><code class="descname">bodies</code><a class="headerlink" href="#Section.Section.bodies" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>type:</strong> cst/nodeTypes/NodeTypes.IBody[]</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Section.Section.context">
+<code class="descclassname">Section.Section.</code><code class="descname">context</code><a class="headerlink" href="#Section.Section.context" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>type:</strong> cst/nodeTypes/NodeTypes.IContext | null</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Section.Section.determineSectionType">
+<code class="descclassname">Section.Section.</code><code class="descname">determineSectionType</code><span class="sig-paren">(</span><em>sectionPrefixCharacter</em><span class="sig-paren">)</span><a class="headerlink" href="#Section.Section.determineSectionType" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>sectionPrefixCharacter</strong> (<em>string</em>) – </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>cst/nodeTypes/NodeTypes.NODE_TYPE</strong> –</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Section.Section.isSelfClosing">
+<code class="descclassname">Section.Section.</code><code class="descname">isSelfClosing</code><a class="headerlink" href="#Section.Section.isSelfClosing" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>type:</strong> boolean</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Section.Section.key">
+<code class="descclassname">Section.Section.</code><code class="descname">key</code><a class="headerlink" href="#Section.Section.key" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>type:</strong> cst/nodeTypes/NodeTypes.IPath</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Section.Section.new Section">
+<code class="descclassname">Section.Section.</code><code class="descname">new Section</code><span class="sig-paren">(</span><em>sectionPrefixCharacter</em>, <em>key</em>, <em>context</em>, <em>params</em>, <em>bodies</em>, <em>isSelfClosing</em>, <em>source</em><span class="sig-paren">)</span><a class="headerlink" href="#Section.Section.new Section" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>sectionPrefixCharacter</strong> (<em>string</em>) – </li>
+<li><strong>key</strong> (<em>cst/nodeTypes/NodeTypes.IPath</em>) – </li>
+<li><strong>| null context</strong> (<em>cst/nodeTypes/NodeTypes.IContext</em>) – </li>
+<li><strong>params</strong> (<em>cst/nodeTypes/NodeTypes.IParam[]</em>) – </li>
+<li><strong>bodies</strong> (<em>cst/nodeTypes/NodeTypes.IBody[]</em>) – </li>
+<li><strong>isSelfClosing</strong> (<em>boolean</em>) – </li>
+<li><strong>source</strong> (<em>cst/nodeTypes/NodeTypes.ISource</em>) – </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>cst/nodeTypes/Section.Section</strong> –</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Section.Section.params">
+<code class="descclassname">Section.Section.</code><code class="descname">params</code><a class="headerlink" href="#Section.Section.params" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>type:</strong> cst/nodeTypes/NodeTypes.IParam[]</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="special">
+<h2>Special<a class="headerlink" href="#special" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="Special.Special">
+<em class="property">class </em><code class="descclassname">Special.</code><code class="descname">Special</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Special.Special" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>exported from</em> <code class="xref js js-mod docutils literal notranslate"><span class="pre">cst/nodeTypes/Special</span></code></p>
+<dl class="docutils">
+<dt><strong>Extends:</strong></dt>
+<dd><ul class="first last simple">
+<li><code class="xref js js-class docutils literal notranslate"><span class="pre">cst/nodeTypes/Node.Node()</span></code></li>
+</ul>
+</dd>
+<dt><strong>Implements:</strong></dt>
+<dd><ul class="first last simple">
+<li><code class="xref js js-class docutils literal notranslate"><span class="pre">cst/nodeTypes/NodeTypes.INode()</span></code></li>
+<li><code class="xref js js-class docutils literal notranslate"><span class="pre">cst/nodeTypes/NodeTypes.ISpecial()</span></code></li>
+</ul>
+</dd>
+</dl>
+<dl class="attribute">
+<dt id="Special.Special.key">
+<code class="descclassname">Special.Special.</code><code class="descname">key</code><a class="headerlink" href="#Special.Special.key" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>type:</strong> string</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Special.Special.new Special">
+<code class="descclassname">Special.Special.</code><code class="descname">new Special</code><span class="sig-paren">(</span><em>key</em>, <em>source</em><span class="sig-paren">)</span><a class="headerlink" href="#Special.Special.new Special" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>key</strong> (<em>string</em>) – </li>
+<li><strong>source</strong> (<em>cst/nodeTypes/NodeTypes.ISource</em>) – </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>cst/nodeTypes/Special.Special</strong> –</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="stringbuffer">
+<h2>StringBuffer<a class="headerlink" href="#stringbuffer" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="StringBuffer.StringBuffer">
+<em class="property">class </em><code class="descclassname">StringBuffer.</code><code class="descname">StringBuffer</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StringBuffer.StringBuffer" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>exported from</em> <code class="xref js js-mod docutils literal notranslate"><span class="pre">cst/nodeTypes/StringBuffer</span></code></p>
+<dl class="docutils">
+<dt><strong>Extends:</strong></dt>
+<dd><ul class="first last simple">
+<li><code class="xref js js-class docutils literal notranslate"><span class="pre">cst/nodeTypes/Node.Node()</span></code></li>
+</ul>
+</dd>
+<dt><strong>Implements:</strong></dt>
+<dd><ul class="first last simple">
+<li><code class="xref js js-class docutils literal notranslate"><span class="pre">cst/nodeTypes/NodeTypes.INode()</span></code></li>
+<li><code class="xref js js-class docutils literal notranslate"><span class="pre">cst/nodeTypes/NodeTypes.IStringBuffer()</span></code></li>
+</ul>
+</dd>
+</dl>
+<dl class="attribute">
+<dt id="StringBuffer.StringBuffer.buffer">
+<code class="descclassname">StringBuffer.StringBuffer.</code><code class="descname">buffer</code><a class="headerlink" href="#StringBuffer.StringBuffer.buffer" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>type:</strong> string</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="StringBuffer.StringBuffer.new StringBuffer">
+<code class="descclassname">StringBuffer.StringBuffer.</code><code class="descname">new StringBuffer</code><span class="sig-paren">(</span><em>buffer</em>, <em>source</em><span class="sig-paren">)</span><a class="headerlink" href="#StringBuffer.StringBuffer.new StringBuffer" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>buffer</strong> (<em>string</em>) – </li>
+<li><strong>source</strong> (<em>cst/nodeTypes/NodeTypes.ISource</em>) – </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>cst/nodeTypes/StringBuffer.StringBuffer</strong> –</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="limitations.html" class="btn btn-neutral float-right" title="Limitations" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="parsing.html" class="btn btn-neutral" title="Parsing" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Mahir Shah
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
