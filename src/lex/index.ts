@@ -1,5 +1,5 @@
 import {
-  createToken,
+  createToken, ILexingResult,
   IMultiModeLexerDefinition,
   Lexer,
   TokenType,
@@ -226,7 +226,16 @@ export const tokenVocabulary = Array()
     }),
     {},
   );
-export function lex(inputText: string) {
+
+/**
+ * Given an input string to lex, returns a ILexingResult, which contains
+ * the token vector produced by lexing the `inputText`. Each token will be a
+ * token contained in the `tokenVocabulary`.
+ * @param inputText - the input string to lex
+ * @return the lexing result containing the token vector or the errors
+ *   encountered when lexing the `inputText`.
+ */
+export function lex(inputText: string): ILexingResult {
   const lexingResult = DustLexer.tokenize(inputText);
 
   if (lexingResult.errors.length > 0) {

@@ -712,7 +712,13 @@ class DustHtmlVisitor extends parserInstance.getBaseCstVisitorConstructorWithDef
 }
 
 export const toAstVisitorInstance = new DustHtmlVisitor();
-export function toAst(inputText: string) {
+
+/**
+ * Given input text produce an AST.
+ * @param inputText - the input text to parse and produce an AST for
+ * @return the Root AST node
+ */
+export function toAst(inputText: string): Root {
   const cst = parse(inputText);
 
   return toAstVisitorInstance.parse(inputText, cst);

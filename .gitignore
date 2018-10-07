@@ -1,2 +1,5 @@
 node_modules
 .idea
+lib
+.DS_STORE
+docs/_build

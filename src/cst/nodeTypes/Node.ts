@@ -1,8 +1,20 @@
 import { INode, ISource, NODE_TYPE } from './NodeTypes';
 
+/**
+ * Parent class of all AST nodes.
+ */
 export default class Node implements INode {
   constructor(
+    /**
+     * see NODE_TYPE
+     */
     public readonly type: NODE_TYPE,
+    /**
+     * An object containing the source code info of this node,
+     * including the raw text this node represents from the input stream,
+     * as well as the line/column info for the start and end of this node in
+     * the input stream.
+     */
     public readonly source: ISource,
   ) {}
 

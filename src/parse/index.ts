@@ -530,6 +530,14 @@ export class DustParser extends Parser {
   }
 }
 export const parserInstance = new DustParser([]);
+
+/**
+ * Parses the given `inputText` returning a CST. Use this method rather than
+ * the toAST method when performance is a concern or only input validation
+ * is needed. This method will throw an error if parsing fails.
+ * @param inputText - the input text to parse
+ * @return the root CST node, which can be used to traverse the CST
+ */
 export function parse(inputText: string): CstNode {
   const lexResult = lex(inputText);
   parserInstance.input = lexResult.tokens;

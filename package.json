@@ -2,14 +2,15 @@
   "name": "dust-parser",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
     "type-check": "tsc --noEmit",
     "type-check:watch": "npm run type-check -- --watch",
-    "build": "npm run build:types && npm run build:js",
+    "build": "rm -rf lib && npm run build:types && npm run build:js && npm build:docs",
     "build:types": "tsc --emitDeclarationOnly",
-    "build:js": "babel src --out-dir lib --extensions \".ts,.tsx\" --source-maps inline",
-    "test": "jest"
+    "build:js": "babel src --out-dir lib --extensions \".ts\" --source-maps inline --ignore \"src/**/*.spec.js\",\"src/**/*.test.js\"",
+    "test": "jest",
+    "build:docs": "make -C docs html"
   },
   "author": "",
   "license": "ISC",
